@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { MainNavComponent } from './components/main-nav/main-nav.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  imports: [RouterOutlet, MainNavComponent],
+  template: `
+    <app-main-nav></app-main-nav>
+    <router-outlet></router-outlet>
+  `,
+  styles: ``,
 })
-export class AppComponent {
-  title = 'FutScorePeru-Manager';
-}
+export class AppComponent {}
