@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { TeamProfile } from '../../interfaces/team-profile';
 
 @Component({
   selector: 'app-teams-list',
@@ -31,6 +32,6 @@ import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
   styles: ``
 })
 export class TeamsListComponent {
-  @Input() teams: any;
+  @Input() teams!: TeamProfile[];
   Redirect = faArrowUpRightFromSquare;
 }
