@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Environments } from '../environment/environments';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { TeamProfile } from '../interfaces/team-profile';
 
 @Injectable({
@@ -12,11 +12,17 @@ export class TeamsApiService {
 
   constructor(private http: HttpClient) {}
 
-  getTeams(category: number): Observable<TeamProfile[]> {
-    return this.http.get<TeamProfile[]>(this.backendUrl + 'teams/' + category);
+  private teamsSubject = new BehaviorSubject<TeamProfile[]>([]);
+  dataTeams$ = this.teamsSubject.asObservable();
+
+  getTeams(category: number) {
+    this.http.get<TeamProfile[]>(this.backendUrl + 'teams/' + category).subscribe({
+      next: (data) => (this.teamsSubject.next(data)),
+      error: (err) => (console.error('Failed to fetch teams data: ', err))
+    });
   }
 
-  getTeamsByTeamId(category: number, teamId: string): Observable<TeamProfile> {
+  getTeamsByTeamId(category: number, teamId: string) {
     return this.http.get<TeamProfile>(this.backendUrl + 'teams/' + category + '/' + teamId);
   }
 
