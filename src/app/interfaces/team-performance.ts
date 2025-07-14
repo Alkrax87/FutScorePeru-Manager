@@ -22,16 +22,6 @@ export interface TeamPerformance {
     dg: number;
     sanction: number;
   };
-  acumulado?: {
-    points: number;
-    pj: number;
-    pg: number;
-    pe: number;
-    pp: number;
-    gf: number;
-    gc: number;
-    dg: number;
-  };
   regional?: {
     points: number;
     pj: number;
