@@ -6,7 +6,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        night: "#161513",
+        nightfall: "#232323",
+        brightnight: "#393939",
         crimson: "#dc143c",
+        gold: "#d8b145",
       }
     },
   },
