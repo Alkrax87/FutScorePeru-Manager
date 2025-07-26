@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Environments } from '../environment/environments';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { TeamPerformance } from '../interfaces/team-performance';
+import { PerformanceData } from '../interfaces/performance-data';
 
 @Injectable({
   providedIn: 'root',
@@ -12,11 +12,15 @@ export class PerformanceApiService {
 
   constructor(private http: HttpClient) {}
 
-  getTeamPerformance(category: number, teamId: string): Observable<TeamPerformance> {
-    return this.http.get<TeamPerformance>(this.backendUrl + 'performance/' + category + '/' + teamId);
+  getTeamPerformance(category: number, teamId: string) {
+    return this.http.get<TeamPerformance>(this.backendUrl + 'performance/category/' + category + '/teamId/' + teamId);
   }
 
-  updateTeamPerformance(category: number, teamId: string, destination: string, performanceData: any): Observable<any> {
-    return this.http.put(this.backendUrl + 'performance/' + category + '/' + teamId + '/' + destination, performanceData)
+  addPerformance(performance: { teamId: string, category: number }) {
+    return this.http.post(this.backendUrl + 'performance', performance);
+  }
+
+  updateTeamPerformance(teamId: string, phase: string, performance: PerformanceData) {
+    return this.http.put(this.backendUrl + 'performance/' + teamId + '/' + phase, performance)
   }
 }
