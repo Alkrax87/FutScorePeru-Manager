@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Environments } from '../environment/environments';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { TeamLastGames } from '../interfaces/team-last-games';
+import { LastGamesGenerator } from '../interfaces/last-games-generator';
 
 @Injectable({
   providedIn: 'root',
@@ -12,11 +12,15 @@ export class LastGamesApiService {
 
   constructor(private http: HttpClient) {}
 
-  getTeamLastGames(category: number, teamId: string): Observable<TeamLastGames> {
-    return this.http.get<TeamLastGames>(this.backendURL + 'lastgames/' + category + '/' + teamId);
+  getTeamLastGames(teamId: string) {
+    return this.http.get<TeamLastGames>(this.backendURL + 'lastgames/teamId/' + teamId);
   }
 
-  updateTeamLastGames(category: number, teamId: string, destination: string, option: string): Observable<any> {
-    return this.http.put(this.backendURL + 'lastgames/' + category + '/' + teamId + '/' + destination + '/' + option, null);
+  addLastGames(lastGamesItem: LastGamesGenerator) {
+    return this.http.post(this.backendURL + 'lastgames', lastGamesItem);
+  }
+
+  updateTeamLastGames(teamId: string, phase: string, option: string) {
+    return this.http.put(this.backendURL + 'lastgames/' + teamId + '/' + phase + '/' + option, null);
   }
 }
