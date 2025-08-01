@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Environments } from '../environment/environments';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { TeamProfile } from '../interfaces/team-profile';
 
 @Injectable({
@@ -15,22 +15,29 @@ export class TeamsApiService {
   private teamsSubject = new BehaviorSubject<TeamProfile[]>([]);
   dataTeams$ = this.teamsSubject.asObservable();
 
-  getTeams(category: number) {
-    this.http.get<TeamProfile[]>(this.backendUrl + 'teams/' + category).subscribe({
+  getTeams() {
+    this.http.get<TeamProfile[]>(this.backendUrl + 'teams/').subscribe({
       next: (data) => (this.teamsSubject.next(data)),
-      error: (err) => (console.error('Failed to fetch teams data: ', err))
+      error: (err) => {
+        console.error('Failed to fetch teams data: ', err);
+        this.teamsSubject.next([]);
+      }
     });
   }
 
-  getTeamsByTeamId(category: number, teamId: string) {
-    return this.http.get<TeamProfile>(this.backendUrl + 'teams/' + category + '/' + teamId);
+  getTeamsByTeamId(teamId: string) {
+    return this.http.get<TeamProfile>(this.backendUrl + 'teams/teamId/' + teamId);
   }
 
-  updateTeam(category: number, teamId: string, teamData: any): Observable<any> {
-    return this.http.put(this.backendUrl + 'teams/' + category + '/' + teamId, teamData);
+  addTeam(teamData: TeamProfile) {
+    return this.http.post<TeamProfile>(this.backendUrl + 'teams', teamData);
   }
 
-  deleteTeam(category: number, teamId: string): Observable<any> {
-    return this.http.delete(this.backendUrl + 'teams/' + category + '/' + teamId);
+  updateTeam(teamId: string, teamData: TeamProfile) {
+    return this.http.put(this.backendUrl + 'teams/' + teamId, teamData);
+  }
+
+  deleteTeam(teamId: string) {
+    return this.http.delete(this.backendUrl + 'teams/' + teamId);
   }
 }
