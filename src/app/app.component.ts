@@ -7,7 +7,9 @@ import { MainNavComponent } from './components/main-nav/main-nav.component';
   imports: [RouterOutlet, MainNavComponent],
   template: `
     <app-main-nav></app-main-nav>
-    <router-outlet></router-outlet>
+    <div class="pt-16">
+      <router-outlet></router-outlet>
+    </div>
   `,
   styles: ``,
 })
