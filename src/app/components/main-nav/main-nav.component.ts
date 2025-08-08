@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-main-nav',
-  imports: [RouterLink],
+  imports: [RouterLink, RouterLinkActive],
   template: `
-    <div class="bg-red-900 text-white w-full flex justify-center gap-10 p-5">
+    <div class="bg-night text-white w-full fixed flex justify-center gap-10 p-5 z-40">
       @for (route of routes; track $index) {
-      <a [routerLink]="route.route">{{ route.name }}</a>
+        <a [routerLink]="route.route" routerLinkActive="text-crimson" class="hover:text-crimson">
+          {{ route.name }}
+        </a>
       }
     </div>
   `,
@@ -16,20 +18,16 @@ import { RouterLink } from '@angular/router';
 export class MainNavComponent {
   routes: { route: string; name: string }[] = [
     {
-      route: 'liga-1',
-      name: 'Liga 1',
+      route: 'teams',
+      name: 'Teams',
     },
     {
-      route: 'liga-2',
-      name: 'Liga 2',
+      route: 'managers',
+      name: 'Managers',
     },
     {
-      route: 'liga-3',
-      name: 'Liga 3',
-    },
-    {
-      route: 'copa-peru',
-      name: 'Copa Perú',
+      route: 'stadiums',
+      name: 'Stadiums',
     },
   ];
 }
