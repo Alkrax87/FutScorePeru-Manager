@@ -4,6 +4,7 @@ import { TeamPageComponent } from './pages/shared/team-page/team-page.component'
 import { ManagersComponent } from './pages/managers/managers.component';
 import { StadiumsComponent } from './pages/stadiums/stadiums.component';
 import { TeamsComponent } from './pages/teams/teams.component';
+import { MapsComponent } from './pages/maps/maps.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -26,5 +27,9 @@ export const routes: Routes = [
   {
     path: 'stadiums',
     component: StadiumsComponent,
+  },
+  {
+    path: 'maps',
+    component: MapsComponent,
   },
 ];
