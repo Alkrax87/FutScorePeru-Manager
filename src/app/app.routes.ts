@@ -5,9 +5,14 @@ import { ManagersComponent } from './pages/managers/managers.component';
 import { StadiumsComponent } from './pages/stadiums/stadiums.component';
 import { TeamsComponent } from './pages/teams/teams.component';
 import { MapsComponent } from './pages/maps/maps.component';
+import { DivisionsComponent } from './pages/divisions/divisions.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
+  {
+    path: 'divisions',
+    component: DivisionsComponent,
+  },
   {
     path: 'home',
     component: HomeComponent,
