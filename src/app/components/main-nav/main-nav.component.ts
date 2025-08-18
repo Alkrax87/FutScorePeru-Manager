@@ -18,6 +18,10 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 export class MainNavComponent {
   routes: { route: string; name: string }[] = [
     {
+      route: 'divisions',
+      name: 'Divisions',
+    },
+    {
       route: 'teams',
       name: 'Teams',
     },
@@ -28,6 +32,10 @@ export class MainNavComponent {
     {
       route: 'stadiums',
       name: 'Stadiums',
+    },
+    {
+      route: 'maps',
+      name: 'Maps',
     },
   ];
 }
