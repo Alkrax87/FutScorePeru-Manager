@@ -30,6 +30,10 @@ export class MainNavComponent {
       name: 'Managers',
     },
     {
+      route: 'teamsCP',
+      name: 'Teams CP',
+    },
+    {
       route: 'stadiums',
       name: 'Stadiums',
     },
