@@ -35,7 +35,7 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
                   <div class="flex items-center gap-2">
                     <img [src]="team.image ? team.image : 'assets/images/no-team.webp'" alt="TeamCP-logo" class="w-12 h-12">
                     <div class="truncate">
-                      <p class="font-semibold text-sm truncate min-w-32">{{ team.name ? team.name : 'Por Definir' }}</p>
+                      <p class="font-semibold text-sm truncate min-w-32">{{ team.name ? team.name + ' (' + team.abbreviation + ')' : 'Por Definir' }}</p>
                       <p class="text-neutral-500 text-xs"><fa-icon [icon]="Location"></fa-icon> {{ team.city }}</p>
                     </div>
                   </div>
