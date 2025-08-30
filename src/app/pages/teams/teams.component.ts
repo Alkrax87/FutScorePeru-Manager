@@ -12,7 +12,7 @@ import { TeamAddModalComponent } from '../../components/team-add-modal/team-add-
   selector: 'app-teams',
   imports: [FontAwesomeModule, RouterLink, TeamAddModalComponent],
   template: `
-    <div class="px-5 xl:px-32 py-5 sm:py-10 select-none">
+    <div class="px-5 xl:px-32 pt-24 pb-8 select-none">
       <!-- Title -->
       <div class="pb-4 flex flex-col sm:flex-row justify-between gap-4">
         <div class="text-center sm:text-start">
