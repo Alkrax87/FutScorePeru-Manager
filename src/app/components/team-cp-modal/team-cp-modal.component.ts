@@ -63,6 +63,18 @@ import { faPenToSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
                 class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
               >
             </div>
+            <!-- Location -->
+            <div>
+              <label for="location" class="block text-sm font-semibold mb-1">Location</label>
+              <select id="location" formControlName="location"
+                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
+              >
+                <option [value]="''" disabled>Choose location</option>
+                @for (location of locations; track $index) {
+                  <option [value]="location">{{ location }}</option>
+                }
+              </select>
+            </div>
           </div>
           <div class="flex justify-end gap-2">
             <button type="button" (click)="close.emit()" class="hover:bg-neutral-50 border text-sm rounded-lg px-4 py-2">Cancel</button>
@@ -89,12 +101,15 @@ export class TeamCPModalComponent {
   private fb = inject(FormBuilder);
   private teamsCPService = inject(TeamsCPApiService);
 
+  locations: string[] = ["Amazonas", 'Áncash', 'Apurímac', "Arequipa", "Ayacucho", "Cajamarca", "Cusco", "Huancavelica", "Huánuco", "Ica", "Junín", "La Libertad", "Lambayeque", "Lima y Callao", "Loreto", "Madre de Dios", "Moquegua", "Pasco", "Piura", "Puno", "San Martín", "Tacna", "Tumbes", "Ucayali"];
+
   form = this.fb.group({
     teamId: ['', Validators.required],
     name: [''],
     abbreviation: [''],
     image: [''],
     city: [''],
+    location: [''],
   });
   errorMessage: { status: string, message: string } | null = null;
 
@@ -111,7 +126,7 @@ export class TeamCPModalComponent {
     if (this.form.invalid) {
       this.errorMessage = {
         status: 'Error',
-        message: 'El campo "teamId" es obligatorio',
+        message: 'The "teamId" field is required',
       };
       return;
     }
