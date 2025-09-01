@@ -4,4 +4,5 @@ export interface TeamCP {
   abbreviation: string;
   image: string;
   city: string;
+  location: string;
 }
