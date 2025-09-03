@@ -1,16 +1,15 @@
-import { Component } from '@angular/core';
-import { StadiumsApiService } from '../../services/stadiums-api-service.service';
-import { Subscription } from 'rxjs';
-import { Stadium } from '../../interfaces/stadium';
+import { Component, inject, signal } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faLocationDot, faPenToSquare, faPlus, faTrashCan, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { StadiumAddModalComponent } from "../../components/stadium-add-modal/stadium-add-modal.component";
-import { StadiumEditModalComponent } from "../../components/stadium-edit-modal/stadium-edit-modal.component";
-import { StadiumDeleteModalComponent } from "../../components/stadium-delete-modal/stadium-delete-modal.component";
+import { StadiumsApiService } from '../../services/stadiums-api.service';
+import { Stadium } from '../../interfaces/stadium';
+import { Subscription } from 'rxjs';
+import { StadiumModalComponent } from "../../components/stadium-modal/stadium-modal.component";
+import { DeleteConfirmationModalComponent } from "../../components/delete-confirmation-modal/delete-confirmation-modal.component";
 
 @Component({
   selector: 'app-stadiums',
-  imports: [FontAwesomeModule, StadiumAddModalComponent, StadiumEditModalComponent, StadiumDeleteModalComponent],
+  imports: [FontAwesomeModule, StadiumModalComponent, DeleteConfirmationModalComponent],
   template: `
     <div class="px-5 xl:px-32 pt-24 pb-8 select-none">
       <!-- Title -->
@@ -59,50 +58,41 @@ import { StadiumDeleteModalComponent } from "../../components/stadium-delete-mod
       </div>
     </div>
 
-    @if (showAddStadiumModal) {
-      <app-stadium-add-modal
-        (add)="addStadium($event)"
-        (cancel)="showAddStadiumModal = !showAddStadiumModal"
-      ></app-stadium-add-modal>
+    @if (isStadiumModalOpen()) {
+      <app-stadium-modal
+        [stadium]="selectedStadium()"
+        (close)="isStadiumModalOpen.set(false)"
+      ></app-stadium-modal>
     }
 
-    @if (showEditStadiumModal) {
-      <app-stadium-edit-modal
-        [stadium]="editedStadium"
-        (edit)="editStadium($event)"
-        (cancel)="showEditStadiumModal = !showEditStadiumModal"
-      ></app-stadium-edit-modal>
+    @if (isConfirmOpen()) {
+      <app-delete-confirmation-modal
+        [message]="{
+          section: 'Stadium',
+          element: selectedStadium()!.name
+        }"
+        (confirm)="confirmDelete()"
+        (close)="isConfirmOpen.set(false)"
+      ></app-delete-confirmation-modal>
     }
-
-    @if (showDeleteStadiumModal) {
-      <app-stadium-delete-modal
-        [stadium]="deletedStadium"
-        (delete)="deleteStadium()"
-        (cancel)="showDeleteStadiumModal = !showDeleteStadiumModal"
-      ></app-stadium-delete-modal>
-    }
-
   `,
   styles: ``,
 })
 export class StadiumsComponent {
-  constructor(private stadiumsService: StadiumsApiService) {}
-
-  private StadiumSubscription: Subscription | null = null;
+  private stadiumsService = inject(StadiumsApiService);
   stadiums: Stadium[] = [];
+  private StadiumSubscription: Subscription | null = null;
+
+  isStadiumModalOpen = signal(false);
+  isConfirmOpen = signal(false);
+
+  selectedStadium = signal<Stadium | null>(null);
 
   People = faUsers;
   Location = faLocationDot;
   Add = faPlus;
   Edit = faPenToSquare;
   Delete = faTrashCan;
-
-  editedStadium!: Stadium;
-  deletedStadium!: Stadium;
-
-  showAddStadiumModal = false;
-  showEditStadiumModal = false;
-  showDeleteStadiumModal = false;
 
   ngOnInit() {
     this.stadiumsService.getStadiums();
@@ -112,32 +102,25 @@ export class StadiumsComponent {
   }
 
   onAdd() {
-    this.showAddStadiumModal = !this.showAddStadiumModal;
+    this.selectedStadium.set(null);
+    this.isStadiumModalOpen.set(true);
   }
 
   onEdit(stadium: Stadium) {
-    this.editedStadium = {...stadium};
-    this.showEditStadiumModal = !this.showEditStadiumModal;
+    this.selectedStadium.set(stadium);
+    this.isStadiumModalOpen.set(true);
   }
 
   onDelete(stadium: Stadium) {
-    this.deletedStadium = stadium;
-    this.showDeleteStadiumModal = !this.showDeleteStadiumModal;
+    this.selectedStadium.set(stadium);
+    this.isConfirmOpen.set(true);
   }
 
-  addStadium(stadium: Stadium) {
-    this.stadiumsService.addStadium(stadium);
-    this.showAddStadiumModal = !this.showAddStadiumModal;
-  }
-
-  editStadium(stadium: Stadium) {
-    this.stadiumsService.updateStadium(stadium)
-    this.showEditStadiumModal = !this.showEditStadiumModal;
-  }
-
-  deleteStadium() {
-    this.stadiumsService.deleteStadium(this.deletedStadium.stadiumId as number);
-    this.showDeleteStadiumModal = !this.showDeleteStadiumModal;
+  confirmDelete() {
+    if (this.selectedStadium()?.stadiumId) {
+      this.stadiumsService.deleteStadium(this.selectedStadium()!.stadiumId!);
+    }
+    this.isConfirmOpen.set(false);
   }
 
   ngOnDestroy() {
