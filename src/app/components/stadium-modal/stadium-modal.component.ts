@@ -9,14 +9,14 @@ import { faPenToSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
   selector: 'app-stadium-modal',
   imports: [ReactiveFormsModule, FontAwesomeModule],
   template: `
-    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none">
-      <div class="bg-white p-5 rounded-xl w-full max-w-sm">
+    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-5">
+      <div class="bg-white p-5 rounded-3xl w-full max-w-sm">
         <form [formGroup]="form" (ngSubmit)="save()">
           @if (stadium) {
-            <h3 class="text-lg font-semibold">Edit Stadium</h3>
+            <h3 class="text-xl font-semibold">Edit Stadium</h3>
             <p class="text-neutral-500 text-sm">Update the stadium details below.</p>
           } @else {
-            <h3 class="text-lg font-semibold">Add New Stadium</h3>
+            <h3 class="text-xl font-semibold">Add New Stadium</h3>
             <p class="text-neutral-500 text-sm">Enter the details for the new stadium below.</p>
           }
           @if (errorMessage) {
@@ -65,13 +65,13 @@ import { faPenToSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
             </div>
           </div>
           <div class="flex justify-end gap-2">
-            <button type="button" (click)="close.emit()" class="hover:bg-neutral-50 border text-sm rounded-lg px-4 py-2">Cancel</button>
+            <button type="button" (click)="close.emit()" class="hover:bg-neutral-100/50 text-neutral-600 border rounded-full px-4 py-2 text-sm duration-300">Cancel</button>
             @if (stadium) {
-              <button type="submit" class="bg-night hover:bg-neutral-800 text-white text-sm rounded-lg px-4 py-2">
+              <button type="submit" class="bg-yellow-500 hover:bg-yellow-500/80 text-white rounded-full px-4 py-2 text-sm duration-300">
                 <fa-icon [icon]="Edit"></fa-icon>&nbsp; Save Changes
               </button>
             } @else {
-              <button type="submit" class="bg-night hover:bg-neutral-800 text-white text-sm rounded-lg px-4 py-2">
+              <button type="submit" class="bg-green-700 hover:bg-green-700/90 text-white rounded-full px-4 py-2 text-sm duration-300">
                 <fa-icon [icon]="Add"></fa-icon>&nbsp; Add Team
               </button>
             }
