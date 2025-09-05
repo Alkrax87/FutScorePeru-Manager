@@ -33,16 +33,15 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
                 <fa-icon style="font-size: 10px;" [icon]="People"></fa-icon>
                 <p>{{ formatNumber(stadium.capacity!) }}</p>
               </div>
-              <img [src]="stadium.image" alt="STADIUM-image" class="group-hover:scale-105 duration-300 w-full h-48 object-cover">
+              <img [src]="stadium.image" alt="STADIUM-image" class="group-hover:scale-105 duration-300 w-full h-40 md:h-48 object-cover">
             </div>
             <div class="p-4">
-              <p class="text-xs">ID: {{ stadium.stadiumId }}</p>
-              <p class="font-semibold">{{ stadium.name  }} </p>
-              <div class="text-neutral-500 text-sm flex gap-1">
-                <fa-icon class="text-xs" [icon]="Location"></fa-icon>
-                <p>{{ stadium.location }}</p>
+              <p class="text-neutral-400 text-xs">ID: {{ stadium.stadiumId }}</p>
+              <p class="font-semibold truncate">{{ stadium.name }}</p>
+              <div class="text-neutral-500 text-xs truncate">
+                <fa-icon [icon]="Location"></fa-icon> {{ stadium.location }}
               </div>
-              <div class="flex justify-end gap-2 mt-2">
+              <div class="flex gap-2 mt-2">
                 <button (click)="onEdit(stadium)" class="hover:bg-neutral-100/50 text-neutral-600 border w-full rounded-full py-2 text-sm duration-300">
                   <fa-icon [icon]="Edit"></fa-icon> Edit
                 </button>
