@@ -19,7 +19,7 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
           <p class="text-neutral-500">Manage and view all Copa Perú teams.</p>
         </div>
         <div class="flex items-center">
-          <button (click)="onAdd()" class="bg-night hover:bg-neutral-800 text-white w-full sm:w-fit px-4 py-2 rounded-xl">
+          <button (click)="onAdd()" class="bg-green-700 hover:bg-green-700/90 text-white w-full sm:w-fit px-6 py-2 rounded-full">
             <fa-icon [icon]="Add"></fa-icon> Add Team
           </button>
         </div>
@@ -27,23 +27,27 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @for (team of dataTeamsCP; track $index) {
-          <div class="border border-neutral-200 hover:bg-neutral-50 duration-300 group rounded-lg shadow-md">
+          <div class="duration-300 rounded-3xl shadow-md">
             <div class="p-4">
-              <div class="flex">
-                <div class="w-full">
-                  <p class="text-neutral-400 text-xs">TeamID: {{ team.teamId }}</p>
-                  <div class="flex items-center gap-2">
-                    <img [src]="team.image ? team.image : 'assets/images/no-team.webp'" alt="TeamCP-logo" class="w-12 h-12">
-                    <div class="truncate">
-                      <p class="font-semibold text-sm truncate min-w-32">{{ team.name ? team.name + ' (' + team.abbreviation + ')' : 'Por Definir' }}</p>
-                      <p class="text-neutral-500 text-xs"><fa-icon [icon]="Location"></fa-icon> {{ team.city }} @if (team.location) {<span>({{ team.location }})</span>} </p>
-                    </div>
+              <div class="w-full">
+                <div class="flex items-center gap-2">
+                  <img [src]="team.image ? team.image : 'assets/images/no-team.webp'" alt="TeamCP-logo" class="w-14 h-14">
+                  <div class="truncate">
+                    <p class="text-neutral-400 text-xs">ID: {{ team.teamId }}</p>
+                    <p class="font-semibold text-sm truncate">{{ team.name ? team.name + ' (' + team.abbreviation + ')' : 'Por Definir' }}</p>
+                    <p class="text-neutral-500 text-xs truncate">
+                      <fa-icon [icon]="Location"></fa-icon> {{ team.city }} @if (team.location) {<span>({{ team.location }})</span>}
+                    </p>
                   </div>
                 </div>
-                <div class="flex flex-col justify-center gap-3 text-neutral-500 text-sm">
-                  <fa-icon (click)="onEdit(team)" class="hover:text-yellow-500 cursor-pointer duration-300" [icon]="Edit"></fa-icon>
-                  <fa-icon (click)="onDelete(team)" class="hover:text-red-600 cursor-pointer duration-300" [icon]="Delete"></fa-icon>
-                </div>
+              </div>
+              <div class="flex gap-2 mt-2">
+                <button (click)="onEdit(team)" class="hover:bg-neutral-100/50 text-neutral-600 border w-full rounded-full py-2 text-sm duration-300">
+                  <fa-icon [icon]="Edit"></fa-icon> Edit
+                </button>
+                <button (click)="onDelete(team)" class="bg-red-600 text-white hover:bg-red-600/80 rounded-full px-4 py-2 text-sm duration-300">
+                  <fa-icon [icon]="Delete"></fa-icon>
+                </button>
               </div>
             </div>
           </div>
