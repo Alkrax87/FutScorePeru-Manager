@@ -27,7 +27,7 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @for (team of dataTeamsCP; track $index) {
-          <div class="duration-300 rounded-3xl shadow-md">
+          <div class="duration-300 rounded-3xl shadow-md border">
             <div class="p-4">
               <div class="w-full">
                 <div class="flex items-center gap-2">

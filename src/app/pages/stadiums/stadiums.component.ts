@@ -27,7 +27,7 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @for (stadium of stadiums; track $index) {
-          <div class="group rounded-3xl overflow-hidden shadow-md">
+          <div class="group rounded-3xl overflow-hidden shadow-md border">
             <div class="relative shadow-md overflow-hidden">
               <div class="bg-white bg-opacity-90 text-neutral-700 flex gap-1.5 z-10 rounded-full text-xs shadow-md font-semibold px-2 py-0.5 absolute right-3 top-3">
                 <fa-icon style="font-size: 10px;" [icon]="People"></fa-icon>
