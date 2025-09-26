@@ -4,7 +4,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowUpRightFromSquare, faLocationDot, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { TeamsApiService } from '../../services/teams-api.service';
-import { StadiumsApiService } from '../../services/stadiums-api-service.service';
+import { StadiumsApiService } from '../../services/stadiums-api.service';
 import { TeamProfile } from '../../interfaces/team-profile';
 import { TeamAddModalComponent } from '../../components/team-add-modal/team-add-modal.component';
 
@@ -28,7 +28,7 @@ import { TeamAddModalComponent } from '../../components/team-add-modal/team-add-
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @for (team of teams; track $index) {
-          <div [routerLink]="['/team',team.category, team.teamId]" class="border border-neutral-200 hover:bg-neutral-50 duration-300 group rounded-lg overflow-hidden shadow-md cursor-pointer">
+          <div [routerLink]="['/team',team.category, team.teamId]" class=" hover:bg-neutral-50 duration-300 group rounded-lg overflow-hidden shadow-md cursor-pointer">
             <div [style.backgroundColor]="team.color.c1" class="h-3"></div>
             <div class="px-4 py-4">
               <div class="flex">

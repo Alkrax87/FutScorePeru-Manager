@@ -5,7 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCircle, faCircleCheck, faCircleMinus, faCircleXmark, faFlag, faGlobe, faLayerGroup, faLocationDot, faPenToSquare, faPlus, faRing, faShareNodes, faTrashCan, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { TeamsApiService } from '../../../services/teams-api.service';
-import { StadiumsApiService } from '../../../services/stadiums-api-service.service';
+import { StadiumsApiService } from '../../../services/stadiums-api.service';
 import { TeamProfile } from '../../../interfaces/team-profile';
 import { Stadium } from '../../../interfaces/stadium';
 import { TeamProfileEditComponent } from "../../../components/team-profile-edit/team-profile-edit.component";

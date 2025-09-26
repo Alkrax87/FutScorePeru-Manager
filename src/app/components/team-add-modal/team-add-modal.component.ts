@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { TeamProfile } from '../../interfaces/team-profile';
-import { StadiumsApiService } from '../../services/stadiums-api-service.service';
+import { StadiumsApiService } from '../../services/stadiums-api.service';
 import { Subscription } from 'rxjs';
 import { Stadium } from '../../interfaces/stadium';
 
