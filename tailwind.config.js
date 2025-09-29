@@ -8,6 +8,7 @@ module.exports = {
       colors: {
         night: "#161513",
         nightfall: "#232323",
+        light: "#F7F7F7",
         brightnight: "#393939",
         crimson: "#dc143c",
         gold: "#d8b145",
