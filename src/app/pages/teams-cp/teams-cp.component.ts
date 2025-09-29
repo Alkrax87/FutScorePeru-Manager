@@ -11,12 +11,12 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
   selector: 'app-teams-cp',
   imports: [FontAwesomeModule, TeamCPModalComponent, DeleteConfirmationModalComponent],
   template: `
-    <div class="px-5 xl:px-32 pt-24 pb-8 select-none">
+    <div class="bg-light px-5 xl:px-32 pt-24 pb-8 select-none">
       <!-- Title -->
       <div class="pb-4 flex flex-col sm:flex-row justify-between gap-4">
         <div class="text-center sm:text-start">
           <h2 class="text-3xl font-semibold">Teams CP Management</h2>
-          <p class="text-neutral-500">Manage and view all Copa Perú teams.</p>
+          <p class="text-neutral-500">Manage and view all Copa Perú teams</p>
         </div>
         <div class="flex items-center">
           <button (click)="onAdd()" class="bg-green-700 hover:bg-green-700/90 text-white w-full sm:w-fit px-6 py-2 rounded-full">
@@ -27,7 +27,7 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @for (team of dataTeamsCP; track $index) {
-          <div class="duration-300 rounded-3xl shadow-md border">
+          <div class="bg-white rounded-3xl shadow-md hover:shadow-xl duration-300">
             <div class="p-4">
               <div class="w-full">
                 <div class="flex items-center gap-2">
@@ -42,7 +42,7 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
                 </div>
               </div>
               <div class="flex gap-2 mt-2">
-                <button (click)="onEdit(team)" class="hover:bg-neutral-100/50 text-neutral-600 border w-full rounded-full py-2 text-sm duration-300">
+                <button (click)="onEdit(team)" class="hover:bg-neutral-100/80 text-neutral-600 border w-full rounded-full py-2 text-sm duration-300">
                   <fa-icon [icon]="Edit"></fa-icon> Edit
                 </button>
                 <button (click)="onDelete(team)" class="bg-red-600 text-white hover:bg-red-600/80 rounded-full px-4 py-2 text-sm duration-300">

@@ -11,7 +11,7 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
   selector: 'app-stadiums',
   imports: [FontAwesomeModule, StadiumModalComponent, DeleteConfirmationModalComponent],
   template: `
-    <div class="px-5 xl:px-32 pt-24 pb-8 select-none">
+    <div class="bg-light px-5 xl:px-32 pt-24 pb-8 select-none">
       <!-- Title -->
       <div class="pb-4 flex flex-col sm:flex-row justify-between gap-4">
         <div class="text-center sm:text-start">
@@ -27,7 +27,7 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @for (stadium of stadiums; track $index) {
-          <div class="group rounded-3xl overflow-hidden shadow-md border">
+          <div class="bg-white group rounded-3xl overflow-hidden shadow-md hover:shadow-xl duration-300">
             <div class="relative shadow-md overflow-hidden">
               <div class="bg-white bg-opacity-90 text-neutral-700 flex gap-1.5 z-10 rounded-full text-xs shadow-md font-semibold px-2 py-0.5 absolute right-3 top-3">
                 <fa-icon style="font-size: 10px;" [icon]="People"></fa-icon>
@@ -42,7 +42,7 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
                 <fa-icon [icon]="Location"></fa-icon> {{ stadium.location }}
               </div>
               <div class="flex gap-2 mt-2">
-                <button (click)="onEdit(stadium)" class="hover:bg-neutral-100/50 text-neutral-600 border w-full rounded-full py-2 text-sm duration-300">
+                <button (click)="onEdit(stadium)" class="hover:bg-neutral-100/80 text-neutral-600 border w-full rounded-full py-2 text-sm duration-300">
                   <fa-icon [icon]="Edit"></fa-icon> Edit
                 </button>
                 <button (click)="onDelete(stadium)" class="bg-red-600 text-white hover:bg-red-600/80 rounded-full px-4 py-2 text-sm duration-300">
