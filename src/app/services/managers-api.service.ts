@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Environments } from '../environment/environments';
 import { HttpClient } from '@angular/common/http';
-import { Manager } from '../interfaces/manager';
+import { inject, Injectable } from '@angular/core';
+import { Environments } from '../environment/environments';
 import { BehaviorSubject } from 'rxjs';
+import { Manager } from '../interfaces/manager';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,7 @@ import { BehaviorSubject } from 'rxjs';
 export class ManagersApiService {
   private backendUrl = Environments.backendUrl;
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   private managersSubject = new BehaviorSubject<Manager[]>([]);
   dataManagers$ = this.managersSubject.asObservable();
@@ -23,14 +23,20 @@ export class ManagersApiService {
   }
 
   addManager(manager: Manager) {
-    return this.http.post(this.backendUrl + 'managers', manager);
+    this.http.post(this.backendUrl + 'managers', manager).subscribe({
+      next: () => this.getManagers(),
+    });
   }
 
   updateManager(managerId: number, manager: Manager) {
-    return this.http.put(this.backendUrl + 'managers/' + managerId, manager);
+    this.http.put(this.backendUrl + 'managers/' + managerId, manager).subscribe({
+      next: () => this.getManagers(),
+    });
   }
 
   deleteManager(managerId: number) {
-    return this.http.delete(this.backendUrl + 'managers/' + managerId);
+    this.http.delete(this.backendUrl + 'managers/' + managerId).subscribe({
+      next: () => this.getManagers(),
+    });
   }
 }
