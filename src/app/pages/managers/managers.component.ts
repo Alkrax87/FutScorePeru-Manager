@@ -1,24 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ManagersApiService } from '../../services/managers-api.service';
 import { TeamsApiService } from '../../services/teams-api.service';
 import { faPenToSquare, faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { Manager } from '../../interfaces/manager';
-import { combineLatest } from 'rxjs';
 import { TeamProfile } from '../../interfaces/team-profile';
-import { ManagerAddModalComponent } from "../../components/manager-add-modal/manager-add-modal.component";
-import { ManagerUpdateModalComponent } from "../../components/manager-update-modal/manager-update-modal.component";
-import { ManagerDeleteModalComponent } from "../../components/manager-delete-modal/manager-delete-modal.component";
+import { combineLatest, Subscription } from 'rxjs';
+import { DeleteConfirmationModalComponent } from "../../components/delete-confirmation-modal/delete-confirmation-modal.component";
+import { ManagerModalComponent } from "../../components/manager-modal/manager-modal.component";
 
 interface managerView extends Manager {
   teamLogo: string;
+  teamName: string;
 }
 
 @Component({
   selector: 'app-managers',
-  imports: [FontAwesomeModule, ManagerAddModalComponent, ManagerUpdateModalComponent, ManagerDeleteModalComponent],
+  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, ManagerModalComponent],
   template: `
-    <div class="px-5 xl:px-32 pt-24 pb-8 select-none">
+    <div class="bg-light px-5 xl:px-32 pt-24 pb-8 select-none">
       <!-- Title -->
       <div class="pb-4 flex flex-col sm:flex-row justify-between gap-4">
         <div class="text-center sm:text-start">
@@ -26,7 +26,7 @@ interface managerView extends Manager {
           <p class="text-neutral-500">Manage and view all managers</p>
         </div>
         <div class="flex items-center">
-          <button (click)="onAdd()" class="bg-night hover:bg-neutral-800 text-white w-full sm:w-fit px-4 py-2 rounded-xl">
+          <button (click)="onAdd()" class="bg-green-700 hover:bg-green-700/90 text-white w-full sm:w-fit px-6 py-2 rounded-full">
             <fa-icon [icon]="Add"></fa-icon> Add Manager
           </button>
         </div>
@@ -34,34 +34,39 @@ interface managerView extends Manager {
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @for (manager of managersViews; track $index) {
-          <div class="border border-neutral-200 rounded-xl overflow-hidden shadow-md">
-            <div class="bg-night relative flex justify-center p-4">
-              @if (manager.photo) {
-                <img [src]="manager.photo" alt="MANAGER-image" class="w-32 h-32 object-cover rounded-lg">
-              } @else {
-                <img src="assets/images/no-manager.webp" alt="MANAGER-image" class="w-32 h-32 object-cover rounded-lg">
-              }
-              <div class="bg-white font-semibold absolute left-2 top-2 px-2 rounded-full text-xs">
-                ID {{ manager.managerId }}
-              </div>
-              <img [src]="manager.teamLogo" alt="TEAM-logo" class="absolute w-10 top-2 right-2">
-            </div>
-            <div class="p-2">
-              <div class="flex justify-center gap-2">
-                <p class="text-center font-semibold">{{ manager.name }}</p>
-                @if (manager.cod) {
-                  <img src="assets/svg/{{ manager.cod }}.svg" alt="FLAG" class="w-5">
-                } @else {
-                  <img src="assets/svg/no-flag.svg" alt="FLAG" class="w-5">
-                }
-              </div>
-              <div class="flex gap-2 mt-2">
-                <button (click)="onEdit(manager)" class="hover:bg-neutral-50 border border-neutral-200 w-full rounded-lg py-2 font-semibold text-sm">
-                  <fa-icon [icon]="Edit"></fa-icon> Edit
-                </button>
-                <button (click)="onDelete(manager)" class="bg-red-500 hover:bg-red-600 text-white border border-neutral-200 w-full rounded-lg py-2 font-semibold text-sm">
-                  <fa-icon [icon]="Delete"></fa-icon> Delete
-                </button>
+          <div class="bg-white rounded-3xl shadow-md hover:shadow-xl duration-300">
+            <div class="p-4">
+              <div class="w-full">
+                <p class="text-neutral-400 text-xs">ID: {{ manager.managerId }}</p>
+                <div class="flex flex-col items-center gap-4">
+                  <div class="bg-nightfall text-white flex justify-center items-center gap-1 rounded-full py-2 px-4 w-fit">
+                    <img [src]="manager.teamLogo" alt="TEAM-logo" class="w-8 h-8">
+                    <p class="font-semibold text-sm truncate">{{ manager.teamName }}</p>
+                  </div>
+                  <div class="flex justify-center">
+                    <div class="rounded-full overflow-hidden">
+                      @if (manager.photo) {
+                        <img [src]="manager.photo" alt="MANAGER-image" class="w-28 h-28 object-cover">
+                      } @else {
+                        <img src="assets/images/no-manager.webp" alt="MANAGER-image" class="w-28 h-28 object-cover">
+                      }
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <p class="font-semibold truncate">{{ manager.name }}</p>
+                    @if (manager.cod) {
+                      <img src="assets/svg/{{ manager.cod }}.svg" alt="FLAG" class="top-20 right-32 w-6">
+                    }
+                  </div>
+                </div>
+                <div class="flex gap-2 mt-2">
+                  <button (click)="onEdit(manager)" class="hover:bg-neutral-100/80 text-neutral-600 border w-full rounded-full py-2 text-sm duration-300">
+                    <fa-icon [icon]="Edit"></fa-icon> Edit
+                  </button>
+                  <button (click)="onDelete(manager)" class="bg-red-600 text-white hover:bg-red-600/80 rounded-full px-4 py-2 text-sm duration-300">
+                    <fa-icon [icon]="Delete"></fa-icon>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -69,119 +74,88 @@ interface managerView extends Manager {
       </div>
     </div>
 
-    @if (showAddManagerModal) {
-      <app-manager-add-modal
-        (add)="addManager($event)"
-        (cancel)="showAddManagerModal = false"
-      ></app-manager-add-modal>
+    @if (isManagerModalOpen()) {
+      <app-manager-modal
+        [manager]="selectedManager()"
+        (close)="isManagerModalOpen.set(false);"
+      ></app-manager-modal>
     }
 
-    @if (showEditManagerModal) {
-      <app-manager-update-modal
-        [editedManager]="editedManager"
-        (edit)="updateManager($event)"
-        (cancel)="showEditManagerModal = false"
-      ></app-manager-update-modal>
-    }
-
-    @if (showDeleteManagerModal) {
-      <app-manager-delete-modal
-        [deletedManager]="deletedManager"
-        (delete)="deleteManager()"
-        (cancel)="showDeleteManagerModal = false"
-      ></app-manager-delete-modal>
+    @if (isConfirmOpen()) {
+      <app-delete-confirmation-modal
+        [message]="{
+          section: 'Manager',
+          element: selectedManager()!.name
+        }"
+        (confirm)="confirmDelete()"
+        (close)="isConfirmOpen.set(false)"
+      ></app-delete-confirmation-modal>
     }
   `,
   styles: ``,
 })
 export class ManagersComponent {
-  constructor(
-    private managersService: ManagersApiService,
-    private teamsService: TeamsApiService,
-  ) {}
-
+  private teamsService = inject(TeamsApiService);
+  private managersService = inject(ManagersApiService);
   managers: Manager[] = [];
   teams: TeamProfile[] = [];
   managersViews: managerView[] = [];
+  private ManagersTeamsSubscription: Subscription | null = null;
+
+  isManagerModalOpen = signal(false);
+  isConfirmOpen = signal(false);
+
+  selectedManager = signal<Manager | null>(null);
 
   Add = faPlus;
   Edit = faPenToSquare;
   Delete = faTrashCan;
 
-  editedManager!: Manager;
-  deletedManager!: Manager;
-
-  showAddManagerModal = false;
-  showEditManagerModal = false;
-  showDeleteManagerModal = false;
-
   ngOnInit() {
     this.teamsService.getTeams();
     this.managersService.getManagers();
-    this.teamsService.dataTeams$.subscribe({
-      next: (data) => {
-        this.teams = data;
+    this.ManagersTeamsSubscription = combineLatest([
+      this.teamsService.dataTeams$,
+      this.managersService.dataManagers$
+    ]).subscribe({
+      next: ([teams, managers]) => {
+        this.teams = teams;
+
+        this.managersViews = managers.map(manager => {
+          const team = teams.find(t => t.teamId === manager.teamId);
+          return {
+            ...manager,
+            teamLogo: team?.image ?? '',
+            teamName: team?.name ?? ''
+          };
+        });
       }
     });
-    this.managersService.dataManagers$.subscribe({
-      next: (data) => {
-        this.managersViews = data.map(manager => ({
-          ...manager,
-          teamLogo: this.getTeamLogo(manager.teamId),
-        }));
-      }
-    });
-  }
-
-  loadManagers() {
-    this.managersService.getManagers();
-  }
-
-  getTeamLogo(teamId: string) {
-    const team = this.teams.find((team) => team.teamId === teamId);
-    return team ? team.image : 'assets/images/no-team.webp';
   }
 
   onAdd() {
-    this.showAddManagerModal = !this.showAddManagerModal;
+    this.selectedManager.set(null);
+    this.isManagerModalOpen.set(true);
   }
 
   onEdit(manager: Manager) {
-    this.editedManager = {...manager};
-    this.showEditManagerModal = !this.showEditManagerModal;
+    this.selectedManager.set(manager);
+    this.isManagerModalOpen.set(true);
   }
 
   onDelete(manager: Manager) {
-    this.deletedManager = manager;
-    this.showDeleteManagerModal = !this.showDeleteManagerModal;
+    this.selectedManager.set(manager);
+    this.isConfirmOpen.set(true);
   }
 
-  addManager(manager: Manager) {
-    this.managersService.addManager(manager).subscribe({
-      next: () => {
-        this.managersService.getManagers();
-        this.showAddManagerModal = false;
-      },
-      error: (err) => (console.error(err.message)
-      )
-    });
+  confirmDelete() {
+    if (this.selectedManager()?.managerId) {
+      this.managersService.deleteManager(this.selectedManager()!.managerId!);
+    }
+    this.isConfirmOpen.set(false);
   }
 
-  updateManager(manager: Manager) {
-    this.managersService.updateManager(manager.managerId, manager).subscribe({
-      next: () => {
-        this.managersService.getManagers();
-        this.showEditManagerModal = false;
-      }
-    });
-  }
-
-  deleteManager() {
-    this.managersService.deleteManager(this.deletedManager.managerId).subscribe({
-      next: () => {
-        this.managersService.getManagers();
-        this.showDeleteManagerModal = false;
-      }
-    });
+  ngOnDestroy() {
+    this.ManagersTeamsSubscription?.unsubscribe();
   }
 }
