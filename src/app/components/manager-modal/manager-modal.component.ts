@@ -123,7 +123,7 @@ export class ManagerModalComponent {
     category: [0, [Validators.min(1), Validators.required]],
     name: ['', Validators.required],
     cod: ['', Validators.required],
-    photo: ['', Validators.required],
+    photo: [''],
     teamId: ['', Validators.required],
   });
   errorMessage: string | null = null;
