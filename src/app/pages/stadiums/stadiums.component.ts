@@ -1,28 +1,26 @@
 import { Component, inject, signal } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faLocationDot, faPenToSquare, faPlus, faTrashCan, faUserGroup, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { StadiumsApiService } from '../../services/stadiums-api.service';
-import { Stadium } from '../../interfaces/stadium';
-import { Subscription } from 'rxjs';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faLocationDot, faPenToSquare, faPlus, faTrashCan, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { StadiumModalComponent } from "../../components/stadium-modal/stadium-modal.component";
 import { DeleteConfirmationModalComponent } from "../../components/delete-confirmation-modal/delete-confirmation-modal.component";
+import { Stadium } from '../../interfaces/stadium';
 
 @Component({
   selector: 'app-stadiums',
   imports: [FontAwesomeModule, StadiumModalComponent, DeleteConfirmationModalComponent],
   template: `
-    <div class="bg-light px-5 xl:px-32 pt-24 pb-8 select-none">
+    <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 pt-24 pb-8 duration-500 select-none">
       <!-- Title -->
-      <div class="pb-4 flex flex-col sm:flex-row justify-between gap-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pb-4">
         <div class="text-center sm:text-start">
           <h2 class="text-3xl font-semibold">Stadium Management</h2>
-          <p class="text-neutral-500">Manage and view all stadiums</p>
+          <p class="text-neutral-400">Manage and view all stadiums</p>
         </div>
-        <div class="flex items-center">
-          <button (click)="onAdd()" class="bg-green-700 hover:bg-green-700/90 text-white w-full sm:w-fit px-6 py-2 rounded-full">
-            <fa-icon [icon]="Add"></fa-icon> Add Stadium
-          </button>
-        </div>
+        <button (click)="onAdd()" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full h-fit sm:w-fit px-6 py-2 rounded-full">
+          <fa-icon [icon]="Add"></fa-icon> Add Stadium
+        </button>
       </div>
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -45,7 +43,7 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
                 <button (click)="onEdit(stadium)" class="hover:bg-neutral-100/80 text-neutral-600 border w-full rounded-full py-2 text-sm duration-300">
                   <fa-icon [icon]="Edit"></fa-icon> Edit
                 </button>
-                <button (click)="onDelete(stadium)" class="bg-red-600 text-white hover:bg-red-600/80 rounded-full px-4 py-2 text-sm duration-300">
+                <button (click)="onDelete(stadium)" class="bg-red-600 hover:bg-red-600/80 text-white rounded-full px-4 py-2 text-sm duration-300">
                   <fa-icon [icon]="Delete"></fa-icon>
                 </button>
               </div>
@@ -78,23 +76,20 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
 export class StadiumsComponent {
   private stadiumsService = inject(StadiumsApiService);
   stadiums: Stadium[] = [];
-  private StadiumSubscription: Subscription | null = null;
 
   isStadiumModalOpen = signal(false);
   isConfirmOpen = signal(false);
-
   selectedStadium = signal<Stadium | null>(null);
 
-  // People = faUsers;
   People = faUserGroup;
   Location = faLocationDot;
   Add = faPlus;
   Edit = faPenToSquare;
   Delete = faTrashCan;
 
-  ngOnInit() {
+  constructor() {
     this.stadiumsService.getStadiums();
-    this.StadiumSubscription = this.stadiumsService.dataStadiums$.subscribe({
+    this.stadiumsService.dataStadiums$.pipe(takeUntilDestroyed()).subscribe({
       next: (data) => (this.stadiums = data),
     });
   }
@@ -123,9 +118,5 @@ export class StadiumsComponent {
       this.stadiumsService.deleteStadium(this.selectedStadium()!.stadiumId!);
     }
     this.isConfirmOpen.set(false);
-  }
-
-  ngOnDestroy() {
-    this.StadiumSubscription?.unsubscribe();
   }
 }
