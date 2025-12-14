@@ -47,15 +47,15 @@ import { MapElement } from '../../interfaces/map-element';
             }
             <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               @for (mapItem of map.model; track $index) {
-                <div class="bg-white border flex items-center gap-2 justify-between shadow-md hover:shadow-xl duration-300 rounded-2xl p-4">
+                <div class="bg-white border flex items-center gap-2 justify-between shadow-md hover:shadow-xl duration-300 rounded-3xl p-4">
                   <p class="font-semibold text-sm truncate">{{ mapItem.mapName }}</p>
                   <button type="button" (click)="onEdit({ category: map.category, mapName: mapItem.mapName, mapId: mapItem.mapId, mapStatus: mapItem.mapStatus})"
-                    class="hover:bg-opacity-85 rounded-full w-24 font-semibold text-sm py-1 text-white duration-300"
+                    class="hover:bg-opacity-85 rounded-full w-24 font-semibold text-sm py-2 text-white duration-300"
                     [ngClass]="{
                       'bg-green-600': mapItem.mapStatus,
                       'bg-red-600': !mapItem.mapStatus
                     }">
-                    {{ mapItem.mapStatus ? 'Active' : 'Disabled' }}
+                    {{ mapItem.mapStatus ? 'Enabled' : 'Disabled' }}
                   </button>
                 </div>
               }
@@ -67,7 +67,7 @@ import { MapElement } from '../../interfaces/map-element';
 
     @if (showChangeStatusModal()) {
       <app-map-update-modal
-        [map]="editedMapItem()!.mapName"
+        [mapItem]="{ region: editedMapItem()!.mapName, status: editedMapItem()!.mapStatus}"
         (update)="changeStatus()"
         (cancel)="showChangeStatusModal.set(false)"
       ></app-map-update-modal>
