@@ -8,7 +8,7 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
   template: `
     <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3 sm:px-5">
       <div class="bg-white p-5 rounded-3xl w-full max-w-sm">
-        <h3 class="text-2xl font-semibold">Delete {{ message.section }}</h3>
+        <h3 class="text-xl font-semibold">Delete {{ message.section }}</h3>
         <p class="text-neutral-800 text-sm text-justify mt-2 mb-4">
           Are you sure you want to delete <span class="font-semibold">{{ message.element }}?</span> This action cannot be undone.
         </p>

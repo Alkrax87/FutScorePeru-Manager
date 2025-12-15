@@ -9,7 +9,7 @@ import { faPenToSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
   selector: 'app-stadium-modal',
   imports: [ReactiveFormsModule, FontAwesomeModule],
   template: `
-    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-5">
+    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
       <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-sm">
         <div class="p-5">
           @if (stadium) {
