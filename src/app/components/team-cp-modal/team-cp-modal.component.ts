@@ -9,15 +9,15 @@ import { faPenToSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
   selector: 'app-team-cp-modal',
   imports: [ReactiveFormsModule, FontAwesomeModule],
   template: `
-    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-5">
-      <div class="bg-white p-5 rounded-3xl w-full max-w-sm">
-        <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
+      <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-sm">
+        <div class="p-5">
           @if (teamCP) {
-            <h3 class="text-lg font-semibold">Edit TeamCP</h3>
-            <p class="text-neutral-500 text-sm">Update the team details below.</p>
+            <h3 class="text-white text-xl font-semibold">Edit Copa Perú Team</h3>
+            <p class="text-neutral-200 text-sm">Update the team details below.</p>
           } @else {
-            <h3 class="text-lg font-semibold">Add New TeamCP</h3>
-            <p class="text-neutral-500 text-sm">Enter the details for the new TeamsCP below.</p>
+            <h3 class="text-white text-xl font-semibold">Add New Copa Perú Team</h3>
+            <p class="text-neutral-200 text-sm">Enter the details for the new TeamsCP below.</p>
           }
           @if (errorMessage) {
             <div class="flex justify-between bg-red-100 text-red-600 text-sm py-1 rounded-lg px-2 mt-4">
@@ -27,63 +27,65 @@ import { faPenToSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
               <p (click)="errorMessage = null" class="cursor-pointer">&times;</p>
             </div>
           }
-          <div class="flex flex-col gap-2 my-4">
+        </div>
+        <form [formGroup]="form" (ngSubmit)="save()" class="bg-white px-5 pb-5 pt-2">
+          <div class="flex flex-col gap-4 my-4">
             <!-- TeamId -->
             <div>
-              <label for="teamId" class="block text-sm font-semibold mb-1">TeamId</label>
-              <input id="teamId" formControlName="teamId" type="text" placeholder="teamId"
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-              >
+              <label for="teamId" class="relative">
+                <input id="teamId" type="text" formControlName="teamId" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">TeamId</span>
+              </label>
             </div>
             <!-- Name -->
             <div>
-              <label for="name" class="block text-sm font-semibold mb-1">Name</label>
-              <input id="name" formControlName="name" type="text" placeholder="name"
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-              >
+              <label for="name" class="relative">
+                <input id="name" type="text" formControlName="name" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Name</span>
+              </label>
             </div>
             <!-- Abbreviation -->
             <div>
-              <label for="abbreviation" class="block text-sm font-semibold mb-1">Abbreviation</label>
-              <input id="abbreviation" formControlName="abbreviation" type="text" placeholder="abbreviation"
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-              >
+              <label for="abbreviation" class="relative">
+                <input id="abbreviation" type="text" formControlName="abbreviation" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Abbreviation</span>
+              </label>
             </div>
             <!-- Image -->
             <div>
-              <label for="image" class="block text-sm font-semibold mb-1">Image</label>
-              <input id="image" formControlName="image" type="text" placeholder="image"
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-              >
+              <label for="image" class="relative">
+                <input id="image" type="text" formControlName="image" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Image</span>
+              </label>
             </div>
             <!-- City -->
             <div>
-              <label for="city" class="block text-sm font-semibold mb-1">City</label>
-              <input id="city" formControlName="city" type="text" placeholder="city"
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-              >
+              <label for="city" class="relative">
+                <input id="city" type="text" formControlName="city" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">City</span>
+              </label>
             </div>
             <!-- Location -->
             <div>
-              <label for="location" class="block text-sm font-semibold mb-1">Location</label>
-              <select id="location" formControlName="location"
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-              >
-                <option [value]="''" disabled>Choose location</option>
-                @for (location of locations; track $index) {
-                  <option [value]="location">{{ location }}</option>
-                }
-              </select>
+              <label for="location" class="relative">
+                <select id="location" formControlName="location" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                  <option value="" disabled selected hidden></option>
+                  @for (location of locations; track $index) {
+                    <option [value]="location" class="hover:bg-main hover:text-red-700 h-20">{{ location }}</option>
+                  }
+                </select>
+                <span class="bg-white text-neutral-400 peer-focus:text-main cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Location</span>
+              </label>
             </div>
           </div>
           <div class="flex justify-end gap-2">
-            <button type="button" (click)="close.emit()" class="hover:bg-neutral-100/50 text-neutral-600 border rounded-full px-4 py-2 text-sm duration-300">Cancel</button>
+            <button type="button" (click)="close.emit()" class="hover:bg-neutral-100/80 text-neutral-600 border rounded-full px-6 py-2 text-sm duration-300">Cancel</button>
             @if (teamCP) {
-              <button type="submit" class="bg-yellow-500 hover:bg-yellow-500/80 text-white rounded-full px-4 py-2 text-sm duration-300">
+              <button type="submit" [disabled]="form.invalid" class="bg-yellow-500 hover:bg-yellow-500/80 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
                 <fa-icon [icon]="Edit"></fa-icon>&nbsp; Save Changes
               </button>
             } @else {
-              <button type="submit" class="bg-green-700 hover:bg-green-700/90 text-white rounded-full px-4 py-2 text-sm duration-300">
+              <button type="submit" [disabled]="form.invalid" class="bg-green-700 hover:bg-green-700/90 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
                 <fa-icon [icon]="Add"></fa-icon>&nbsp; Add Team
               </button>
             }
@@ -105,13 +107,13 @@ export class TeamCPModalComponent {
 
   form = this.fb.group({
     teamId: ['', Validators.required],
-    name: [''],
-    abbreviation: [''],
-    image: [''],
-    city: [''],
-    location: [''],
+    name: ['', Validators.required],
+    abbreviation: ['', Validators.required],
+    image: ['', Validators.required],
+    city: ['', Validators.required],
+    location: ['', Validators.required],
   });
-  errorMessage: { status: string, message: string } | null = null;
+  errorMessage: string | null = null;
 
   Add = faPlus;
   Edit = faPenToSquare;
@@ -124,10 +126,7 @@ export class TeamCPModalComponent {
 
   save() {
     if (this.form.invalid) {
-      this.errorMessage = {
-        status: 'Error',
-        message: 'The "teamId" field is required',
-      };
+      this.errorMessage = 'Some fields are invalid';
       return;
     }
 

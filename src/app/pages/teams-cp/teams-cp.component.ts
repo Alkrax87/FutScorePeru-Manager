@@ -1,28 +1,26 @@
 import { Component, inject, signal } from '@angular/core';
+import { TeamsCPApiService } from '../../services/teams-cp-api.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faLocationDot, faPenToSquare, faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { TeamsCPApiService } from '../../services/teams-cp-api.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TeamCPModalComponent } from '../../components/team-cp-modal/team-cp-modal.component';
+import { DeleteConfirmationModalComponent } from '../../components/delete-confirmation-modal/delete-confirmation-modal.component';
 import { TeamCP } from '../../interfaces/team-cp';
-import { Subscription } from 'rxjs';
-import { TeamCPModalComponent } from "../../components/team-cp-modal/team-cp-modal.component";
-import { DeleteConfirmationModalComponent } from "../../components/delete-confirmation-modal/delete-confirmation-modal.component";
 
 @Component({
   selector: 'app-teams-cp',
   imports: [FontAwesomeModule, TeamCPModalComponent, DeleteConfirmationModalComponent],
   template: `
-    <div class="bg-light px-5 xl:px-32 pt-24 pb-8 select-none">
+    <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 pt-24 pb-8 duration-500 select-none">
       <!-- Title -->
-      <div class="pb-4 flex flex-col sm:flex-row justify-between gap-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pb-4">
         <div class="text-center sm:text-start">
-          <h2 class="text-3xl font-semibold">Teams CP Management</h2>
-          <p class="text-neutral-500">Manage and view all Copa Perú teams</p>
+          <h2 class="text-3xl font-semibold">Copa Perú Teams Management</h2>
+          <p class="text-neutral-400">Manage and view all Copa Perú teams</p>
         </div>
-        <div class="flex items-center">
-          <button (click)="onAdd()" class="bg-green-700 hover:bg-green-700/90 text-white w-full sm:w-fit px-6 py-2 rounded-full">
-            <fa-icon [icon]="Add"></fa-icon> Add Team
-          </button>
-        </div>
+        <button (click)="onAdd()" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full h-fit sm:w-fit px-6 py-2 rounded-full">
+          <fa-icon [icon]="Add"></fa-icon> Add Team
+        </button>
       </div>
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -78,21 +76,19 @@ import { DeleteConfirmationModalComponent } from "../../components/delete-confir
 export class TeamsCPComponent {
   private teamsCPService = inject(TeamsCPApiService);
   dataTeamsCP: TeamCP[] = [];
-  private teamsCPSubscription: Subscription | null = null;
 
   isTeamCPModalOpen = signal(false);
   isConfirmOpen = signal(false);
-
   selectedTeamCP = signal<TeamCP | null>(null);
 
+  Location = faLocationDot;
   Add = faPlus;
   Edit = faPenToSquare;
   Delete = faTrashCan;
-  Location = faLocationDot;
 
-  ngOnInit() {
+  constructor() {
     this.teamsCPService.getTeamsCP();
-    this.teamsCPSubscription = this.teamsCPService.dataTeamsCP$.subscribe({
+    this.teamsCPService.dataTeamsCP$.pipe(takeUntilDestroyed()).subscribe({
       next: (data) => (this.dataTeamsCP = data),
     });
   }
@@ -117,9 +113,5 @@ export class TeamsCPComponent {
       this.teamsCPService.deleteTeamCP(this.selectedTeamCP()!.teamId!);
     }
     this.isConfirmOpen.set(false);
-  }
-
-  ngOnDestroy() {
-    this.teamsCPSubscription?.unsubscribe();
   }
 }
