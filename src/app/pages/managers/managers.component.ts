@@ -8,6 +8,7 @@ import { TeamProfile } from '../../interfaces/team-profile';
 import { combineLatest, Subscription } from 'rxjs';
 import { DeleteConfirmationModalComponent } from "../../components/delete-confirmation-modal/delete-confirmation-modal.component";
 import { ManagerModalComponent } from "../../components/manager-modal/manager-modal.component";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface managerView extends Manager {
   teamLogo: string;
@@ -18,18 +19,16 @@ interface managerView extends Manager {
   selector: 'app-managers',
   imports: [FontAwesomeModule, DeleteConfirmationModalComponent, ManagerModalComponent],
   template: `
-    <div class="bg-light px-5 xl:px-32 pt-24 pb-8 select-none">
+    <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 pt-24 pb-8 duration-500 select-none">
       <!-- Title -->
-      <div class="pb-4 flex flex-col sm:flex-row justify-between gap-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pb-4">
         <div class="text-center sm:text-start">
           <h2 class="text-3xl font-semibold">Managers Management</h2>
-          <p class="text-neutral-500">Manage and view all managers</p>
+          <p class="text-neutral-400">Manage and view all managers</p>
         </div>
-        <div class="flex items-center">
-          <button (click)="onAdd()" class="bg-green-700 hover:bg-green-700/90 text-white w-full sm:w-fit px-6 py-2 rounded-full">
-            <fa-icon [icon]="Add"></fa-icon> Add Manager
-          </button>
-        </div>
+        <button (click)="onAdd()" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full h-fit sm:w-fit px-6 py-2 rounded-full">
+          <fa-icon [icon]="Add"></fa-icon> Add Stadium
+        </button>
       </div>
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -37,9 +36,8 @@ interface managerView extends Manager {
           <div class="bg-white rounded-3xl shadow-md hover:shadow-xl duration-300">
             <div class="p-4">
               <div class="w-full">
-                <p class="text-neutral-400 text-xs">ID: {{ manager.managerId }}</p>
-                <div class="flex flex-col items-center gap-4">
-                  <div class="bg-nightfall text-white flex justify-center items-center gap-1 rounded-full py-2 px-4 w-fit">
+                <div class="flex flex-col items-center gap-2">
+                  <div class="bg-nightfall text-white flex justify-center items-center gap-2 rounded-full py-2 px-4 w-fit">
                     <img [src]="manager.teamLogo" alt="TEAM-logo" class="w-8 h-8">
                     <p class="font-semibold text-sm truncate">{{ manager.teamName }}</p>
                   </div>
@@ -52,6 +50,7 @@ interface managerView extends Manager {
                       }
                     </div>
                   </div>
+                  <p class="text-neutral-400 text-xs">ID: {{ manager.managerId }}</p>
                   <div class="flex gap-2">
                     <p class="font-semibold truncate">{{ manager.name }}</p>
                     @if (manager.cod) {
@@ -97,30 +96,24 @@ interface managerView extends Manager {
 export class ManagersComponent {
   private teamsService = inject(TeamsApiService);
   private managersService = inject(ManagersApiService);
-  managers: Manager[] = [];
-  teams: TeamProfile[] = [];
   managersViews: managerView[] = [];
-  private ManagersTeamsSubscription: Subscription | null = null;
 
   isManagerModalOpen = signal(false);
   isConfirmOpen = signal(false);
-
   selectedManager = signal<Manager | null>(null);
 
   Add = faPlus;
   Edit = faPenToSquare;
   Delete = faTrashCan;
 
-  ngOnInit() {
+  constructor() {
     this.teamsService.getTeams();
     this.managersService.getManagers();
-    this.ManagersTeamsSubscription = combineLatest([
+    combineLatest([
       this.teamsService.dataTeams$,
       this.managersService.dataManagers$
-    ]).subscribe({
+    ]).pipe(takeUntilDestroyed()).subscribe({
       next: ([teams, managers]) => {
-        this.teams = teams;
-
         this.managersViews = managers.map(manager => {
           const team = teams.find(t => t.teamId === manager.teamId);
           return {
@@ -153,9 +146,5 @@ export class ManagersComponent {
       this.managersService.deleteManager(this.selectedManager()!.managerId!);
     }
     this.isConfirmOpen.set(false);
-  }
-
-  ngOnDestroy() {
-    this.ManagersTeamsSubscription?.unsubscribe();
   }
 }
