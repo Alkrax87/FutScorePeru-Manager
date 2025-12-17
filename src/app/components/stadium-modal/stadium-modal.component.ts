@@ -3,7 +3,7 @@ import { Stadium } from '../../interfaces/stadium';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { StadiumsApiService } from '../../services/stadiums-api.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPenToSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faFloppyDisk, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-stadium-modal',
@@ -77,7 +77,7 @@ import { faPenToSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
             <button type="button" (click)="close.emit()" class="hover:bg-neutral-100/80 text-neutral-600 border rounded-full px-6 py-2 text-sm duration-300">Cancel</button>
             @if (stadium) {
               <button type="submit" [disabled]="form.invalid" class="bg-yellow-500 hover:bg-yellow-500/80 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
-                <fa-icon [icon]="Edit"></fa-icon>&nbsp; Save Changes
+                <fa-icon [icon]="Save"></fa-icon>&nbsp; Save Changes
               </button>
             } @else {
               <button type="submit" [disabled]="form.invalid" class="bg-green-700 hover:bg-green-700/90 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
@@ -109,7 +109,7 @@ export class StadiumModalComponent {
   errorMessage: string | null = null;
 
   Add = faPlus;
-  Edit = faPenToSquare;
+  Save = faFloppyDisk;
 
   ngOnInit() {
     if (this.stadium) {
