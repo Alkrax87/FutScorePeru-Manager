@@ -1,39 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faArrowUpRightFromSquare, faLocationDot, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { Subscription } from 'rxjs';
+import { faChevronRight, faLocationDot, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { TeamsApiService } from '../../services/teams-api.service';
 import { StadiumsApiService } from '../../services/stadiums-api.service';
 import { TeamProfile } from '../../interfaces/team-profile';
 import { TeamAddModalComponent } from '../../components/team-add-modal/team-add-modal.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-teams',
   imports: [FontAwesomeModule, RouterLink, TeamAddModalComponent],
   template: `
-    <div class="px-5 xl:px-32 pt-24 pb-8 select-none">
+    <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 pt-24 pb-8 duration-500 select-none">
       <!-- Title -->
-      <div class="pb-4 flex flex-col sm:flex-row justify-between gap-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pb-4">
         <div class="text-center sm:text-start">
           <h2 class="text-3xl font-semibold">Team Management</h2>
-          <p class="text-neutral-500">Manage and view all teams</p>
+          <p class="text-neutral-400">Manage and view all teams</p>
         </div>
-        <div class="flex items-center">
-          <button (click)="onAdd()" class="bg-night hover:bg-neutral-800 text-white w-full sm:w-fit px-4 py-2 rounded-xl">
-            <fa-icon [icon]="Add"></fa-icon> Add Team
-          </button>
-        </div>
+        <button (click)="onAdd()" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full h-fit sm:w-fit px-6 py-2 rounded-full">
+          <fa-icon [icon]="Add"></fa-icon> Add Stadium
+        </button>
       </div>
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @for (team of teams; track $index) {
-          <div [routerLink]="['/team',team.category, team.teamId]" class=" hover:bg-neutral-50 duration-300 group rounded-lg overflow-hidden shadow-md cursor-pointer">
+          <div [routerLink]="['/team',team.category, team.teamId]" class=" bg-white group rounded-3xl overflow-hidden shadow-md hover:shadow-xl duration-300 cursor-pointer">
             <div [style.backgroundColor]="team.color.c1" class="h-3"></div>
-            <div class="px-4 py-4">
+            <div class="px-4 pb-4 pt-3">
               <div class="flex">
                 <div class="w-full">
-                  <p class="text-neutral-400 text-xs">TeamID: {{ team.teamId }}</p>
+                  <p class="text-neutral-400 text-xs">ID: {{ team.teamId }}</p>
                   <div class="flex items-center gap-2 mt-2">
                     <img [src]="team.image" [alt]="team.alt" class="w-12 h-12">
                     <div class="truncate">
@@ -43,7 +41,7 @@ import { TeamAddModalComponent } from '../../components/team-add-modal/team-add-
                   </div>
                 </div>
                 <div class="flex items-center text-neutral-500 text-sm">
-                  <fa-icon class="py-2 px-3 group-hover:bg-crimson group-hover:text-white rounded-full duration-300" [icon]="Redirect"></fa-icon>
+                  <fa-icon class="py-2 px-3.5 group-hover:bg-crimson group-hover:text-white rounded-full duration-300" [icon]="Redirect"></fa-icon>
                 </div>
               </div>
             </div>
@@ -52,50 +50,33 @@ import { TeamAddModalComponent } from '../../components/team-add-modal/team-add-
       </div>
     </div>
 
-    @if (showAddTeamModal) {
-      <app-team-add-modal
-        (add)="addTeam($event)"
-        (cancel)="showAddTeamModal = !showAddTeamModal"
-      ></app-team-add-modal>
+    @if (showAddTeamModal()) {
+      <app-team-add-modal (cancel)="showAddTeamModal.set(false)"></app-team-add-modal>
     }
   `,
   styles: ``,
 })
 export class TeamsComponent {
-  constructor(private teamsService: TeamsApiService, private stadiumsService: StadiumsApiService) {}
-
-  private teamsSubscription: Subscription | null = null;
+  private teamsService = inject(TeamsApiService);
+  private stadiumsService = inject(StadiumsApiService);
   teams: TeamProfile[] = [];
 
+  showAddTeamModal = signal(false);
+
   Add = faPlus;
-  Redirect = faArrowUpRightFromSquare;
+  Redirect = faChevronRight;
   Location = faLocationDot;
 
-  showAddTeamModal = false;
 
-  ngOnInit() {
+  constructor() {
     this.teamsService.getTeams();
     this.stadiumsService.getStadiums();
-    this.teamsSubscription = this.teamsService.dataTeams$.subscribe({
+    this.teamsService.dataTeams$.pipe(takeUntilDestroyed()).subscribe({
       next: (data) => (this.teams = data),
     });
   }
 
   onAdd() {
-    this.showAddTeamModal = !this.showAddTeamModal;
-  }
-
-  addTeam(team: TeamProfile) {
-    this.teamsService.addTeam(team).subscribe({
-      next: () => {
-        this.teamsService.getTeams();
-        this.showAddTeamModal = !this.showAddTeamModal;
-      },
-      error: (err) => (console.error("Failed to add new team: ", err))
-    });
-  }
-
-  ngOnDestroy() {
-    this.teamsSubscription?.unsubscribe();
+    this.showAddTeamModal.set(true);
   }
 }
