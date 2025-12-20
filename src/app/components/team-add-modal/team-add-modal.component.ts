@@ -1,235 +1,234 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { TeamProfile } from '../../interfaces/team-profile';
 import { StadiumsApiService } from '../../services/stadiums-api.service';
-import { Subscription } from 'rxjs';
 import { Stadium } from '../../interfaces/stadium';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TeamsApiService } from '../../services/teams-api.service';
 
 @Component({
   selector: 'app-team-add-modal',
-  imports: [FormsModule, FontAwesomeModule],
+  imports: [FormsModule, FontAwesomeModule, ReactiveFormsModule],
   template: `
-    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none">
-      <div class="bg-white p-5 rounded-xl w-full max-w-xl">
-        <h3 class="text-lg font-semibold">Add New Team</h3>
-        <p class="text-neutral-500 text-sm">Enter the details for the new team below.</p>
-        <div class="flex flex-col gap-3 pt-4 pb-8">
-          <div class="flex gap-5">
-            <!-- TeamId -->
-            <div class="w-1/3">
-              <label for="teamId" class="block text-sm font-semibold mb-1">TeamId</label>
-              <input id="teamId" [(ngModel)]="team.teamId" type="text" required
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-                placeholder="TeamId"
-              >
+    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
+      <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-2xl">
+        <div class="p-5">
+          <h3 class="text-white text-xl font-semibold">Add New Team</h3>
+          <p class="text-neutral-200 text-sm">Enter the details for the new team below.</p>
+          @if (errorMessage) {
+            <div class="flex justify-between bg-red-100 text-red-600 text-sm py-1 rounded-lg px-2 mt-4">
+              <p>
+                <span class="font-semibold">Error:</span> {{ errorMessage }}
+              </p>
+              <p (click)="errorMessage = null" class="cursor-pointer">&times;</p>
             </div>
-            <!-- Location -->
-            <div class="w-1/3">
-              <label for="location" class="block text-sm font-semibold mb-1">Location</label>
-              <select id="location" [(ngModel)]="team.location"
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-              >
-                <option [value]="''" disabled>Choose location</option>
-                @for (location of locations; track $index) {
-                  <option [value]="location">{{ location }}</option>
-                }
-              </select>
-            </div>
-            <!-- Category -->
-            <div class="w-1/3">
-              <label for="category" class="block text-sm font-semibold mb-1">Category</label>
-              <select id="category" [(ngModel)]="team.category"
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-              >
-                <option value="0" disabled>Choose category</option>
-                <option value="1">Liga 1</option>
-                <option value="2">Liga 2</option>
-                <option value="3">Liga 3</option>
-              </select>
-            </div>
-          </div>
-          <div class="flex gap-5">
-            <!-- Name -->
-            <div class="w-2/3">
-              <label for="name" class="block text-sm font-semibold mb-1">Name</label>
-              <input id="name" [(ngModel)]="team.name" type="text"
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-                placeholder="Name"
-              >
-            </div>
-            <!-- Abbreviation -->
-            <div class="w-1/3">
-              <label for="abbreviation" class="block text-sm font-semibold mb-1">Abbreviation</label>
-              <input id="abbreviation" [(ngModel)]="team.abbreviation" type="text"
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-                placeholder="Abbreviation"
-              >
-            </div>
-          </div>
-          <!-- Image -->
-          <div class="w-full">
-            <label for="image" class="block text-sm font-semibold mb-1">Image</label>
-            <input id="image" [(ngModel)]="team.image" type="text"
-              class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-              placeholder="Image URL"
-            >
-          </div>
-          <!-- Image Thumbnail -->
-          <div class="w-full">
-            <label for="imageThumbnail" class="block text-sm font-semibold mb-1">ImageThumbnail</label>
-            <input id="imageThumbnail" [(ngModel)]="team.imageThumbnail" type="text"
-              class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-              placeholder="Image Thumbnail URL"
-            >
-          </div>
-          <!-- Groups -->
-          <div class="flex gap-5">
-            <!-- Group First Phase -->
-            <div class="w-1/2">
-              <label for="groupFirstPhase" class="block text-sm font-semibold mb-1">Group First Phase</label>
-              <select id="groupFirstPhase" [(ngModel)]="team.groupFirstPhase"
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-              >
-                <option value="">None</option>
-                <option disabled>---- Liga 2 ----</option>
-                <option value="a">Grupo A</option>
-                <option value="b">Grupo B</option>
-                <option disabled>---- Liga 3 ----</option>
-                <option value="1">Grupo 1</option>
-                <option value="2">Grupo 2</option>
-                <option value="3">Grupo 3</option>
-                <option value="4">Grupo 4</option>
-              </select>
-            </div>
-            <!-- Group Second Phase -->
-            <div class="w-1/2">
-              <label for="groupSecondPhase" class="block text-sm font-semibold mb-1">Group Second Phase</label>
-              <select id="groupSecondPhase" [(ngModel)]="team.groupSecondPhase"
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-              >
-                <option value="">None</option>
-                <option disabled>---- Liga 2 ----</option>
-                <option value="p1">Grupo Ascenso 1</option>
-                <option value="p2">Grupo Ascenso 2</option>
-                <option value="r">Grupo Descenso</option>
-                <option disabled>---- Liga 3 ----</option>
-                <option value="f1">Grupo Final 1</option>
-                <option value="f2">Grupo Final 2</option>
-                <option value="f3">Grupo Final 3</option>
-                <option value="f4">Grupo Final 4</option>
-              </select>
-            </div>
-          </div>
-          <!-- Colors -->
-          <div class="flex gap-5">
-            <!-- C1 -->
-            <div class="w-1/2">
-              <label for="c1" class="block text-sm font-semibold mb-1">Primary Color</label>
-              <div class="flex gap-2">
-                <input id="c1" [(ngModel)]="team.color.c1" type="text"
-                  class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-                  placeholder="Primary Color"
-                >
-                <input [(ngModel)]="team.color.c1" type="color" class="bg-white w-10 h-10 rounded-xl border-none"/>
+          }
+        </div>
+        <form [formGroup]="form" (ngSubmit)="onAdd()" class="bg-white px-5 pb-5 pt-2">
+          <div class="flex flex-col gap-4 my-4">
+            <div class="flex gap-4">
+              <!-- TeamId -->
+              <div>
+                <label for="teamId" class="relative">
+                  <input id="teamId" type="text" formControlName="teamId" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                  <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">TeamId</span>
+                </label>
+              </div>
+              <!-- Location -->
+              <div>
+                <label for="location" class="relative">
+                  <select id="location" formControlName="location" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                    <option value="" disabled>Choose Location</option>
+                    @for (region of locations; track $index) {
+                      <option [value]="region">{{ region }}</option>
+                    }
+                  </select>
+                  <span class="bg-white text-neutral-400 peer-focus:text-main cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Location</span>
+                </label>
+              </div>
+              <!-- Category -->
+              <div>
+                <label for="category" class="relative">
+                  <select id="category" formControlName="category" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                    <option value="0" disabled>Choose category</option>
+                    <option value="1">Liga 1</option>
+                    <option value="2">Liga 2</option>
+                    <option value="3">Liga 3</option>
+                  </select>
+                  <span class="bg-white text-neutral-400 peer-focus:text-main cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Category</span>
+                </label>
               </div>
             </div>
-            <!-- C2 -->
-            <div class="w-1/2">
-              <label for="c2" class="block text-sm font-semibold mb-1">Secondary Color</label>
-              <select id="c2" [(ngModel)]="team.color.c2"
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-              >
-                <option value="" disabled>Choose text color</option>
-                <option value="#ffffff">Light Text</option>
-                <option value="#161513">Dark Text</option>
-              </select>
+            <div class="flex gap-4">
+              <!-- Name -->
+              <div class="w-2/3">
+                <label for="name" class="relative">
+                  <input id="name" type="text" formControlName="name" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                  <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Name</span>
+                </label>
+              </div>
+              <!-- Abbreviation -->
+              <div class="w-1/3">
+                <label for="abbreviation" class="relative">
+                  <input id="abbreviation" type="text" formControlName="abbreviation" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                  <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Abbreviation</span>
+                </label>
+              </div>
             </div>
-          </div>
-          <div class="flex gap-5">
+            <!-- Image -->
+            <div>
+              <label for="image" class="relative">
+                <input id="image" type="text" formControlName="image" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Image</span>
+              </label>
+            </div>
+            <!-- Image Thumbnail -->
+            <div>
+              <label for="imageThumbnail" class="relative">
+                <input id="imageThumbnail" type="text" formControlName="imageThumbnail" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Image Thumbnail</span>
+              </label>
+            </div>
+            <div class="flex gap-4">
+              <!-- Group First Phase -->
+              <div class="w-1/2">
+                <label for="groupFirstPhase" class="relative">
+                  <select id="groupFirstPhase" formControlName="groupFirstPhase" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                    <option value="" selected>None</option>
+                    <option disabled>---- Liga 2 ----</option>
+                    <option value="a">Grupo A</option>
+                    <option value="b">Grupo B</option>
+                    <option disabled>---- Liga 3 ----</option>
+                    <option value="1">Grupo 1</option>
+                    <option value="2">Grupo 2</option>
+                    <option value="3">Grupo 3</option>
+                    <option value="4">Grupo 4</option>
+                  </select>
+                  <span class="bg-white text-neutral-400 peer-focus:text-main cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Group First Phase</span>
+                </label>
+              </div>
+              <!-- Group Second Phase -->
+              <div class="w-1/2">
+                <label for="groupSecondPhase" class="relative">
+                  <select id="groupSecondPhase" formControlName="groupSecondPhase" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                    <option value="" selected>None</option>
+                    <option disabled>---- Liga 2 ----</option>
+                    <option value="p1">Grupo Ascenso 1</option>
+                    <option value="p2">Grupo Ascenso 2</option>
+                    <option value="r">Grupo Descenso</option>
+                    <option disabled>---- Liga 3 ----</option>
+                    <option value="f1">Grupo Final 1</option>
+                    <option value="f2">Grupo Final 2</option>
+                    <option value="f3">Grupo Final 3</option>
+                    <option value="f4">Grupo Final 4</option>
+                  </select>
+                  <span class="bg-white text-neutral-400 peer-focus:text-main cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Group Second Phase</span>
+                </label>
+              </div>
+            </div>
+            <!-- Colors -->
+            <div formGroupName="color" class="flex gap-4">
+              <!-- C1-->
+              <div class="w-1/2 flex items-center gap-1">
+                <div class="w-full">
+                  <label for="c1" class="relative">
+                    <input id="c1" type="text" [value]="form.get('c1')?.value" (input)="onColorInput($event)" formControlName="c1" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                    <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Primary Color</span>
+                  </label>
+                </div>
+                <div class="rounded-full overflow-hidden w-12 h-11 flex items-center justify-center">
+                  <input formControlName="c1" type="color" [value]="form.get('c1')?.value" (input)="onColorInput($event)" class="h-16 min-w-20 cursor-pointer"/>
+                </div>
+              </div>
+              <!-- C2 -->
+              <div class="w-1/2">
+                <label for="c2" class="relative">
+                  <select id="c2" formControlName="c2" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                    <option value="#ffffff" selected>Light Text</option>
+                    <option value="#161513">Dark Text</option>
+                  </select>
+                  <span class="bg-white text-neutral-400 peer-focus:text-main cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Secondary Color</span>
+                </label>
+              </div>
+            </div>
             <!-- Stadium -->
-            <div class="w-1/2 flex items-center">
-              <div class="w-full">
-                <label for="stadium" class="block text-sm font-semibold mb-1">Stadium</label>
-                <select id="stadium" [(ngModel)]="team.stadium"
-                  class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-                >
+            <div>
+              <label for="stadium" class="relative">
+                <select id="stadium" formControlName="stadium" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                  <option value="0" disabled>Choose Stadium</option>
                   @for (stadium of stadiums; track $index) {
                     <option [value]="stadium.stadiumId">{{ stadium.name }}</option>
                   }
                 </select>
-              </div>
+                <span class="bg-white text-neutral-400 peer-focus:text-main cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Stadium</span>
+              </label>
             </div>
-            <!-- Stadium Preview -->
-            <div class="w-1/2">
-              <div class="border-gray-300 flex items-center border p-3 rounded-xl">
-                <img [src]="stadiums[team.stadium - 1].image" alt="STADIUM-image" class="rounded-lg object-cover">
-              </div>
+            <div class="flex justify-end gap-2">
+              <button type="button" (click)="close.emit()" class="hover:bg-neutral-100/80 text-neutral-600 border rounded-full px-6 py-2 text-sm duration-300">Cancel</button>
+              <button type="submit" [disabled]="form.invalid" class="bg-green-700 hover:bg-green-700/90 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
+                <fa-icon [icon]="Add"></fa-icon>&nbsp; Add Team
+              </button>
             </div>
           </div>
-        </div>
-        <div class="flex gap-2 justify-end">
-          <button (click)="onCancel()" class="hover:bg-neutral-50 border border-neutral-200 rounded-lg px-5 py-1.5 font-semibold text-sm">
-            <fa-icon [icon]="Cancel"></fa-icon> Cancel
-          </button>
-          <button (click)="onAdd()" class="bg-night hover:bg-neutral-800 text-white border-neutral-200 rounded-lg px-5 py-1.5 font-semibold text-sm">
-            <fa-icon [icon]="Add"></fa-icon> Add Stadium
-          </button>
-        </div>
+        </form>
       </div>
     </div>
   `,
   styles: ``,
 })
 export class TeamAddModalComponent {
-  constructor(private stadiumsService: StadiumsApiService) {}
+  @Output() close = new EventEmitter<void>();
 
-  @Output() add = new EventEmitter<TeamProfile>();
-  @Output() cancel = new EventEmitter<void>();
+  private fb = inject(FormBuilder);
+  private teamService = inject(TeamsApiService);
+  private stadiumService = inject(StadiumsApiService);
 
-  private stadiumSubscription: Subscription | null = null;
-
-  team: TeamProfile = {
-    teamId: '',
-    category: 0,
-    groupFirstPhase: '',
-    groupSecondPhase: '',
-    name: '',
-    abbreviation: '',
-    image: '',
-    imageThumbnail: '',
-    alt: '',
-    location: '',
-    stadium: 1,
-    color: {
-      c1: '',
-      c2: '#ffffff',
-    }
-  }
-  stadiums: Stadium[] = [];
   locations: string[] = ["Amazonas", 'Áncash', 'Apurímac', "Arequipa", "Ayacucho", "Cajamarca", "Cusco", "Huancavelica", "Huánuco", "Ica", "Junín", "La Libertad", "Lambayeque", "Lima y Callao", "Loreto", "Madre de Dios", "Moquegua", "Pasco", "Piura", "Puno", "San Martín", "Tacna", "Tumbes", "Ucayali"];
+  stadiums: Stadium[] = [];
+
+  form = this.fb.group({
+    teamId: ['', Validators.required],
+    category: [0, Validators.required],
+    groupFirstPhase: [''],
+    groupSecondPhase: [''],
+    name: ['', Validators.required],
+    abbreviation: ['', Validators.required],
+    image: ['', Validators.required],
+    imageThumbnail: ['', Validators.required],
+    location: ['', Validators.required],
+    stadium: [0, Validators.required],
+    color: this.fb.group({
+      c1: ['#161513', [Validators.required]],
+      c2: ['#ffffff', [Validators.required]],
+    }),
+  });
+  errorMessage: string | null = null;
 
   Add = faPlus;
-  Cancel = faXmark;
 
-  ngOnInit() {
-    this.stadiumSubscription = this.stadiumsService.dataStadiums$.subscribe({
-      next: (data) => (this.stadiums = data),
+  constructor() {
+    this.stadiumService.dataStadiums$.pipe(takeUntilDestroyed()).subscribe({
+      next: (data) => (this.stadiums = data)
     });
   }
 
+  onColorInput(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.form.get(['color', 'c1'])?.setValue(value);
+  }
+
   onAdd() {
-    this.team.abbreviation = this.team.abbreviation.toUpperCase();
-    this.team.alt = this.team.abbreviation.toUpperCase() + '-logo';
-    this.add.emit(this.team);
-  }
+    if (this.form.invalid) {
+      this.errorMessage = 'Some fields are invalid';
+      return;
+    }
 
-  onCancel() {
-    this.cancel.emit();
-  }
+    const formTeam = this.form.value as TeamProfile;
+    formTeam.alt = formTeam.abbreviation + '-logo';
 
-  ngOnDestroy() {
-    this.stadiumSubscription?.unsubscribe();
+    this.teamService.addTeam(formTeam);
+    this.close.emit();
   }
 }
