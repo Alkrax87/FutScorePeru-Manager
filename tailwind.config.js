@@ -11,6 +11,7 @@ module.exports = {
         light: "#F7F7F7",
         brightnight: "#393939",
         crimson: "#dc143c",
+        "crimson-hover": "#eb1a44",
         gold: "#d8b145",
       }
     },
