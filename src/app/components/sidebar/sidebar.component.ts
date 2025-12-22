@@ -8,7 +8,7 @@ import { faAngleRight, IconDefinition } from '@fortawesome/free-solid-svg-icons'
   selector: 'app-sidebar',
   imports: [NgClass, RouterLink, FontAwesomeModule, RouterLinkActive],
   template: `
-    <div class="bg-night h-screen duration-300 fixed select-none" [ngClass]="{ 'w-52': isOpen, 'w-14': !isOpen }">
+    <div class="bg-night h-screen duration-300 fixed select-none z-50" [ngClass]="{ 'w-52': isOpen, 'w-14': !isOpen }">
       <!-- Title -->
       <div class="px-2">
         <div routerLink="/" class="flex items-center gap-2 rounded-lg cursor-pointer outline-none duration-300 h-14">

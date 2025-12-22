@@ -10,11 +10,15 @@ import { TopbarComponent } from "./components/topbar/topbar.component";
   selector: 'app-root',
   imports: [RouterOutlet, SidebarComponent, NgClass, FooterComponent, TopbarComponent],
   template: `
-    <div class="flex h-screen">
+    <div class="flex h-dvh">
       <app-sidebar [routesElements]="routes" (sidebarOpen)="seeStatus($event)"></app-sidebar>
-      <div class="bg-light w-full overflow-y-auto duration-300" [ngClass]="{ 'pl-52': sidebarOpen, 'pl-12': !sidebarOpen }">
-        <app-topbar></app-topbar>
-        <router-outlet></router-outlet>
+      <div class="bg-light w-full duration-300 flex flex-col min-h-dvh h-fit" [ngClass]="{ 'pl-52': sidebarOpen, 'pl-14': !sidebarOpen }">
+        <div class="sticky top-0">
+          <app-topbar></app-topbar>
+        </div>
+        <div class="flex-1">
+          <router-outlet></router-outlet>
+        </div>
         <app-footer></app-footer>
       </div>
     </div>
