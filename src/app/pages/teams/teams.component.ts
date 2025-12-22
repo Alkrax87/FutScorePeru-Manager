@@ -14,7 +14,7 @@ import { NgClass } from '@angular/common';
   selector: 'app-teams',
   imports: [FontAwesomeModule, RouterLink, TeamAddModalComponent, NgClass],
   template: `
-    <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 pt-24 pb-8 duration-500 select-none">
+    <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
       <!-- Title -->
       <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
         <div class="text-center sm:text-start">

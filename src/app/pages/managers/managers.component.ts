@@ -4,8 +4,7 @@ import { ManagersApiService } from '../../services/managers-api.service';
 import { TeamsApiService } from '../../services/teams-api.service';
 import { faPenToSquare, faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { Manager } from '../../interfaces/manager';
-import { TeamProfile } from '../../interfaces/team-profile';
-import { combineLatest, Subscription } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import { DeleteConfirmationModalComponent } from "../../components/delete-confirmation-modal/delete-confirmation-modal.component";
 import { ManagerModalComponent } from "../../components/manager-modal/manager-modal.component";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -19,7 +18,7 @@ interface managerView extends Manager {
   selector: 'app-managers',
   imports: [FontAwesomeModule, DeleteConfirmationModalComponent, ManagerModalComponent],
   template: `
-    <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 pt-24 pb-8 duration-500 select-none">
+    <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
       <!-- Title -->
       <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pb-4">
         <div class="text-center sm:text-start">

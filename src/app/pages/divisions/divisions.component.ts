@@ -12,18 +12,16 @@ import { DivisionDeleteModalComponent } from "../../components/division-delete-m
   selector: 'app-divisions',
   imports: [FontAwesomeModule, DivisionAddModalComponent, DivisionUpdateModalComponent, DivisionDeleteModalComponent],
   template: `
-    <div class="px-5 xl:px-32 pt-24 pb-8 select-none">
+    <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
       <!-- Title -->
-      <div class="pb-4 flex flex-col sm:flex-row justify-between gap-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pb-4">
         <div class="text-center sm:text-start">
           <h2 class="text-3xl font-semibold">Division Management</h2>
-          <p class="text-neutral-500">Manage and view all divisions</p>
+          <p class="text-neutral-400">Manage and view all divisions</p>
         </div>
-        <div class="flex items-center">
-          <button (click)="onAdd()" class="bg-night hover:bg-neutral-800 text-white w-full sm:w-fit px-4 py-2 rounded-xl">
-            <fa-icon [icon]="Add"></fa-icon> Add Division
-          </button>
-        </div>
+        <button (click)="onAdd()" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full h-fit sm:w-fit px-6 py-2 rounded-full">
+          <fa-icon [icon]="Add"></fa-icon> Add Division
+        </button>
       </div>
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
