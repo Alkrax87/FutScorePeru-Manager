@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Environments } from '../environment/environments';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Environments } from '../environment/environments';
 import { BehaviorSubject } from 'rxjs';
 import { TeamProfile } from '../interfaces/team-profile';
 
@@ -10,34 +10,43 @@ import { TeamProfile } from '../interfaces/team-profile';
 export class TeamsApiService {
   private backendUrl = Environments.backendUrl;
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   private teamsSubject = new BehaviorSubject<TeamProfile[]>([]);
   dataTeams$ = this.teamsSubject.asObservable();
 
   getTeams() {
-    this.http.get<TeamProfile[]>(this.backendUrl + 'teams/').subscribe({
-      next: (data) => (this.teamsSubject.next(data)),
-      error: (err) => {
-        console.error('Failed to fetch teams data: ', err);
-        this.teamsSubject.next([]);
-      }
+    this.http.get<TeamProfile[]>(this.backendUrl + 'teams').subscribe({
+      next: (data) => this.teamsSubject.next(data),
+      error: (err) => console.error('Unable to load teams: ', err),
     });
   }
 
   getTeamsByTeamId(teamId: string) {
-    return this.http.get<TeamProfile>(this.backendUrl + 'teams/teamId/' + teamId);
+    this.http.get<TeamProfile>(this.backendUrl + 'teams/teamId/' + teamId).subscribe({
+      next: (data) => this.teamsSubject.next([data]),
+      error: (err) => console.error('Unable to load team: ', err),
+    });
   }
 
   addTeam(teamData: TeamProfile) {
-    return this.http.post<TeamProfile>(this.backendUrl + 'teams', teamData);
+    this.http.post(this.backendUrl + 'teams', teamData).subscribe({
+      next: () => this.getTeams(),
+      error: (err) => console.error('Unable to create team: ', err),
+    });
   }
 
-  updateTeam(teamId: string, teamData: TeamProfile) {
-    return this.http.put(this.backendUrl + 'teams/' + teamId, teamData);
+  updateTeam(teamId: string, team: TeamProfile) {
+    this.http.put(this.backendUrl + 'teams/' + teamId, team).subscribe({
+      next: () => this.getTeams(),
+      error: (err) => console.error('Unable to update team: ', err),
+    });
   }
 
   deleteTeam(teamId: string) {
-    return this.http.delete(this.backendUrl + 'teams/' + teamId);
+    this.http.delete(this.backendUrl + 'teams/' + teamId).subscribe({
+      next: () => this.getTeams(),
+      error: (err) => console.error('Unable to delete team: ', err),
+    });
   }
 }

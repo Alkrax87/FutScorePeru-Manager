@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Environments } from '../environment/environments';
 import { BehaviorSubject } from 'rxjs';
 import { Stadium } from '../interfaces/stadium';
@@ -8,7 +8,7 @@ import { Stadium } from '../interfaces/stadium';
   providedIn: 'root',
 })
 export class StadiumsApiService {
-  private BackendUrl = Environments.backendUrl;
+  private backendUrl = Environments.backendUrl;
 
   private http = inject(HttpClient);
 
@@ -16,26 +16,30 @@ export class StadiumsApiService {
   dataStadiums$ = this.stadiumsSubject.asObservable();
 
   getStadiums() {
-    this.http.get<Stadium[]>(this.BackendUrl + 'stadiums').subscribe({
+    this.http.get<Stadium[]>(this.backendUrl + 'stadiums').subscribe({
       next: (data) => this.stadiumsSubject.next(data),
+      error: (err) => console.error('Unable to load stadiums: ', err),
     });
   }
 
-  createStadium(stadium: Stadium) {
-    this.http.post(this.BackendUrl + 'stadiums', stadium).subscribe({
+  addStadium(stadium: Stadium) {
+    this.http.post(this.backendUrl + 'stadiums', stadium).subscribe({
       next: () => this.getStadiums(),
+      error: (err) => console.error('Unable to create stadium: ', err),
     });
   }
 
   updateStadium(stadiumId: number, stadium: Stadium) {
-    this.http.put(this.BackendUrl + 'stadiums/' + stadiumId, stadium).subscribe({
+    this.http.put(this.backendUrl + 'stadiums/' + stadiumId, stadium).subscribe({
       next: () => this.getStadiums(),
+      error: (err) => console.error('Unable to update stadium: ', err),
     });
   }
 
   deleteStadium(stadiumId: number) {
-    this.http.delete(this.BackendUrl + 'stadiums/' + stadiumId).subscribe({
+    this.http.delete(this.backendUrl + 'stadiums/' + stadiumId).subscribe({
       next: () => this.getStadiums(),
+      error: (err) => console.error('Unable to delete stadium: ', err),
     });
   }
 }
