@@ -58,13 +58,6 @@ import { faFloppyDisk, faPlus } from '@fortawesome/free-solid-svg-icons';
                 <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Location</span>
               </label>
             </div>
-            <!-- Opening -->
-            <div>
-              <label for="opening" class="relative">
-                <input id="opening" type="number" min="1900" formControlName="opening" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
-                <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Opening</span>
-              </label>
-            </div>
             <!-- ImageUrl -->
             <div>
               <label for="image" class="relative">
@@ -99,11 +92,10 @@ export class StadiumModalComponent {
   private stadiumsService = inject(StadiumsApiService);
 
   form = this.fb.group({
-    stadiumId: [1, [Validators.required, Validators.min(1)]],
+    stadiumId: [null as number | null, [Validators.required, Validators.min(1)]],
     name: ['', Validators.required],
-    capacity: [0, [Validators.required, Validators.min(0)]],
+    capacity: [null as number | null, [Validators.required, Validators.min(0)]],
     location: ['', Validators.required],
-    opening: [1900, [Validators.required, Validators.min(1900)]],
     image: ['', Validators.required],
   });
   errorMessage: string | null = null;
@@ -129,7 +121,7 @@ export class StadiumModalComponent {
       this.stadiumsService.updateStadium(this.stadium.stadiumId, formStadium);
       this.close.emit();
     } else {
-      this.stadiumsService.createStadium(formStadium);
+      this.stadiumsService.addStadium(formStadium);
       this.close.emit();
     }
   }

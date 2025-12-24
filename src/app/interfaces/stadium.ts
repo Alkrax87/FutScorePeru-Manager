@@ -1,8 +1,7 @@
 export interface Stadium {
-  stadiumId: number | null;
+  stadiumId: number;
   name: string;
-  capacity: number | null;
+  capacity: number;
   location: string;
-  opening: number;
   image: string;
 }
