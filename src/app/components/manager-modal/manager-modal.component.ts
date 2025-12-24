@@ -44,7 +44,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
             <div>
               <label for="category" class="relative">
                 <select id="category" formControlName="category" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
-                  <option value="0" disabled>Choose category</option>
+                  <option value="null" disabled>Choose Category</option>
                   <option value="1">Liga 1</option>
                   <option value="2">Liga 2</option>
                 </select>
@@ -58,17 +58,26 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                 <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Name</span>
               </label>
             </div>
+            <!-- Photo -->
+            <div>
+              <label for="photo" class="relative">
+                <input id="photo" type="text" formControlName="photo" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Photo</span>
+              </label>
+            </div>
             <!-- Cod -->
             <div>
               <label for="cod" class="relative">
                 <select id="cod" formControlName="cod" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
                   <option value="" disabled>Choose Nationality</option>
+                  <option value="no-flag">Por Definir</option>
                   <option value="ar">Argentina</option>
                   <option value="bo">Bolivia</option>
                   <option value="br">Brasil</option>
                   <option value="ch">Chile</option>
                   <option value="co">Colombia</option>
                   <option value="ec">Ecuador</option>
+                  <option value="es">España</option>
                   <option value="mx">México</option>
                   <option value="pe">Perú</option>
                   <option value="py">Paraguay</option>
@@ -76,13 +85,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                   <option value="ve">Venezuela</option>
                 </select>
                 <span class="bg-white text-neutral-400 peer-focus:text-main cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Nationality</span>
-              </label>
-            </div>
-            <!-- Photo -->
-            <div>
-              <label for="photo" class="relative">
-                <input id="photo" type="text" formControlName="photo" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
-                <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Photo</span>
               </label>
             </div>
             <!-- TeamId -->
@@ -129,11 +131,11 @@ export class ManagerModalComponent {
   teams: TeamProfile[] = [];
 
   form = this.fb.group({
-    managerId: [0, [Validators.min(1), Validators.required]],
-    category: [0, [Validators.min(1), Validators.required]],
+    managerId: [null as number | null, [Validators.min(1), Validators.required]],
+    category: [null as number | null, [Validators.min(1), Validators.required]],
     name: ['', Validators.required],
-    cod: ['', Validators.required],
     photo: [''],
+    cod: ['', Validators.required],
     teamId: ['', Validators.required],
   });
   errorMessage: string | null = null;

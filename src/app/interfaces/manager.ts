@@ -1,8 +1,8 @@
 export interface Manager {
-  managerId: number | null;
+  managerId: number;
   category: number;
-  teamId: string;
   name: string;
-  cod: string;
   photo: string;
+  cod: string;
+  teamId: string;
 }
