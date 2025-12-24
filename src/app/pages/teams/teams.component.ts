@@ -33,15 +33,15 @@ import { NgClass } from '@angular/common';
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
           @for (item of filters; track $index) {
             <button (click)="filterTeams(item.id)"
-            class="hover:bg-crimson hover:text-white font-semibold shadow-md hover:shadow-xl rounded-full w-full sm:w-32 py-1 cursor-pointer"
-            [ngClass]="selectedFilter === item.id ? 'bg-crimson text-white duration-300' : 'bg-white text-gray-600 duration-300'"
-            >
-            {{ item.label }}
-          </button>
-        }
+              class="hover:bg-crimson hover:text-white font-semibold shadow-md hover:shadow-xl rounded-full w-full sm:w-32 py-1 cursor-pointer"
+              [ngClass]="selectedFilter === item.id ? 'bg-crimson text-white duration-300' : 'bg-white text-gray-600 duration-300'"
+              >
+              {{ item.label }}
+            </button>
+          }
+        </div>
       </div>
-    </div>
-    <!-- Content -->
+      <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @for (team of filteredTeams; track $index) {
           <div [routerLink]="['/team',team.category, team.teamId]" class=" bg-white group rounded-3xl overflow-hidden shadow-md hover:shadow-xl duration-300 cursor-pointer">
@@ -86,7 +86,7 @@ export class TeamsComponent {
     { id: 0, label: 'All' },
     { id: 1, label: 'Liga 1' },
     { id: 2, label: 'Liga 2' },
-    { id: 3, label: 'Liga 3' }
+    { id: 3, label: 'Liga 3' },
   ];
   selectedFilter = 0;
 
