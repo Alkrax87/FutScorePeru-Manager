@@ -5,7 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapUpdateModalComponent } from "../../components/map-update-modal/map-update-modal.component";
-import { MapElement } from '../../interfaces/map-element';
+import { Map, MapElement } from '../../interfaces/map-element';
 
 @Component({
   selector: 'app-maps',
@@ -49,7 +49,7 @@ import { MapElement } from '../../interfaces/map-element';
               @for (mapItem of map.model; track $index) {
                 <div class="bg-white border flex items-center gap-2 justify-between shadow-md hover:shadow-xl duration-300 rounded-3xl p-4">
                   <p class="font-semibold text-sm truncate">{{ mapItem.mapName }}</p>
-                  <button type="button" (click)="onEdit({ category: map.category, mapName: mapItem.mapName, mapId: mapItem.mapId, mapStatus: mapItem.mapStatus})"
+                  <button type="button" (click)="onChangeStatus(map.category, mapItem)"
                     class="hover:bg-opacity-85 rounded-full w-24 font-semibold text-sm py-2 text-white duration-300"
                     [ngClass]="{
                       'bg-green-600': mapItem.mapStatus,
@@ -65,11 +65,10 @@ import { MapElement } from '../../interfaces/map-element';
       </div>
     </div>
 
-    @if (showChangeStatusModal()) {
+    @if (isChangeStatusModalOpen()) {
       <app-map-update-modal
-        [mapItem]="{ region: editedMapItem()!.mapName, status: editedMapItem()!.mapStatus}"
-        (update)="changeStatus()"
-        (cancel)="showChangeStatusModal.set(false)"
+        [mapItem]="selectedMapItem()!"
+        (close)="isChangeStatusModalOpen.set(false)"
       ></app-map-update-modal>
     }
   `,
@@ -77,10 +76,10 @@ import { MapElement } from '../../interfaces/map-element';
 })
 export class MapsComponent {
   private mapsService = inject(MapsApiService);
-  maps: MapElement[] = [];
+  maps: Map[] = [];
 
-  showChangeStatusModal = signal(false);
-  editedMapItem = signal<{ category: number, mapId: string; mapName: string, mapStatus: boolean} | null>(null);
+  isChangeStatusModalOpen = signal(false);
+  selectedMapItem = signal<{ category: number, model: MapElement } | null>(null);
 
   Map = faMapLocationDot;
 
@@ -91,13 +90,8 @@ export class MapsComponent {
     });
   }
 
-  onEdit(mapItem: { category: number, mapId: string; mapName: string, mapStatus: boolean}) {
-    this.showChangeStatusModal.set(true);
-    this.editedMapItem.set(mapItem);
-  }
-
-  changeStatus() {
-    this.mapsService.updateMapItem(this.editedMapItem()!.category, this.editedMapItem()!.mapId, !this.editedMapItem()!.mapStatus);
-    this.showChangeStatusModal.set(false);
+  onChangeStatus(category: number, mapItem: MapElement) {
+    this.selectedMapItem.set({ category, model: mapItem });
+    this.isChangeStatusModalOpen.set(true);
   }
 }

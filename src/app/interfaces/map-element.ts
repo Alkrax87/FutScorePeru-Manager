@@ -1,11 +1,11 @@
-export interface MapElement {
+export interface Map {
   category: number;
-  model: [
-    {
-      mapId: string;
-      mapName: string;
-      mapStatus: boolean;
-      mapD: string;
-    }
-  ];
+  model: MapElement[];
+}
+
+export interface MapElement {
+  mapId: string;
+  mapName: string;
+  mapStatus: boolean;
+  mapD: string;
 }

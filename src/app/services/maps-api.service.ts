@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Environments } from '../environment/environments';
 import { BehaviorSubject } from 'rxjs';
-import { MapElement } from '../interfaces/map-element';
+import { Map } from '../interfaces/map-element';
 
 @Injectable({
   providedIn: 'root',
@@ -12,11 +12,11 @@ export class MapsApiService {
 
   private http = inject(HttpClient);
 
-  private mapsSubject = new BehaviorSubject<MapElement[]>([]);
+  private mapsSubject = new BehaviorSubject<Map[]>([]);
   dataMaps$ = this.mapsSubject.asObservable();
 
   getMaps() {
-    this.http.get<MapElement[]>(this.backendUrl + 'map').subscribe({
+    this.http.get<Map[]>(this.backendUrl + 'map').subscribe({
       next: (data) => this.mapsSubject.next(data),
       error: (err) => console.error('Unable to load maps: ', err),
     });
