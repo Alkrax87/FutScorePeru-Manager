@@ -2,12 +2,13 @@ import { Component, inject, signal } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ManagersApiService } from '../../services/managers-api.service';
 import { TeamsApiService } from '../../services/teams-api.service';
-import { faPenToSquare, faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faPenToSquare, faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { Manager } from '../../interfaces/manager';
 import { combineLatest } from 'rxjs';
 import { DeleteConfirmationModalComponent } from "../../components/delete-confirmation-modal/delete-confirmation-modal.component";
 import { ManagerModalComponent } from "../../components/manager-modal/manager-modal.component";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NgClass } from '@angular/common';
 
 interface managerView extends Manager {
   teamLogo: string;
@@ -16,11 +17,11 @@ interface managerView extends Manager {
 
 @Component({
   selector: 'app-managers',
-  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, ManagerModalComponent],
+  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, ManagerModalComponent, NgClass],
   template: `
     <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
       <!-- Title -->
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pb-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
         <div class="text-center sm:text-start">
           <h2 class="text-3xl font-semibold">Managers Management</h2>
           <p class="text-neutral-400">Manage and view all managers</p>
@@ -29,9 +30,25 @@ interface managerView extends Manager {
           <fa-icon [icon]="Add"></fa-icon> Add Stadium
         </button>
       </div>
+      <!-- Filter -->
+      <div class="flex flex-col sm:flex-row gap-4 py-4">
+        <div class="flex items-center justify-center sm:justify-start gap-2 text-neutral-500">
+          <fa-icon [icon]="Filter"></fa-icon> Filters
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          @for (item of filters; track $index) {
+            <button (click)="filterManagers(item.id)"
+              class="hover:bg-crimson hover:text-white font-semibold shadow-md hover:shadow-xl rounded-full w-full sm:w-32 py-1 cursor-pointer"
+              [ngClass]="selectedFilter === item.id ? 'bg-crimson text-white duration-300' : 'bg-white text-gray-600 duration-300'"
+              >
+              {{ item.label }}
+            </button>
+          }
+        </div>
+      </div>
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        @for (manager of managersViews; track $index) {
+        @for (manager of filteredManagers; track $index) {
           <div class="bg-white rounded-3xl shadow-md hover:shadow-xl duration-300">
             <div class="p-4">
               <div class="w-full">
@@ -96,12 +113,21 @@ export class ManagersComponent {
   private teamsService = inject(TeamsApiService);
   private managersService = inject(ManagersApiService);
   managersViews: managerView[] = [];
+  filteredManagers: managerView[] = [];
 
   isManagerModalOpen = signal(false);
   isConfirmOpen = signal(false);
   selectedManager = signal<Manager | null>(null);
 
+  filters = [
+    { id: 0, label: 'All' },
+    { id: 1, label: 'Liga 1' },
+    { id: 2, label: 'Liga 2' },
+  ];
+  selectedFilter = 0;
+
   Add = faPlus;
+  Filter = faFilter;
   Edit = faPenToSquare;
   Delete = faTrashCan;
 
@@ -121,8 +147,25 @@ export class ManagersComponent {
             teamName: team?.name ?? ''
           };
         });
+        this.filteredManagers = managers.map(manager => {
+          const team = teams.find(t => t.teamId === manager.teamId);
+          return {
+            ...manager,
+            teamLogo: team?.image ?? '',
+            teamName: team?.name ?? ''
+          };
+        });
       }
     });
+  }
+
+  filterManagers(category: number) {
+    this.selectedFilter = category;
+    if (category === 0) {
+      this.filteredManagers = this.managersViews;
+      return;
+    }
+    this.filteredManagers = this.managersViews.filter((manager) => manager.category === category);
   }
 
   onAdd() {
