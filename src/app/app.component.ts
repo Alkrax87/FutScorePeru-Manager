@@ -13,7 +13,7 @@ import { TopbarComponent } from "./components/topbar/topbar.component";
     <div class="flex h-dvh">
       <app-sidebar [routesElements]="routes" (sidebarOpen)="seeStatus($event)"></app-sidebar>
       <div class="bg-light w-full duration-300 flex flex-col min-h-dvh h-fit" [ngClass]="{ 'pl-52': sidebarOpen, 'pl-14': !sidebarOpen }">
-        <div class="sticky top-0">
+        <div class="sticky top-0 z-40">
           <app-topbar></app-topbar>
         </div>
         <div class="flex-1">
@@ -34,6 +34,8 @@ export class AppComponent {
         { route: 'divisions', name: 'Divisions', icon: faTags },
         { route: 'fixtures', name: 'Fixtures', icon: faWindowRestore },
         { route: 'brackets', name: 'Brackets', icon: faNetworkWired },
+        { route: 'stadiums', name: 'Stadiums', icon: faRing },
+        { route: 'maps', name: 'Maps', icon: faMapLocation },
       ],
     },
     {
@@ -41,8 +43,6 @@ export class AppComponent {
       routes: [
         { route: 'teams', name: 'Teams', icon: faShieldHalved },
         { route: 'managers', name: 'Managers', icon: faUserTie },
-        { route: 'stadiums', name: 'Stadiums', icon: faRing },
-        { route: 'maps', name: 'Maps', icon: faMapLocation },
       ],
     },
     {
