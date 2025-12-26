@@ -1,10 +1,10 @@
 export interface Division {
   divisionId: number;
-  sup: string;
   name: string;
+  sup: string;
   image: string;
-  season: number;
   teams: number;
+  season: number;
   firstPhase: {
     name: string;
     inGame: number;
