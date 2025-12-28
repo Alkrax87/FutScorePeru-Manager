@@ -5,7 +5,7 @@ import { Manager } from '../../interfaces/manager';
 import { ManagersApiService } from '../../services/managers-api.service';
 import { faFloppyDisk, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { TeamsApiService } from '../../services/teams-api.service';
-import { TeamProfile } from '../../interfaces/team-profile';
+import { Team } from '../../interfaces/team';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -128,7 +128,7 @@ export class ManagerModalComponent {
   private managersService = inject(ManagersApiService);
   private teamsService = inject(TeamsApiService);
 
-  teams: TeamProfile[] = [];
+  teams: Team[] = [];
 
   form = this.fb.group({
     managerId: [null as number | null, [Validators.min(1), Validators.required]],

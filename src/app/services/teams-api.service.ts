@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Environments } from '../environment/environments';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { TeamProfile } from '../interfaces/team-profile';
+import { Team } from '../interfaces/team';
 
 @Injectable({
   providedIn: 'root',
@@ -12,28 +12,28 @@ export class TeamsApiService {
 
   private http = inject(HttpClient);
 
-  private teamsSubject = new BehaviorSubject<TeamProfile[]>([]);
+  private teamsSubject = new BehaviorSubject<Team[]>([]);
   dataTeams$ = this.teamsSubject.asObservable();
 
   getTeams() {
-    this.http.get<TeamProfile[]>(this.backendUrl + 'teams').subscribe({
+    this.http.get<Team[]>(this.backendUrl + 'teams').subscribe({
       next: (data) => this.teamsSubject.next(data),
       error: (err) => console.error('Unable to load teams: ', err),
     });
   }
 
-  getTeamsByTeamId(teamId: string): Observable<TeamProfile> {
-    return this.http.get<TeamProfile>(this.backendUrl + 'teams/teamId/' + teamId);
+  getTeamsByTeamId(teamId: string): Observable<Team> {
+    return this.http.get<Team>(this.backendUrl + 'teams/teamId/' + teamId);
   }
 
-  addTeam(teamData: TeamProfile) {
+  addTeam(teamData: Team) {
     this.http.post(this.backendUrl + 'teams', teamData).subscribe({
       next: () => this.getTeams(),
       error: (err) => console.error('Unable to create team: ', err),
     });
   }
 
-  updateTeam(teamId: string, team: TeamProfile) {
+  updateTeam(teamId: string, team: Team) {
     this.http.put(this.backendUrl + 'teams/' + teamId, team).subscribe({
       next: () => this.getTeams(),
       error: (err) => console.error('Unable to update team: ', err),

@@ -1,4 +1,4 @@
-export interface TeamProfile {
+export interface Team {
   teamId: string;
   category: number;
   groupFirstPhase: string;
@@ -7,6 +7,7 @@ export interface TeamProfile {
   abbreviation: string;
   image: string;
   imageThumbnail: string;
+  background: string;
   alt: string;
   location: string;
   stadium: number;
