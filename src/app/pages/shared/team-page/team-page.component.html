@@ -1,625 +1,190 @@
 @if (team && stadiums) {
-  <div class="bg-gray-100 flex flex-col gap-3 w-full px-5 py-10 md:py-24 select-none">
-    <!-- Team -->
-    <div class="w-full text-center">
+  <div class="max-w-screen-lg mx-auto px-3 sm:px-5 py-5 flex flex-col gap-4 duration-500 select-none">
+    <!-- Title -->
+    <div class="text-center">
       <h1 class="font-bold text-4xl">Team Profile</h1>
       <p class="text-neutral-500">Manage and view detailed team information</p>
     </div>
-    <div class="bg-white w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md">
+    <!-- Team -->
+    <div class="bg-white rounded-3xl overflow-hidden shadow-md">
       <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
       <div class="flex gap-5 p-5">
-        <div class="w-full flex gap-4">
-          <div class="bg-white border-2 rounded-full p-4" [style.borderColor]="team.color.c1">
-            <img [src]="team.image" [alt]="team.alt" class="w-20 h-20">
-          </div>
-          <div class="flex flex-col justify-center">
-            <p class="text-neutral-500 text-xs">{{ team.teamId }}</p>
-            <p class="text-3xl font-semibold">{{ team.name }}</p>
-            <p class="text-neutral-500 text-sm">
-              <fa-icon [icon]="Location"></fa-icon> {{ team.location }}
-            </p>
-            <div class="flex gap-2 mt-2">
-              <p class="border-2 rounded-full px-4 font-semibold text-sm" [style.borderColor]="team.color.c1">
-                Liga {{ team.category }}
+        <!-- Left -->
+        <div class="w-full">
+          <div class="flex gap-4">
+            <div class="bg-white border-2 rounded-full p-4 min-w-fit" [style.borderColor]="team.color.c1">
+              <img [src]="team.image" [alt]="team.alt" class="w-28 h-28">
+            </div>
+            <div class="flex flex-col justify-center">
+              <p class="text-neutral-500 text-xs">ID: {{ team.teamId }}</p>
+              <p class="text-3xl font-semibold">{{ team.name }}</p>
+              <p class="text-neutral-500 text-sm">
+                <fa-icon [icon]="Location"></fa-icon> {{ team.location }}
               </p>
-              <p class="border-2 rounded-full px-4 font-semibold text-sm" [style.borderColor]="team.color.c1">
-                {{ team.abbreviation }}
-              </p>
-              @if (team.groupFirstPhase) {
-                <p class="border-2 rounded-full px-4 font-semibold text-sm" [style.borderColor]="team.color.c1">
-                  @switch (team.groupFirstPhase) {
-                    @case ('a') { Group A }
-                    @case ('b') { Group B }
-                    @case ('1') { Group 1 }
-                    @case ('2') { Group 2 }
-                    @case ('3') { Group 3 }
-                    @case ('4') { Group 4 }
-                  }
-                </p>
-              }
-              @if (team.groupSecondPhase) {
-                <p class="border-2 rounded-full px-4 font-semibold text-sm" [style.borderColor]="team.color.c1">
-                  @switch (team.groupSecondPhase) {
-                    @case ('p1') { Group Promotion 1 }
-                    @case ('p2') { Group Promotion 2 }
-                    @case ('r') { Group Relegation }
-                    @case ('f1') { Group Final 1 }
-                    @case ('f2') { Group Final 2 }
-                    @case ('f3') { Group Final 3 }
-                    @case ('f4') { Group Final 4 }
-                  }
-                </p>
-              }
             </div>
           </div>
         </div>
-        <div class="w-40 flex flex-col justify-center gap-3">
-          <button (click)="showTeamEditModal = true" class="bg-yellow-400 hover:bg-opacity-90 text-white py-2 rounded-xl outline-none">
+        <!-- Right -->
+        <div class="flex flex-col justify-center gap-2">
+          <button (click)="isTeamModalOpen.set(true)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white w-32 rounded-full py-2 text-sm duration-300">
             <fa-icon [icon]="Edit"></fa-icon>&nbsp; Edit
           </button>
-          <button (click)="showTeamDeleteModal = true" class="bg-red-600 hover:bg-opacity-90 text-white py-2 rounded-xl outline-none">
+          <button (click)="isConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white w-32 rounded-full py-2 text-sm duration-300">
             <fa-icon [icon]="Delete"></fa-icon>&nbsp; Delete
           </button>
         </div>
       </div>
     </div>
+    <!-- Description -->
+    <div class="grid grid-cols-4 gap-4">
+      <!-- Details -->
+      <div class="col-span-3">
+        <p class="text-2xl font-semibold mb-2"><fa-icon [icon]="Details"></fa-icon> Details</p>
+        <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
+          <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
+          <div class="p-4">
+            <div class="flex justify-evenly gap-10">
+              <div>
+                <p [style.color]="team.color.c1" class="text-sm font-semibold">Category</p>
+                <p class="text-neutral-700 font-semibold text-center">Liga {{ team.category }}</p>
+              </div>
+              <div>
+                <p [style.color]="team.color.c1" class="text-sm font-semibold">Abbreviation</p>
+                <p class="text-neutral-700 font-semibold text-center">{{ team.abbreviation }}</p>
+              </div>
+              @if (team.groupFirstPhase || team.groupSecondPhase) {
+                <div>
+                  <p [style.color]="team.color.c1" class="text-sm font-semibold text-center">Groups</p>
+                  <div class="flex gap-2">
+                    @if (team.groupFirstPhase) {
+                      <p class="border-2 rounded-full px-2 font-semibold text-sm" [style.borderColor]="team.color.c1">
+                        @switch (team.groupFirstPhase) {
+                          @case ('a') { GA }
+                          @case ('b') { GB }
+                          @case ('1') { G1 }
+                          @case ('2') { G2 }
+                          @case ('3') { G3 }
+                          @case ('4') { G4 }
+                        }
+                      </p>
+                    }
+                    @if (team.groupSecondPhase) {
+                      <p class="border-2 rounded-full px-2 font-semibold text-sm" [style.borderColor]="team.color.c1">
+                        @switch (team.groupSecondPhase) {
+                          @case ('p1') { P1 }
+                          @case ('p2') { P2 }
+                          @case ('r') { RE }
+                          @case ('f1') { F1 }
+                          @case ('f2') { F2 }
+                          @case ('f3') { F3 }
+                          @case ('f4') { F4 }
+                        }
+                      </p>
+                    }
+                  </div>
+                </div>
+              }
+              <div class="flex flex-col items-center">
+                <p [style.color]="team.color.c1" class="text-sm font-semibold">Resources</p>
+                <button (click)="isResourcesModalOpen.set(true)" [style.backgroundColor]="team.color.c1" class="text-white rounded-full px-2">
+                  <fa-icon [icon]="Resources"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Colors -->
+      <div class="col-span-1">
+        <p class="text-2xl font-semibold mb-2"><fa-icon [icon]="Color"></fa-icon> Colors</p>
+        <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
+          <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
+          <div class="p-4 grid grid-cols-2 gap-5 my-0.5">
+            <div class="flex items-center gap-1">
+              <div [style.backgroundColor]="team.color.c1" class="border shadow-md min-w-10 h-10 rounded-full"></div>
+              <p class="text-neutral-700 text-sm font-semibold">{{ team.color.c1 }}</p>
+            </div>
+            <div class="flex items-center gap-1">
+              <div [style.backgroundColor]="team.color.c2" class="border shadow-md min-w-10 h-10 rounded-full"></div>
+              <p class="text-neutral-700 text-sm font-semibold">{{ team.color.c2 }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Stadium -->
-    <div class="w-full max-w-5xl mx-auto">
-      <p class="text-2xl font-semibold">Stadium</p>
-    </div>
-    <div class="bg-white w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md">
-      <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
-      <div class="flex gap-5 p-5">
-        <div class="w-1/3">
-          <img [src]="stadiums[team.stadium - 1].image" alt="TEAM-stadium" class="w-full h-44 object-cover rounded-lg">
-        </div>
-        <div class="text-neutral-700 w-2/3 flex flex-col justify-center">
-          <p class="text-neutral-500 text-xs">StadiumID: {{ stadiums[team.stadium - 1].stadiumId }}</p>
-          <div class="flex text-2xl">
-            <div class="w-10 text-center">
-              <fa-icon [icon]="Stadium"></fa-icon>
+    <div>
+      <p class="text-2xl font-semibold mb-2"><fa-icon [icon]="Stadium"></fa-icon> Stadium</p>
+      <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
+        <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
+        @if (stadium()) {
+          <div class="flex gap-5 p-5">
+            <div class="w-1/3">
+              <img [src]="stadium()!.image" alt="TEAM-stadium" class="w-full h-40 object-cover rounded-lg">
             </div>
-            {{ stadiums[team.stadium - 1].name }}
-          </div>
-          <div class="grid grid-cols-2 gap-5 mt-5">
-            <div class="bg-neutral-50 rounded-lg grid-cols-1 text-xl p-3 text-center">
-              <div class="w-full text-center">
-                <fa-icon [icon]="Location"></fa-icon>
-              </div>
-              <p class="text-neutral-500 text-sm">Location</p>
-              <p class="text-neutral-700 font-semibold">{{ stadiums[team.stadium - 1].location }}</p>
-            </div>
-            <div class="bg-neutral-50 rounded-lg grid-cols-1 text-lg p-3 text-center">
-              <div class="w-full text-center">
-                <fa-icon [icon]="People"></fa-icon>
-              </div>
-              <p class="text-neutral-500 text-sm">Capacity</p>
-              <p class="text-neutral-700 font-semibold">{{ stadiums[team.stadium - 1].capacity }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- LastGames -->
-    <div class="w-full max-w-5xl mx-auto">
-      <p class="text-2xl font-semibold">LastGames</p>
-    </div>
-    @if (!lastGamesDataPhase1 || !lastGamesDataPhase2) {
-      <div class="w-full max-w-5xl mx-auto">
-        <div class="bg-white w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md">
-          <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
-          <div class="p-5">
-            <button (click)="showLastGamesAddModal = true" class="bg-night hover:bg-opacity-90 text-white w-full py-2 rounded-xl">
-              <fa-icon [icon]="Add"></fa-icon> Add LastGames
-            </button>
-          </div>
-        </div>
-      </div>
-    } @else {
-      <div class="w-full max-w-5xl mx-auto flex gap-5">
-        <div class="w-1/2">
-          <div class="bg-white w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md">
-            <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
-            <div class="p-5">
-              <p class="text-lg font-semibold place-content-center"><fa-icon [icon]="Phase"></fa-icon> {{ phasesSelected[0].toUpperCase() }}</p>
-              <!-- Buttons -->
-              <div class="flex gap-2 justify-between my-5">
-                <button (click)="setLastGamesOptions('w', phasesSelected[0])" class="bg-green-600 hover:bg-opacity-90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-xl outline-none">
-                  <fa-icon [icon]="Win"></fa-icon>
-                  <p class="font-semibold">Win</p>
-                </button>
-                <button (click)="setLastGamesOptions('d', phasesSelected[0])" class="bg-neutral-400 hover:bg-opacity-90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-xl outline-none">
-                  <fa-icon [icon]="Draw"></fa-icon>
-                  <p class="font-semibold">Draw</p>
-                </button>
-                <button (click)="setLastGamesOptions('l', phasesSelected[0])" class="bg-red-600 hover:bg-opacity-90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-xl outline-none">
-                  <fa-icon [icon]="Loose"></fa-icon>
-                  <p class="font-semibold">Loose</p>
-                </button>
-                <button (click)="setLastGamesOptions('r', phasesSelected[0])" class="bg-neutral-700 hover:bg-opacity-90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-xl outline-none">
-                  <fa-icon [icon]="Default"></fa-icon>
-                  <p class="font-semibold">Default</p>
-                </button>
-              </div>
-              <!-- Icons -->
-              <div class="bg-gray-300 h-1 rounded-full mb-3"></div>
-              <div class="flex gap-2 flex-wrap justify-center text-lg">
-                @for (lastGame of lastGamesDataPhase1; track $index) {
-                  @switch (lastGame) {
-                    @case ("w") {
-                      <fa-icon class="text-green-600" [icon]="Win"></fa-icon>
-                    }
-                    @case ("d") {
-                      <fa-icon class="text-neutral-300" [icon]="Draw"></fa-icon>
-                    }
-                    @case ("l") {
-                      <fa-icon class="text-red-600" [icon]="Loose"></fa-icon>
-                    }
-                    @default {
-                      <fa-icon class="text-neutral-400" [icon]="Default"></fa-icon>
-                    }
-                  }
-                }
+            <div class="text-neutral-700 w-2/3 flex flex-col justify-center">
+              <p class="text-neutral-500 text-xs">StadiumID: {{ stadium()!.stadiumId }}</p>
+              <div class="text-2xl font-semibold">{{ stadium()!.name }}</div>
+              <div class="grid grid-cols-2 gap-5 mt-4">
+                <div class="bg-neutral-100 rounded-xl grid-cols-1 p-3 text-center">
+                  <fa-icon [style.color]="team.color.c1" [icon]="Location"></fa-icon>
+                  <p class="text-neutral-500 text-sm">Location</p>
+                  <p class="text-neutral-700 text-lg font-semibold">{{ stadium()!.location }}</p>
+                </div>
+                <div class="bg-neutral-100 rounded-lg grid-cols-1 p-3 text-center">
+                  <fa-icon [style.color]="team.color.c1" [icon]="People"></fa-icon>
+                  <p class="text-neutral-500 text-sm">Capacity</p>
+                  <p class="text-neutral-700 text-lg font-semibold">{{ stadium()!.capacity }}</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="w-1/2">
-          <div class="bg-white w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md">
-            <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
-            <div class="p-5">
-              <p class="text-lg font-semibold place-content-center"><fa-icon [icon]="Phase"></fa-icon> {{ phasesSelected[1].toUpperCase() }}</p>
-              <!-- Buttons -->
-              <div class="flex gap-2 justify-between my-5">
-                <button (click)="setLastGamesOptions('w', phasesSelected[1])" class="bg-green-600 hover:bg-opacity-90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-xl outline-none">
-                  <fa-icon [icon]="Win"></fa-icon>
-                  <p class="font-semibold">Win</p>
-                </button>
-                <button (click)="setLastGamesOptions('d', phasesSelected[1])" class="bg-neutral-400 hover:bg-opacity-90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-xl outline-none">
-                  <fa-icon [icon]="Draw"></fa-icon>
-                  <p class="font-semibold">Draw</p>
-                </button>
-                <button (click)="setLastGamesOptions('l', phasesSelected[1])" class="bg-red-600 hover:bg-opacity-90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-xl outline-none">
-                  <fa-icon [icon]="Loose"></fa-icon>
-                  <p class="font-semibold">Loose</p>
-                </button>
-                <button (click)="setLastGamesOptions('r', phasesSelected[1])" class="bg-neutral-700 hover:bg-opacity-90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-xl outline-none">
-                  <fa-icon [icon]="Default"></fa-icon>
-                  <p class="font-semibold">Default</p>
-                </button>
-              </div>
-              <!-- Icons -->
-              <div class="bg-gray-300 h-1 rounded-full mb-3"></div>
-              <div class="flex gap-2 flex-wrap justify-center text-lg">
-                @for (lastGame of lastGamesDataPhase2; track $index) {
-                  @switch (lastGame) {
-                    @case ("w") {
-                      <fa-icon class="text-green-600" [icon]="Win"></fa-icon>
-                    }
-                    @case ("d") {
-                      <fa-icon class="text-neutral-300" [icon]="Draw"></fa-icon>
-                    }
-                    @case ("l") {
-                      <fa-icon class="text-red-600" [icon]="Loose"></fa-icon>
-                    }
-                    @default {
-                      <fa-icon class="text-neutral-400" [icon]="Default"></fa-icon>
-                    }
-                  }
-                }
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    }
-    <!-- Results -->
-    <div class="w-full max-w-5xl mx-auto">
-      <p class="text-2xl font-semibold">Results</p>
-    </div>
-    @if (!resultsDataPhase1 || !resultsDataPhase2) {
-      <div class="w-full max-w-5xl mx-auto">
-        <div class="bg-white w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md">
-          <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
-          <div class="p-5">
-            <button (click)="showResultsAddModal = true" class="bg-night hover:bg-opacity-90 text-white w-full py-2 rounded-xl">
-              <fa-icon [icon]="Add"></fa-icon> Add Results
-            </button>
-          </div>
-        </div>
-      </div>
-    } @else {
-      <div class="w-full max-w-5xl mx-auto flex gap-5">
-        <div class="w-1/2">
-          <div class="bg-white w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md">
-            <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
-            <div class="p-5">
-              <div class="flex justify-between">
-                <p class="text-lg font-semibold place-content-center">
-                  <fa-icon [icon]="Phase"></fa-icon> {{ phasesSelected[0].toUpperCase() }}
-                </p>
-                <button (click)="setResultsOptions(phasesSelected[0], resultsDataPhase1)" class="bg-night hover:bg-opacity-90 text-white border-neutral-200 rounded-lg px-2 py-1">
-                  <fa-icon [icon]="Edit"></fa-icon>
-                </button>
-              </div>
-              <!-- Results -->
-              <div class="flex flex-wrap justify-center gap-1 mt-2">
-                @for (result of resultsDataPhase1; track $index) {
-                  <div class="border rounded-lg w-10 text-center">
-                    <p class="text-gray-500 text-xs">F{{ $index + 1 }}</p>
-                    @if (result != null) {
-                      <p class="font-semibold">{{ result }}</p>
-                    } @else {
-                      <p class="font-semibold">-</p>
-                    }
-                  </div>
-                }
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="w-1/2">
-          <div class="bg-white w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md">
-            <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
-            <div class="p-5">
-              <div class="flex justify-between">
-                <p class="text-lg font-semibold place-content-center">
-                  <fa-icon [icon]="Phase"></fa-icon> {{ phasesSelected[1].toUpperCase() }}
-                </p>
-                <button (click)="setResultsOptions(phasesSelected[1], resultsDataPhase2)" class="bg-night hover:bg-opacity-90 text-white border-neutral-200 rounded-lg px-2 py-1">
-                  <fa-icon [icon]="Edit"></fa-icon>
-                </button>
-              </div>
-              <!-- Results -->
-              <div class="flex flex-wrap justify-center gap-1 mt-2">
-                @for (result of resultsDataPhase2; track $index) {
-                  <div class="border rounded-lg w-10 text-center">
-                    <p class="text-gray-500 text-xs">F{{ $index + 1 }}</p>
-                    @if (result != null) {
-                      <p class="font-semibold">{{ result }}</p>
-                    } @else {
-                      <p class="font-semibold">-</p>
-                    }
-                  </div>
-                }
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    }
-    <!-- Performance -->
-    <div class="w-full max-w-5xl mx-auto">
-      <p class="text-2xl font-semibold">Performance</p>
-    </div>
-    @if (!performanceDataPhase1 || !performanceDataPhase2) {
-      <div class="w-full max-w-5xl mx-auto">
-        <div class="bg-white w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md">
-          <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
-          <div class="p-5">
-            <button (click)="showPerformanceAddModal = true" class="bg-night hover:bg-opacity-90 text-white w-full py-2 rounded-xl">
-              <fa-icon [icon]="Add"></fa-icon> Add Performance
-            </button>
-          </div>
-        </div>
-      </div>
-    } @else {
-      <div class="w-full max-w-5xl mx-auto flex gap-5">
-        <div class="w-1/2">
-          <div class="bg-white w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md">
-            <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
-            <div class="p-5">
-              <div class="flex justify-between">
-                <p class="text-lg font-semibold place-content-center">
-                  <fa-icon [icon]="Phase"></fa-icon> {{ phasesSelected[0].toUpperCase() }}
-                </p>
-                <button (click)="setPerformanceUpdateData(phasesSelected[0], performanceDataPhase1)" class="bg-night hover:bg-opacity-90 text-white border-neutral-200 rounded-lg px-2 py-1">
-                  <fa-icon [icon]="Edit"></fa-icon>
-                </button>
-              </div>
-              <!-- Performance -->
-              <div class="flex justify-around gap-1 mt-2">
-                <div class="border border-gray-300 rounded-lg w-full py-1 px-2 text-center">
-                  <p class="text-gray-500 text-xs">Points</p>
-                  <p class="font-semibold">{{ performanceDataPhase1.points }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">Played</p>
-                  <p class="font-semibold">{{ performanceDataPhase1.played }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">W</p>
-                  <p class="font-semibold">{{ performanceDataPhase1.w }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">D</p>
-                  <p class="font-semibold">{{ performanceDataPhase1.d }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">L</p>
-                  <p class="font-semibold">{{ performanceDataPhase1.l }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">GF</p>
-                  <p class="font-semibold">{{ performanceDataPhase1.gf }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">GA</p>
-                  <p class="font-semibold">{{ performanceDataPhase1.ga }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">GD</p>
-                  <p class="font-semibold">{{ (performanceDataPhase1.gd ?? 0) > 0 ? '+' + performanceDataPhase1.gd : performanceDataPhase1.gd }}</p>
-                </div>
-              </div>
-              <!-- Extras -->
-              @if (performanceDataPhase1.sanction) {
-                <div class="bg-neutral-200 h-0.5 my-2 rounded-full"></div>
-                <div class="bg-red-100 border-red-500 text-red-700 border w-1/2 rounded-lg py-0.5 text-center">
-                  <p>Sanction: <b>-{{ performanceDataPhase1.sanction }}</b></p>
-                </div>
-              }
-            </div>
-          </div>
-        </div>
-        <div class="w-1/2">
-          <div class="bg-white w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md">
-            <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
-            <div class="p-5">
-              <div class="flex justify-between">
-                <p class="text-lg font-semibold place-content-center">
-                  <fa-icon [icon]="Phase"></fa-icon> {{ phasesSelected[1].toUpperCase() }}
-                </p>
-                <button (click)="setPerformanceUpdateData(phasesSelected[1], performanceDataPhase2)" class="bg-night hover:bg-opacity-90 text-white border-neutral-200 rounded-lg px-2 py-1">
-                  <fa-icon [icon]="Edit"></fa-icon>
-                </button>
-              </div>
-              <!-- Performance -->
-              <div class="flex justify-around gap-1 mt-2">
-                <div class="border border-gray-300 rounded-lg w-full py-1 px-2 text-center">
-                  <p class="text-gray-500 text-xs">Points</p>
-                  <p class="font-semibold">{{ performanceDataPhase2.points }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">Played</p>
-                  <p class="font-semibold">{{ performanceDataPhase2.played }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">W</p>
-                  <p class="font-semibold">{{ performanceDataPhase2.w }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">D</p>
-                  <p class="font-semibold">{{ performanceDataPhase2.d }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">L</p>
-                  <p class="font-semibold">{{ performanceDataPhase2.l }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">GF</p>
-                  <p class="font-semibold">{{ performanceDataPhase2.gf }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">GA</p>
-                  <p class="font-semibold">{{ performanceDataPhase2.ga }}</p>
-                </div>
-                <div class="border border-gray-300 rounded-lg w-full py-1 text-center">
-                  <p class="text-gray-500 text-xs">GD</p>
-                  <p class="font-semibold">{{ (performanceDataPhase2.gd ?? 0) > 0 ? '+' + performanceDataPhase2.gd : performanceDataPhase2.gd }}</p>
-                </div>
-              </div>
-              <!-- Extras -->
-              @if (performanceDataPhase2.sanction || performanceDataPhase2.addition) {
-                <div class="bg-neutral-200 h-0.5 my-2 rounded-full"></div>
-                <div class="flex gap-2">
-                  @if (performanceDataPhase2.sanction) {
-                    <div class="bg-red-100 border-red-500 text-red-700 border w-1/2 rounded-lg py-0.5 text-center">
-                      <p>Sanction: <b>-{{ performanceDataPhase2.sanction }}</b></p>
-                    </div>
-                  }
-                  @if (performanceDataPhase2.addition) {
-                    <div class="bg-green-100 border-green-500 text-green-700 border w-1/2 rounded-lg py-0.5 text-center">
-                      <p>Addition: <b>+{{ performanceDataPhase2.addition }}</b></p>
-                    </div>
-                  }
-                </div>
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-    }
-    <!-- TeamInformation -->
-    <div class="w-full max-w-5xl mx-auto">
-      <div class="flex gap-4">
-        <p class="text-2xl font-semibold">Team Information</p>
-        @if (teamInformation) {
-          <button (click)="showTeamInformationUpdateModal = true" class="bg-night hover:bg-opacity-90 text-white border-neutral-200 rounded-lg px-2 py-1">
-            <fa-icon [icon]="Edit"></fa-icon>
-          </button>
         }
       </div>
     </div>
-    @if (!teamInformation) {
-      <div class="w-full max-w-5xl mx-auto">
-        <div class="bg-white w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md">
-          <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
-          <div class="p-5">
-            <button (click)="showTeamInformationAddModal = true" class="bg-night hover:bg-opacity-90 text-white w-full py-2 rounded-xl">
-              <fa-icon [icon]="Add"></fa-icon> Add Team Information
-            </button>
-          </div>
-        </div>
-      </div>
-    } @else {
-      <div class="w-full max-w-5xl mx-auto">
-        <div class="bg-white w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md">
-          <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
-          <div class="p-5">
-            <div class="flex gap-4">
-              <div class="flex gap-4 w-1/5 bg-neutral-100 p-2 rounded-xl">
-                <div class="bg-white w-10 h-10 flex items-center justify-center rounded-lg">
-                  <fa-icon class="text-xl" [icon]="Flag"></fa-icon>
-                </div>
-                <div>
-                  <p class="text-neutral-400 text-xs">Founded</p>
-                  <p class="font-semibold">{{ teamInformation.foundation }}</p>
-                </div>
-              </div>
-              <div class="flex gap-4 w-2/5 bg-neutral-100 p-2 rounded-xl">
-                <div class="bg-white w-10 h-10 flex items-center justify-center rounded-lg">
-                  <fa-icon class="text-xl" [icon]="Web"></fa-icon>
-                </div>
-                <div>
-                  <p class="text-neutral-400 text-xs">Official Website</p>
-                  @if (teamInformation.website) {
-                    <a [href]="teamInformation.website" class="font-semibold text-blue-600">{{ teamInformation.website }}</a>
-                  } @else {
-                    <p class="font-semibold">There isn't an official website</p>
-                  }
-                </div>
-              </div>
-              <div class="flex gap-4 w-2/5 bg-neutral-100 p-2 rounded-xl">
-                <div class="bg-white min-w-10 h-10 flex items-center justify-center rounded-lg">
-                  <fa-icon class="text-xl" [icon]="Share"></fa-icon>
-                </div>
-                <div class="w-full flex gap-5 items-center justify-center">
-                  @if (
-                    teamInformation.social.facebook ||
-                    teamInformation.social.instagram ||
-                    teamInformation.social.twitter ||
-                    teamInformation.social.youtube ||
-                    teamInformation.social.tiktok
-                  ) {
-                    @if (teamInformation.social.facebook) {
-                      <a [href]="teamInformation.social.facebook" class="bg-blue-700 text-white flex items-center justify-center rounded-full h-8 w-8">
-                        <fa-icon [icon]="Facebook"></fa-icon>
-                      </a>
-                    }
-                    @if (teamInformation.social.instagram) {
-                      <a [href]="teamInformation.social.instagram" class="bg-gradient-to-tr from-yellow-400 to-pink-500 text-white flex items-center justify-center rounded-full h-8 w-8">
-                        <fa-icon [icon]="Instagram"></fa-icon>
-                      </a>
-                    }
-                    @if (teamInformation.social.twitter) {
-                      <a [href]="teamInformation.social.twitter" class="bg-black text-white flex items-center justify-center rounded-full h-8 w-8">
-                        <fa-icon [icon]="Twitter"></fa-icon>
-                      </a>
-                    }
-                    @if (teamInformation.social.youtube) {
-                      <a [href]="teamInformation.social.youtube" class="bg-red-600 text-white flex items-center justify-center rounded-full h-8 w-8">
-                        <fa-icon [icon]="Youtube"></fa-icon>
-                      </a>
-                    }
-                    @if (teamInformation.social.tiktok) {
-                      <a [href]="teamInformation.social.tiktok" class="bg-neutral-800 text-white flex items-center justify-center rounded-full h-8 w-8">
-                        <fa-icon [icon]="Tiktok"></fa-icon>
-                      </a>
-                    }
-                  } @else {
-                    <p class="font-semibold">There isn't any social media.</p>
-                  }
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    }
   </div>
-}
 
-<!-- EditTeamModal -->
-@if (showTeamEditModal) {
-  <app-team-profile-edit
-    [updatedTeam]="editedTeam"
-    [stadiums]="stadiums"
-    (save)="saveChanges($event)"
-    (cancel)="showTeamEditModal = !showTeamEditModal"
-  ></app-team-profile-edit>
-}
+  @if (isResourcesModalOpen()) {
+    <div class="bg-black bg-opacity-70 fixed inset-0 flex items-center justify-center z-50 select-none">
+      <div class="bg-white relative w-full max-w-lg rounded-3xl p-5">
+        <button (click)="isResourcesModalOpen.set(false)" class="absolute top-5 right-6 text-neutral-400">
+          <fa-icon [icon]="X"></fa-icon>
+        </button>
+        <p class="text-xl font-semibold"><fa-icon [icon]="Resources"></fa-icon> Resources</p>
+        <div class="flex flex-col gap-2 mt-3">
+          <div>
+            <p [style.color]="team.color.c1" class="text-sm font-semibold">Image</p>
+            <p class="text-neutral-700">{{ team.image ? team.image : '-' }}</p>
+          </div>
+          <div>
+            <p [style.color]="team.color.c1" class="text-sm font-semibold">Image Thumbail</p>
+            <p class="text-neutral-700">{{ team.imageThumbnail ? team.imageThumbnail : '-' }}</p>
+          </div>
+          <div>
+            <p [style.color]="team.color.c1" class="text-sm font-semibold">Background</p>
+            <p class="text-neutral-700">{{ team.background ? team.background : '-' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
 
-<!-- DeleteTeamModal -->
-@if (showTeamDeleteModal) {
-  <app-team-profile-delete
-    [updatedTeam]="editedTeam"
-    (delete)="confirmDelete()"
-    (cancel)="showTeamDeleteModal = !showTeamDeleteModal"
-  ></app-team-profile-delete>
-}
+  @if (isTeamModalOpen()) {
+    <app-team-modal
+      [team]="selectedTeam()"
+      (updated)="updateTeamData($event)"
+      (close)="isTeamModalOpen.set(false)"
+    ></app-team-modal>
+  }
 
-<!-- AddLastGamesModal -->
-@if (showLastGamesAddModal) {
-  <app-last-games-add-modal
-    [teamId]="teamId"
-    [category]="category"
-    [phases]="phasesSelected"
-    (add)="addLastGames($event)"
-    (cancel)="showLastGamesAddModal = !showLastGamesAddModal"
-  ></app-last-games-add-modal>
-}
-
-<!-- LastGamesOptionModal -->
-@if (showLastGamesOptionModal) {
-  <app-last-games-option-modal
-    [option]="lastGamesOption"
-    (add)="changeLastGameResult()"
-    (cancel)="showLastGamesOptionModal = !showLastGamesOptionModal"
-  ></app-last-games-option-modal>
-}
-
-<!-- AddResultsModal -->
-@if (showResultsAddModal) {
-  <app-results-add-modal
-    [teamId]="teamId"
-    [category]="category"
-    [phases]="phasesSelected"
-    (add)="addResults($event)"
-    (cancel)="showResultsAddModal = !showResultsAddModal"
-  ></app-results-add-modal>
-}
-
-<!-- UpdateResultsModal -->
-@if (showResultsUpdateModal) {
-  <app-results-update-modal
-    [results]="resultsSelected"
-    (update)="updateResults($event)"
-    (cancel)="showResultsUpdateModal = !showResultsUpdateModal"
-  ></app-results-update-modal>
-}
-
-<!-- AddPerformanceModal -->
-@if (showPerformanceAddModal) {
-  <app-performance-add-modal
-    (add)="addPerformance()"
-    (cancel)="showPerformanceAddModal = !showPerformanceAddModal"
-  ></app-performance-add-modal>
-}
-
-<!-- UpdatePerformanceModal -->
-@if (showPerformanceUpdateModal) {
-  <app-performance-update-modal
-    [performance]="selectedPerformance"
-    (update)="updatePerformance($event)"
-    (cancel)="showPerformanceUpdateModal = !showPerformanceUpdateModal"
-  ></app-performance-update-modal>
-}
-
-<!-- AddTeamInformation -->
-@if (showTeamInformationAddModal) {
-  <app-team-information-add-modal
-    [teamId]="this.teamId"
-    (add)="addTeamInformation($event)"
-    (cancel)="showTeamInformationAddModal = !showTeamInformationAddModal"
-  ></app-team-information-add-modal>
-}
-
-<!-- UpdateTeamInformation -->
-@if (showTeamInformationUpdateModal) {
-  <app-team-information-update-modal
-    [updatedTeamInformation]="teamInformation"
-    (update)="updateTeamInformation($event)"
-    (cancel)="showTeamInformationUpdateModal = !showTeamInformationUpdateModal"
-  ></app-team-information-update-modal>
+  @if (isConfirmOpen()) {
+    <app-delete-confirmation-modal
+      [message]="{
+        section: 'Team',
+        element: selectedTeam()!.name
+      }"
+      (confirm)="confirmDelete()"
+      (close)="isConfirmOpen.set(false)"
+    ></app-delete-confirmation-modal>
+  }
 }

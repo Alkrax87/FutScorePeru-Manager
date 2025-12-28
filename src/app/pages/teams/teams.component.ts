@@ -4,15 +4,15 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faChevronRight, faFilter, faLocationDot, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { TeamsApiService } from '../../services/teams-api.service';
 import { StadiumsApiService } from '../../services/stadiums-api.service';
-import { TeamProfile } from '../../interfaces/team-profile';
-import { TeamAddModalComponent } from '../../components/team-add-modal/team-add-modal.component';
+import { Team } from '../../interfaces/team';
+import { TeamModalComponent } from '../../components/team-modal/team-modal.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgClass } from '@angular/common';
 
 
 @Component({
   selector: 'app-teams',
-  imports: [FontAwesomeModule, RouterLink, TeamAddModalComponent, NgClass],
+  imports: [FontAwesomeModule, RouterLink, TeamModalComponent, NgClass],
   template: `
     <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
       <!-- Title -->
@@ -69,7 +69,7 @@ import { NgClass } from '@angular/common';
     </div>
 
     @if (showAddTeamModal()) {
-      <app-team-add-modal (close)="showAddTeamModal.set(false)"></app-team-add-modal>
+      <app-team-modal (close)="showAddTeamModal.set(false)"></app-team-modal>
     }
   `,
   styles: ``,
@@ -77,8 +77,8 @@ import { NgClass } from '@angular/common';
 export class TeamsComponent {
   private teamsService = inject(TeamsApiService);
   private stadiumsService = inject(StadiumsApiService);
-  teams: TeamProfile[] = [];
-  filteredTeams: TeamProfile[] = [];
+  teams: Team[] = [];
+  filteredTeams: Team[] = [];
 
   showAddTeamModal = signal(false);
 
