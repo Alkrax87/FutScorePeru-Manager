@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Environments } from '../environment/environments';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { TeamProfile } from '../interfaces/team-profile';
 
 @Injectable({
@@ -22,11 +22,8 @@ export class TeamsApiService {
     });
   }
 
-  getTeamsByTeamId(teamId: string) {
-    this.http.get<TeamProfile>(this.backendUrl + 'teams/teamId/' + teamId).subscribe({
-      next: (data) => this.teamsSubject.next([data]),
-      error: (err) => console.error('Unable to load team: ', err),
-    });
+  getTeamsByTeamId(teamId: string): Observable<TeamProfile> {
+    return this.http.get<TeamProfile>(this.backendUrl + 'teams/teamId/' + teamId);
   }
 
   addTeam(teamData: TeamProfile) {
