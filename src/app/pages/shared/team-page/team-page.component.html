@@ -187,4 +187,144 @@
       (close)="isConfirmOpen.set(false)"
     ></app-delete-confirmation-modal>
   }
+
+  <!-- ============================================= -->
+  <!-- ==================LastGames================== -->
+  <!-- ============================================= -->
+  <div class="max-w-screen-lg mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
+    <!-- Title -->
+    <div class="flex gap-2 mb-2">
+      <p class="text-2xl font-semibold">LastGames</p>
+      @if (lastGames()) {
+        <button (click)="isLastGamesConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
+          <fa-icon [icon]="Delete"></fa-icon>
+        </button>
+      }
+    </div>
+    <!-- Content -->
+    <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
+      <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
+      <div class="p-5">
+        @if (!lastGames()) {
+          <button (click)="isLastGamesAddOpen.set(true)" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full px-6 py-2 rounded-full">
+            <fa-icon [icon]="Add"></fa-icon> Add LastGames
+          </button>
+        } @else {
+          <div class="w-full flex flex-col lg:flex-row gap-5">
+            <!-- Phase 1 -->
+            <div class="w-full lg:w-1/2">
+              <p class="font-semibold text-lg">Phase 1</p>
+              <!-- Buttons -->
+              <div class="flex gap-2 justify-between my-2">
+                <button (click)="setLastGamesOptions(1, 'w')" class="bg-green-600 hover:bg-green-600/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                  <fa-icon [icon]="Win"></fa-icon>
+                  <p class="font-semibold truncate">Win</p>
+                </button>
+                <button (click)="setLastGamesOptions(1, 'd')" class="bg-neutral-400 hover:bg-neutral-400/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                  <fa-icon [icon]="Draw"></fa-icon>
+                  <p class="font-semibold truncate">Draw</p>
+                </button>
+                <button (click)="setLastGamesOptions(1, 'l')" class="bg-red-600 hover:bg-red-600/80 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                  <fa-icon [icon]="Loose"></fa-icon>
+                  <p class="font-semibold">Loose</p>
+                </button>
+                <button (click)="setLastGamesOptions(1, 'r')" class="bg-neutral-700 hover:bg-neutral-700/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                  <fa-icon [icon]="Default"></fa-icon>
+                  <p class="font-semibold truncate">Default</p>
+                </button>
+              </div>
+              <!-- Icons -->
+              <div class="bg-neutral-100 shadow-md px-4 py-2 rounded-full flex gap-1 flex-wrap justify-evenly">
+                @for (element of lastGames()?.phase1; track $index) {
+                  @switch (element) {
+                    @case ("w") {
+                      <fa-icon class="text-green-600" [icon]="Win"></fa-icon>
+                    }
+                    @case ("d") {
+                      <fa-icon class="text-neutral-300" [icon]="Draw"></fa-icon>
+                    }
+                    @case ("l") {
+                      <fa-icon class="text-red-600" [icon]="Loose"></fa-icon>
+                    }
+                    @default {
+                      <fa-icon class="text-neutral-400" [icon]="Default"></fa-icon>
+                    }
+                  }
+                }
+              </div>
+            </div>
+            <!-- Phase 2 -->
+            <div class="w-full lg:w-1/2">
+              <p class="font-semibold text-lg">Phase 2</p>
+              <!-- Buttons -->
+              <div class="flex gap-2 justify-between my-2">
+                <button (click)="setLastGamesOptions(2, 'w')" class="bg-green-600 hover:bg-green-600/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                  <fa-icon [icon]="Win"></fa-icon>
+                  <p class="font-semibold truncate">Win</p>
+                </button>
+                <button (click)="setLastGamesOptions(2, 'd')" class="bg-neutral-400 hover:bg-neutral-400/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                  <fa-icon [icon]="Draw"></fa-icon>
+                  <p class="font-semibold truncate">Draw</p>
+                </button>
+                <button (click)="setLastGamesOptions(2, 'l')" class="bg-red-600 hover:bg-red-600/80 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                  <fa-icon [icon]="Loose"></fa-icon>
+                  <p class="font-semibold">Loose</p>
+                </button>
+                <button (click)="setLastGamesOptions(2, 'r')" class="bg-neutral-700 hover:bg-neutral-700/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                  <fa-icon [icon]="Default"></fa-icon>
+                  <p class="font-semibold truncate">Default</p>
+                </button>
+              </div>
+              <!-- Icons -->
+              <div class="bg-neutral-100 shadow-md px-4 py-2 rounded-full flex gap-1 flex-wrap justify-evenly">
+                @for (element of lastGames()?.phase2; track $index) {
+                  @switch (element) {
+                    @case ("w") {
+                      <fa-icon class="text-green-600" [icon]="Win"></fa-icon>
+                    }
+                    @case ("d") {
+                      <fa-icon class="text-neutral-300" [icon]="Draw"></fa-icon>
+                    }
+                    @case ("l") {
+                      <fa-icon class="text-red-600" [icon]="Loose"></fa-icon>
+                    }
+                    @default {
+                      <fa-icon class="text-neutral-400" [icon]="Default"></fa-icon>
+                    }
+                  }
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (isLastGamesAddOpen()) {
+    <app-last-games-add-modal
+      [teamReference]="{ teamId: team.teamId, category: team.category}"
+      (updated)="loadLastGamesData()"
+      (close)="isLastGamesAddOpen.set(false)"
+    ></app-last-games-add-modal>
+  }
+
+  @if (isLastGamesOptionModalOpen()) {
+    <app-last-games-option-modal
+      [options]="lastGamesOption()!"
+      (updated)="loadLastGamesData()"
+      (close)="isLastGamesOptionModalOpen.set(false)"
+    ></app-last-games-option-modal>
+  }
+
+  @if (isLastGamesConfirmOpen()) {
+    <app-delete-confirmation-modal
+      [message]="{
+        section: 'LastGames',
+        element: selectedTeam()!.name + ' last games'
+      }"
+      (confirm)="confirmDeleteLastGames(teamId)"
+      (close)="isLastGamesConfirmOpen.set(false); lastGamesOption.set(null)"
+    ></app-delete-confirmation-modal>
+  }
 }
