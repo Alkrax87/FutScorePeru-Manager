@@ -1,41 +1,44 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCircle, faCircleCheck, faCircleMinus, faCircleXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { LastGamesApiService } from '../../services/last-games-api.service';
 
 @Component({
   selector: 'app-last-games-option-modal',
   imports: [FontAwesomeModule],
   template: `
-    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none">
-      <div class="bg-white p-5 rounded-xl w-full max-w-sm">
-        <h3 class="text-lg font-semibold">Confirm Match Result</h3>
-        <p class="text-neutral-500 text-sm text-justify">Are you sure you want to add a <span class="font-semibold">{{ optionValue }}</span> to the match history?</p>
-        <div class="flex gap-2 justify-end mt-4">
-          <button (click)="onCancel()" class="hover:bg-neutral-50 border border-neutral-200 rounded-lg px-5 py-1.5 font-semibold text-sm">
-            <fa-icon [icon]="Cancel"></fa-icon> Cancel
-          </button>
-          @switch (option) {
-            @case ('w') {
-              <button (click)="onAdd()" class="bg-green-600 hover:bg-opacity-90 text-white border-neutral-200 rounded-lg px-5 py-1.5 font-semibold text-sm">
-                <fa-icon [icon]="Win"></fa-icon> Add Win
-              </button>
+    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
+      <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-sm">
+        <div class="p-5">
+          <h3 class="text-white text-xl font-semibold">Confirm Match Result</h3>
+        </div>
+        <div class="bg-white px-5 pb-5 pt-2">
+          <p class="text-sm">Are you sure you want to add <span class="font-semibold">{{ optionValue }}</span> to the match history?</p>
+          <div class="flex justify-end gap-2 mt-2">
+            <button type="button" (click)="close.emit()" class="hover:bg-neutral-100/80 text-neutral-600 border rounded-full px-6 py-2 text-sm duration-300">Cancel</button>
+            @switch (options.option) {
+              @case ('w') {
+                <button (click)="save()" class="bg-green-600 hover:bg-green-600/90 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
+                  <fa-icon [icon]="Win"></fa-icon> Add Win
+                </button>
+              }
+              @case ('d') {
+                <button (click)="save()" class="bg-neutral-400 hover:bg-neutral-400/90 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
+                  <fa-icon [icon]="Draw"></fa-icon> Add Draw
+                </button>
+              }
+              @case ('l') {
+                <button (click)="save()" class="bg-red-600 hover:bg-red-600/80 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
+                  <fa-icon [icon]="Loose"></fa-icon> Add Loose
+                </button>
+              }
+              @case ('r') {
+                <button (click)="save()" class="bg-neutral-700 hover:bg-neutral-700/90 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
+                  <fa-icon [icon]="Default"></fa-icon> Add Default
+                </button>
+              }
             }
-            @case ('d') {
-              <button (click)="onAdd()" class="bg-neutral-400 hover:bg-opacity-90 text-white border-neutral-200 rounded-lg px-5 py-1.5 font-semibold text-sm">
-                <fa-icon [icon]="Draw"></fa-icon> Add Draw
-              </button>
-            }
-            @case ('l') {
-              <button (click)="onAdd()" class="bg-red-600 hover:bg-opacity-90 text-white border-neutral-200 rounded-lg px-5 py-1.5 font-semibold text-sm">
-                <fa-icon [icon]="Loose"></fa-icon> Add Loose
-              </button>
-            }
-            @case ('r') {
-              <button (click)="onAdd()" class="bg-neutral-700 hover:bg-opacity-90 text-white border-neutral-200 rounded-lg px-5 py-1.5 font-semibold text-sm">
-                <fa-icon [icon]="Default"></fa-icon> Add Default
-              </button>
-            }
-          }
+          </div>
         </div>
       </div>
     </div>
@@ -43,9 +46,11 @@ import { faCircle, faCircleCheck, faCircleMinus, faCircleXmark, faXmark } from '
   styles: ``,
 })
 export class LastGamesOptionModalComponent {
-  @Input() option!: string;
-  @Output() add = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>();
+  @Input() options!: { teamId: string; phase: number, option: string };
+  @Output() updated = new EventEmitter<void>();
+  @Output() close = new EventEmitter<void>();
+
+  private lastgamesService = inject(LastGamesApiService);
 
   optionValue!: string;
 
@@ -53,10 +58,9 @@ export class LastGamesOptionModalComponent {
   Draw = faCircleMinus;
   Loose = faCircleXmark;
   Default = faCircle;
-  Cancel = faXmark;
 
   ngOnInit() {
-    switch (this.option) {
+    switch (this.options.option) {
       case 'w':
         this.optionValue = 'Win'
         break;
@@ -74,11 +78,12 @@ export class LastGamesOptionModalComponent {
     }
   }
 
-  onAdd() {
-    this.add.emit();
-  }
-
-  onCancel() {
-    this.cancel.emit();
+  save() {
+    this.lastgamesService.updateTeamLastGames(this.options.teamId, this.options.phase, this.options.option).subscribe({
+      next: () => {
+        this.updated.emit();
+        this.close.emit();
+      },
+    });
   }
 }
