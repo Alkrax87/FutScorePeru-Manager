@@ -5,9 +5,13 @@ import { Component } from '@angular/core';
   imports: [],
   template: `
     <div class="py-2 text-white text-center bg-crimson font-semibold">
-      <a href="https://www.mavp_projects.com">&copy; 2025 MAVP Projects</a>
+      <a href="https://www.mavp_projects.com" >&copy; {{ Now().getFullYear() }} MAVP Projects</a>
     </div>
   `,
   styles: ``,
 })
-export class FooterComponent {}
+export class FooterComponent {
+  Now() {
+    return new Date();
+  }
+}
