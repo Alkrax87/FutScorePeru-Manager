@@ -1,22 +1,25 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { PerformanceApiService } from '../../services/performance-api.service';
 
 @Component({
   selector: 'app-performance-add-modal',
   imports: [FontAwesomeModule],
   template: `
-    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none">
-      <div class="bg-white p-5 rounded-xl w-full max-w-sm">
-        <h3 class="text-lg font-semibold">Add New Performance</h3>
-        <p class="text-neutral-500 text-sm">Are you sure you want to create team performance?</p>
-        <div class="flex gap-2 justify-end mt-4">
-          <button (click)="onCancel()" class="hover:bg-neutral-50 border border-neutral-200 rounded-lg px-5 py-1.5 font-semibold text-sm">
-            <fa-icon [icon]="Cancel"></fa-icon> Cancel
-          </button>
-          <button (click)="onAdd()" class="bg-night hover:bg-opacity-90 text-white border-neutral-200 rounded-lg px-5 py-1.5 font-semibold text-sm">
-            <fa-icon [icon]="Add"></fa-icon> Add Performance
-          </button>
+    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
+      <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-sm">
+        <div class="p-5">
+          <h3 class="text-white text-xl font-semibold">Generate Performance</h3>
+        </div>
+        <div class="bg-white px-5 pb-5 pt-2">
+          <p class="text-sm">Are you sure you want to generate <span class="font-semibold">{{ options.name }}</span> performance?</p>
+          <div class="flex justify-end gap-2 mt-2">
+            <button type="button" (click)="close.emit()" class="hover:bg-neutral-100/80 text-neutral-600 border rounded-full px-6 py-2 text-sm duration-300">Cancel</button>
+            <button (click)="save()" class="bg-green-600 hover:bg-green-600/90 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
+              <fa-icon [icon]="Add"></fa-icon> Generate
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -24,17 +27,20 @@ import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
   styles: ``,
 })
 export class PerformanceAddModalComponent {
-  @Output() add = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>();
+  @Input() options!: { category: number, teamId: string, name: string };
+  @Output() added = new EventEmitter<void>();
+  @Output() close = new EventEmitter<void>();
+
+  private performanceService = inject(PerformanceApiService);
 
   Add = faPlus;
-  Cancel = faXmark;
 
-  onAdd() {
-    this.add.emit();
-  }
-
-  onCancel() {
-    this.cancel.emit();
+  save() {
+    this.performanceService.addPerformance({ teamId: this.options.teamId, category: this.options.category}).subscribe({
+      next: () => {
+        this.added.emit();
+        this.close.emit();
+      }
+    });
   }
 }

@@ -1,143 +1,243 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { PerformanceData } from '../../interfaces/performance-data';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { PerformanceApiService } from '../../services/performance-api.service';
+import { TeamPerformance } from '../../interfaces/team-performance';
 
 @Component({
   selector: 'app-performance-update-modal',
-  imports: [FontAwesomeModule, FormsModule],
+  imports: [FontAwesomeModule, ReactiveFormsModule],
   template: `
-    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none">
-      <div class="bg-white p-5 rounded-xl w-full max-w-sm">
-        <h3 class="text-lg font-semibold">Update Performance Data</h3>
-        <p class="text-neutral-500 text-sm">Update performance statistics.</p>
-        <div class="flex flex-col gap-4 my-4">
-          <!-- Match Results -->
-          <div class="flex gap-4">
-            <!-- Win -->
-            <div class="w-1/3">
-              <label for="win" class="block text-sm font-semibold mb-1">Win (W)</label>
-              <input id="win" [(ngModel)]="editedPerformance.w" type="number" min="0" required
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-                placeholder="Win"
-              >
-            </div>
-            <!-- Draw -->
-            <div class="w-1/3">
-              <label for="draw" class="block text-sm font-semibold mb-1">Draw (D)</label>
-              <input id="draw" [(ngModel)]="editedPerformance.d" type="number" min="0" required
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-                placeholder="Draw"
-              >
-            </div>
-            <!-- Loose -->
-            <div class="w-1/3">
-              <label for="loose" class="block text-sm font-semibold mb-1">Loose (L)</label>
-              <input id="loose" [(ngModel)]="editedPerformance.l" type="number" min="0" required
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-                placeholder="Loose"
-              >
-            </div>
+    <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
+      <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-sm">
+        <div class="p-5">
+          <h3 class="text-white text-xl font-semibold">Update Performance Data</h3>
+          <p class="text-neutral-200 text-sm">Update performance statistics.</p>
+        </div>
+        @if (errorMessage) {
+          <div class="flex justify-between bg-red-100 text-red-600 text-sm py-1 rounded-lg px-2 mt-4">
+            <p>
+              <span class="font-semibold">Error:</span> {{ errorMessage }}
+            </p>
+            <p (click)="errorMessage = null" class="cursor-pointer">&times;</p>
           </div>
-          <!-- Goals -->
-          <div class="flex gap-4">
-            <!-- Goals For -->
-            <div class="w-1/2">
-              <label for="gf" class="block text-sm font-semibold mb-1">Goals For (GF)</label>
-              <input id="gf" [(ngModel)]="editedPerformance.gf" type="number" min="0" required
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-                placeholder="Goals For"
-              >
-            </div>
-            <!-- Goals Against -->
-            <div class="w-1/2">
-              <label for="ga" class="block text-sm font-semibold mb-1">Goals Against (GA)</label>
-              <input id="ga" [(ngModel)]="editedPerformance.ga" type="number" min="0" required
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-                placeholder="Goals Against"
-              >
-            </div>
-          </div>
-          <!-- Points Adjustments -->
-          <div class="flex gap-4">
-            <!-- Sanction Points -->
-            <div class="w-1/2">
-              <label for="sanction" class="block text-sm font-semibold mb-1">Sanction Points</label>
-              <input id="sanction" [(ngModel)]="editedPerformance.sanction" type="number" min="0" required
-                class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-                placeholder="Sanction Points"
-              >
-            </div>
-            <!-- Addition Points -->
-            @if (editedPerformance.addition != null) {
-              <div class="w-1/2">
-                <label for="addition" class="block text-sm font-semibold mb-1">Addition Points</label>
-                <input id="addition" [(ngModel)]="editedPerformance.addition" type="number" min="0" required
-                  class="border-gray-300 text-neutral-500 border px-3 py-1.5 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-crimson focus:text-black transition"
-                  placeholder="Addition Points"
-                >
+        }
+        <form [formGroup]="form" (ngSubmit)="save()" class="bg-white px-5 pb-5 pt-2">
+          <div class="flex flex-col gap-4 my-4">
+            <!-- TeamId -->
+            @if (options.phase === 1) {
+              <!-- Phase 1 -->
+              <p class="text-gold text-sm -mb-1 font-semibold">Phase 1</p>
+              <div formGroupName="phase1" class="flex flex-col gap-4">
+                <!-- Match Results -->
+                <div class="flex gap-4">
+                  <!-- Win -->
+                  <div class="w-1/3">
+                    <div>
+                      <label for="w" class="relative">
+                        <input id="w" type="number" min="0" formControlName="w" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                        <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Win (W)</span>
+                      </label>
+                    </div>
+                  </div>
+                  <!-- Draw -->
+                  <div class="w-1/3">
+                    <div>
+                      <label for="d" class="relative">
+                        <input id="d" type="number" min="0" formControlName="d" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                        <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Draw (D)</span>
+                      </label>
+                    </div>
+                  </div>
+                  <!-- Loose -->
+                  <div class="w-1/3">
+                    <div>
+                      <label for="l" class="relative">
+                        <input id="l" type="number" min="0" formControlName="l" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                        <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Loose (L)</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <!-- Goals -->
+                <div class="flex gap-4">
+                  <!-- Goals For -->
+                  <div class="w-1/2">
+                    <div>
+                      <label for="gf" class="relative">
+                        <input id="gf" type="number" min="0" formControlName="gf" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                        <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Goals For (GF)</span>
+                      </label>
+                    </div>
+                  </div>
+                  <!-- Goals Against -->
+                  <div class="w-1/2">
+                    <div>
+                      <label for="ga" class="relative">
+                        <input id="ga" type="number" min="0" formControlName="ga" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                        <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Goals Against (GA)</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <!-- Points Adjustments -->
+                <div class="flex gap-4">
+                  <!-- Sanction Points-->
+                  <div class="w-1/2">
+                    <div>
+                      <label for="sanction" class="relative">
+                        <input id="sanction" type="number" min="0" formControlName="sanction" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                        <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Sanction Points</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+            @if (options.phase === 2) {
+              <!-- Phase 2 -->
+               <p class="text-gold text-sm -mb-1 font-semibold">Phase 2</p>
+              <div formGroupName="phase2" class="flex flex-col gap-4">
+                <!-- Match Results -->
+                <div class="flex gap-4">
+                  <!-- Win -->
+                  <div class="w-1/3">
+                    <div>
+                      <label for="w" class="relative">
+                        <input id="w" type="number" min="0" formControlName="w" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                        <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Win (W)</span>
+                      </label>
+                    </div>
+                  </div>
+                  <!-- Draw -->
+                  <div class="w-1/3">
+                    <div>
+                      <label for="d" class="relative">
+                        <input id="d" type="number" min="0" formControlName="d" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                        <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Draw (D)</span>
+                      </label>
+                    </div>
+                  </div>
+                  <!-- Loose -->
+                  <div class="w-1/3">
+                    <div>
+                      <label for="l" class="relative">
+                        <input id="l" type="number" min="0" formControlName="l" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                        <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Loose (L)</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <!-- Goals -->
+                <div class="flex gap-4">
+                  <!-- Goals For -->
+                  <div class="w-1/2">
+                    <div>
+                      <label for="gf" class="relative">
+                        <input id="gf" type="number" min="0" formControlName="gf" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                        <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Goals For (GF)</span>
+                      </label>
+                    </div>
+                  </div>
+                  <!-- Goals Against -->
+                  <div class="w-1/2">
+                    <div>
+                      <label for="ga" class="relative">
+                        <input id="ga" type="number" min="0" formControlName="ga" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                        <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Goals Against (GA)</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <!-- Points Adjustments -->
+                <div class="flex gap-4">
+                  <!-- Sanction Points-->
+                  <div class="w-1/2">
+                    <div>
+                      <label for="sanction" class="relative">
+                        <input id="sanction" type="number" min="0" formControlName="sanction" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                        <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Sanction Points</span>
+                      </label>
+                    </div>
+                  </div>
+                  <!-- Addition Points -->
+                  <div class="w-1/2">
+                    <div>
+                      <label for="addition" class="relative">
+                        <input id="addition" type="number" min="0" formControlName="addition" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                        <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Addition Points</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
               </div>
             }
           </div>
-          <!-- Summary -->
-          <div class="bg-neutral-50 flex justify-evenly border rounded-xl px-4 py-2">
-            <div class="text-center">
-              <p class="text-neutral-500 text-xs font-semibold">Total Points</p>
-              <p class="text-xl font-bold">{{ editedPerformance.w * 3 + editedPerformance.d - editedPerformance.sanction + (editedPerformance.addition ?? 0) }}</p>
-            </div>
-            <div class="text-center">
-              <p class="text-neutral-500 text-xs font-semibold">Games Played</p>
-              <p class="text-xl font-bold">{{ editedPerformance.w + editedPerformance.d + editedPerformance.l }}</p>
-            </div>
-            <div class="text-center">
-              <p class="text-neutral-500 text-xs font-semibold">Goal Difference</p>
-              <p class="text-xl font-bold">{{ (editedPerformance.gf - editedPerformance.ga) > 0 ? '+' + (editedPerformance.gf - editedPerformance.ga) : editedPerformance.gf - editedPerformance.ga }}</p>
-            </div>
+          <div class="flex justify-end gap-2">
+            <button type="button" (click)="close.emit()" class="hover:bg-neutral-100/80 text-neutral-600 border rounded-full px-6 py-2 text-sm duration-300">Cancel</button>
+            <button type="submit" [disabled]="form.invalid" class="bg-yellow-500 hover:bg-yellow-500/80 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
+              <fa-icon [icon]="Edit"></fa-icon>&nbsp; Update Performance
+            </button>
           </div>
-        </div>
-        <div class="flex gap-2 justify-end">
-          <button (click)="onCancel()" class="hover:bg-neutral-50 border border-neutral-200 rounded-lg px-5 py-1.5 font-semibold text-sm">
-            <fa-icon [icon]="Cancel"></fa-icon> Cancel
-          </button>
-          <button (click)="onUpdate()" class="bg-night hover:bg-neutral-800 text-white border-neutral-200 rounded-lg px-5 py-1.5 font-semibold text-sm">
-            <fa-icon [icon]="Edit"></fa-icon> Update Performance
-          </button>
-        </div>
+        </form>
       </div>
     </div>
   `,
   styles: ``,
 })
 export class PerformanceUpdateModalComponent {
-  @Input() performance!: PerformanceData;
-  @Output() update = new EventEmitter<PerformanceData>();
-  @Output() cancel = new EventEmitter<void>();
+  @Input() options!: {phase: number, performance: TeamPerformance};
+  @Output() updated = new EventEmitter<void>();
+  @Output() close = new EventEmitter<void>();
 
-  editedPerformance!: PerformanceData;
+  private fb = inject(FormBuilder);
+  private performanceService = inject(PerformanceApiService);
+
+  form = this.fb.group({
+    teamId: ['', Validators.required],
+    phase1: this.fb.group({
+      w: [null as number | null, Validators.required],
+      d: [null as number | null, Validators.required],
+      l: [null as number | null, Validators.required],
+      gf: [null as number | null, Validators.required],
+      ga: [null as number | null, Validators.required],
+      sanction: [null as number | null, Validators.required],
+    }),
+    phase2: this.fb.group({
+      w: [null as number | null, Validators.required],
+      d: [null as number | null, Validators.required],
+      l: [null as number | null, Validators.required],
+      gf: [null as number | null, Validators.required],
+      ga: [null as number | null, Validators.required],
+      sanction: [null as number | null, Validators.required],
+      addition: [null as number | null, Validators.required],
+    }),
+  });
+  errorMessage: string | null = null;
+
   Edit = faPenToSquare;
   Cancel = faXmark;
 
   ngOnInit() {
-    this.editedPerformance = {
-      w: this.performance.w,
-      d: this.performance.d,
-      l: this.performance.l,
-      gf: this.performance.gf,
-      ga: this.performance.ga,
-      sanction: this.performance.sanction,
-      addition: this.performance.addition,
-    };
-  }
-
-  onUpdate() {
-    if (!this.editedPerformance.addition) {
-      delete this.editedPerformance.addition;
+    if (this.options.performance) {
+      this.form.patchValue(this.options.performance);
     }
-    this.update.emit(this.editedPerformance);
   }
 
-  onCancel() {
-    this.cancel.emit();
+  save() {
+    if (this.form.invalid) {
+      this.errorMessage = 'Some fields are invalid';
+      return;
+    }
+
+    const formPerformance = this.form.value as TeamPerformance;
+
+    this.performanceService.updateTeamPerformance(formPerformance.teamId, formPerformance).subscribe({
+      next: () => {
+        this.updated.emit();
+        this.close.emit();
+      },
+    });
   }
 }
