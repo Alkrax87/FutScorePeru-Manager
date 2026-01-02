@@ -14,10 +14,14 @@ import { LastGamesAddModalComponent } from "../../../components/last-games-add-m
 import { LastGamesApiService } from '../../../services/last-games-api.service';
 import { TeamLastGames } from '../../../interfaces/team-last-games';
 import { LastGamesOptionModalComponent } from "../../../components/last-games-option-modal/last-games-option-modal.component";
+import { TeamPerformance } from '../../../interfaces/team-performance';
+import { PerformanceAddModalComponent } from "../../../components/performance-add-modal/performance-add-modal.component";
+import { PerformanceApiService } from '../../../services/performance-api.service';
+import { PerformanceUpdateModalComponent } from "../../../components/performance-update-modal/performance-update-modal.component";
 
 @Component({
   selector: 'app-team-page',
-  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, TeamModalComponent, LastGamesAddModalComponent, LastGamesOptionModalComponent],
+  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, TeamModalComponent, LastGamesAddModalComponent, LastGamesOptionModalComponent, PerformanceAddModalComponent, PerformanceUpdateModalComponent],
   templateUrl: './team-page.component.html',
   styles: ``,
 })
@@ -28,6 +32,7 @@ export class TeamPageComponent {
   private teamsService = inject(TeamsApiService);
   private stadiumsService = inject(StadiumsApiService);
   private lastGamesService = inject(LastGamesApiService);
+  private performanceService = inject(PerformanceApiService);
 
   stadiums!: Stadium[];
   category!: number;
@@ -47,6 +52,13 @@ export class TeamPageComponent {
   isLastGamesOptionModalOpen = signal(false);
   isLastGamesConfirmOpen = signal(false);
   lastGamesOption = signal<{ teamId: string, phase: number, option: string } | null>(null);
+
+  // Performance
+  performance = signal<TeamPerformance | undefined>(undefined);
+  isPerformanceAddOpen = signal(false);
+  isPerformanceUpdateModal = signal(false);
+  isPerformanceConfirmOpen = signal(false);
+  performanceOptions = signal<{ phase: number, performance: TeamPerformance } | null>(null);
 
   // Icons
   Location = faLocationDot;
@@ -81,7 +93,8 @@ export class TeamPageComponent {
         this.team = data;
         this.selectedTeam.set(data);
         this.findStadium(data.stadium);
-        this.loadLastGamesData()
+        this.loadLastGamesData();
+        this.loadPerformaceData();
       },
       error: (err) => {
         console.error('Failed to load team data:', err.error.error);
@@ -127,6 +140,31 @@ export class TeamPageComponent {
       next: () => {
         this.loadLastGamesData();
         this.isLastGamesConfirmOpen.set(false);
+      },
+      error: (err) => {}
+    });
+  }
+
+  // =============================================
+  // ==================LastGames==================
+  // =============================================
+  loadPerformaceData() {
+    this.performanceService.getTeamPerformance(this.category, this.teamId).subscribe({
+      next: (data) => this.performance.set(data),
+      error: (err) => this.performance.set(undefined),
+    });
+  }
+
+  setPerformanceOptions(phase: number) {
+    this.performanceOptions.set({ phase, performance: this.performance()! });
+    this.isPerformanceUpdateModal.set(true);
+  }
+
+  confirmDeletePerformance(teamId: string) {
+    this.performanceService.deleteTeamPerformance(teamId).subscribe({
+      next: () => {
+        this.loadPerformaceData();
+        this.isPerformanceConfirmOpen.set(false);
       },
       error: (err) => {}
     });

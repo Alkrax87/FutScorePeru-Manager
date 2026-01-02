@@ -327,4 +327,171 @@
       (close)="isLastGamesConfirmOpen.set(false); lastGamesOption.set(null)"
     ></app-delete-confirmation-modal>
   }
+
+  <!-- ============================================= -->
+  <!-- ================Performance================== -->
+  <!-- ============================================= -->
+  <div class="max-w-screen-lg mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
+    <!-- Title -->
+    <div class="flex gap-2 mb-2">
+      <p class="text-2xl font-semibold">Performance</p>
+      @if (performance()) {
+        <button (click)="isPerformanceConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
+          <fa-icon [icon]="Delete"></fa-icon>
+        </button>
+      }
+    </div>
+    <!-- Content -->
+    <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
+      <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
+      <div class="p-5">
+        @if (!performance()) {
+          <button (click)="isPerformanceAddOpen.set(true)" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full px-6 py-2 rounded-full">
+            <fa-icon [icon]="Add"></fa-icon> Add Performance
+          </button>
+        } @else {
+          <div class="w-full flex flex-col lg:flex-row gap-5">
+            <!-- Phase 1 -->
+            <div class="w-full lg:w-1/2">
+              <div class="flex gap-2 mb-2">
+                <p class="font-semibold text-lg">Phase 1</p>
+                <button (click)="setPerformanceOptions(1)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
+                  <fa-icon [icon]="Edit"></fa-icon>
+                </button>
+              </div>
+              <!-- Performance -->
+              <div class="flex justify-around gap-1">
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">Points</p>
+                  <p class="font-semibold">{{ performance()!.phase1.w * 3 + performance()!.phase1.d - performance()!.phase1.sanction }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">Played</p>
+                  <p class="font-semibold">{{ performance()!.phase1.w + performance()!.phase1.d + performance()!.phase1.l }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">W</p>
+                  <p class="font-semibold">{{ performance()!.phase1.w }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">D</p>
+                  <p class="font-semibold">{{ performance()!.phase1.d }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">L</p>
+                  <p class="font-semibold">{{ performance()!.phase1.l }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">GF</p>
+                  <p class="font-semibold">{{ performance()!.phase1.gf }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">GA</p>
+                  <p class="font-semibold">{{ performance()!.phase1.ga }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">GD</p>
+                  <p class="font-semibold">{{ (performance()!.phase1.gf - performance()!.phase1.ga) > 0 ? '+' + (performance()!.phase1.gf - performance()!.phase1.ga) : performance()!.phase1.gf - performance()!.phase1.ga }}</p>
+                </div>
+              </div>
+              <!-- Extras -->
+              @if (performance()!.phase1.sanction) {
+                <div class="bg-neutral-200 h-0.5 my-2 rounded-full"></div>
+                <div class="bg-red-100 border-red-500 text-red-700 border w-1/2 rounded-full py-0.5 text-center">
+                  <p>Sanction: <b>-{{ performance()!.phase1.sanction }}</b></p>
+                </div>
+              }
+            </div>
+            <!-- Phase 2 -->
+            <div class="w-full lg:w-1/2">
+              <div class="flex gap-2 mb-2">
+                <p class="font-semibold text-lg">Phase 2</p>
+                <button (click)="setPerformanceOptions(2)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
+                  <fa-icon [icon]="Edit"></fa-icon>
+                </button>
+              </div>
+              <!-- Performance -->
+              <div class="flex justify-around gap-1">
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">Points</p>
+                  <p class="font-semibold">{{ performance()!.phase2.w * 3 + performance()!.phase2.d - performance()!.phase2.sanction + performance()!.phase2.addition }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">Played</p>
+                  <p class="font-semibold">{{ performance()!.phase2.w + performance()!.phase2.d + performance()!.phase2.l }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">W</p>
+                  <p class="font-semibold">{{ performance()!.phase2.w }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">D</p>
+                  <p class="font-semibold">{{ performance()!.phase2.d }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">L</p>
+                  <p class="font-semibold">{{ performance()!.phase2.l }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">GF</p>
+                  <p class="font-semibold">{{ performance()!.phase2.gf }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">GA</p>
+                  <p class="font-semibold">{{ performance()!.phase2.ga }}</p>
+                </div>
+                <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                  <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">GD</p>
+                  <p class="font-semibold">{{ (performance()!.phase2.gf - performance()!.phase2.ga) > 0 ? '+' + (performance()!.phase2.gf - performance()!.phase2.ga) : performance()!.phase2.gf - performance()!.phase2.ga }}</p>
+                </div>
+              </div>
+              <!-- Extras -->
+              @if (performance()!.phase2.sanction || performance()!.phase2.addition) {
+                <div class="bg-neutral-200 h-0.5 my-2 rounded-full"></div>
+                <div class="flex gap-1">
+                  @if (performance()!.phase2.sanction) {
+                    <div class="bg-red-100 border-red-500 text-red-700 border w-1/2 rounded-full py-0.5 text-center">
+                      <p>Sanction: <b>-{{ performance()!.phase2.sanction }}</b></p>
+                    </div>
+                  }
+                  @if (performance()!.phase2.addition) {
+                    <div class="bg-green-100 border-green-600 text-green-700 border w-1/2 rounded-full py-0.5 text-center">
+                      <p>Addition: <b>+{{ performance()!.phase2.addition }}</b></p>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (isPerformanceAddOpen()) {
+    <app-performance-add-modal
+      [options]="{ teamId: team.teamId, category: team.category, name: team.name}"
+      (added)="loadPerformaceData()"
+      (close)="isPerformanceAddOpen.set(false)"
+    ></app-performance-add-modal>
+  }
+
+  @if (isPerformanceUpdateModal()) {
+    <app-performance-update-modal
+      [options]="performanceOptions()!"
+      (updated)="loadPerformaceData()"
+      (close)="isPerformanceUpdateModal.set(false)"
+    ></app-performance-update-modal>
+  }
+
+  @if (isPerformanceConfirmOpen()) {
+    <app-delete-confirmation-modal
+      [message]="{
+        section: 'Performance',
+        element: selectedTeam()!.name + ' performance'
+      }"
+      (confirm)="confirmDeletePerformance(teamId)"
+      (close)="isPerformanceConfirmOpen.set(false)"
+    ></app-delete-confirmation-modal>
+  }
 }
