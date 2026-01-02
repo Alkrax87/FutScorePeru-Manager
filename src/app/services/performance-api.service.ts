@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Environments } from '../environment/environments';
 import { TeamPerformance } from '../interfaces/team-performance';
-import { PerformanceData } from '../interfaces/performance-data';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +19,8 @@ export class PerformanceApiService {
     return this.http.post(this.backendUrl + 'performance', performance);
   }
 
-  updateTeamPerformance(teamId: string, phase: string, performance: PerformanceData) {
-    return this.http.put(this.backendUrl + 'performance/' + teamId + '/' + phase, performance)
+  updateTeamPerformance(teamId: string, performance: TeamPerformance) {
+    return this.http.put(this.backendUrl + 'performance/' + teamId, performance)
   }
 
   deleteTeamPerformance(teamId: string) {
