@@ -45,16 +45,16 @@
           <div class="p-4">
             <div class="flex justify-evenly gap-10">
               <div>
-                <p [style.color]="team.color.c1" class="text-sm font-semibold">Category</p>
+                <p [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" class="text-sm font-semibold">Category</p>
                 <p class="text-neutral-700 font-semibold text-center">Liga {{ team.category }}</p>
               </div>
               <div>
-                <p [style.color]="team.color.c1" class="text-sm font-semibold">Abbreviation</p>
+                <p [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" class="text-sm font-semibold">Abbreviation</p>
                 <p class="text-neutral-700 font-semibold text-center">{{ team.abbreviation }}</p>
               </div>
               @if (team.groupFirstPhase || team.groupSecondPhase) {
                 <div>
-                  <p [style.color]="team.color.c1" class="text-sm font-semibold text-center">Groups</p>
+                  <p [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" class="text-sm font-semibold text-center">Groups</p>
                   <div class="flex gap-2">
                     @if (team.groupFirstPhase) {
                       <p class="border-2 rounded-full px-2 font-semibold text-sm" [style.borderColor]="team.color.c1">
@@ -85,8 +85,8 @@
                 </div>
               }
               <div class="flex flex-col items-center">
-                <p [style.color]="team.color.c1" class="text-sm font-semibold">Resources</p>
-                <button (click)="isResourcesModalOpen.set(true)" [style.backgroundColor]="team.color.c1" class="text-white rounded-full px-2">
+                <p [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" class="text-sm font-semibold">Resources</p>
+                <button (click)="isResourcesModalOpen.set(true)" [style.backgroundColor]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" class="text-white rounded-full px-2">
                   <fa-icon [icon]="Resources"></fa-icon>
                 </button>
               </div>
@@ -127,12 +127,12 @@
               <div class="text-2xl font-semibold">{{ stadium()!.name }}</div>
               <div class="grid grid-cols-2 gap-5 mt-4">
                 <div class="bg-neutral-100 rounded-xl grid-cols-1 p-3 text-center">
-                  <fa-icon [style.color]="team.color.c1" [icon]="Location"></fa-icon>
+                  <fa-icon [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" [icon]="Location"></fa-icon>
                   <p class="text-neutral-500 text-sm">Location</p>
                   <p class="text-neutral-700 text-lg font-semibold">{{ stadium()!.location }}</p>
                 </div>
                 <div class="bg-neutral-100 rounded-lg grid-cols-1 p-3 text-center">
-                  <fa-icon [style.color]="team.color.c1" [icon]="People"></fa-icon>
+                  <fa-icon [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" [icon]="People"></fa-icon>
                   <p class="text-neutral-500 text-sm">Capacity</p>
                   <p class="text-neutral-700 text-lg font-semibold">{{ stadium()!.capacity }}</p>
                 </div>
@@ -153,15 +153,15 @@
         <p class="text-xl font-semibold"><fa-icon [icon]="Resources"></fa-icon> Resources</p>
         <div class="flex flex-col gap-2 mt-3">
           <div>
-            <p [style.color]="team.color.c1" class="text-sm font-semibold">Image</p>
+            <p [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" class="text-sm font-semibold">Image</p>
             <p class="text-neutral-700">{{ team.image ? team.image : '-' }}</p>
           </div>
           <div>
-            <p [style.color]="team.color.c1" class="text-sm font-semibold">Image Thumbail</p>
+            <p [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" class="text-sm font-semibold">Image Thumbnail</p>
             <p class="text-neutral-700">{{ team.imageThumbnail ? team.imageThumbnail : '-' }}</p>
           </div>
           <div>
-            <p [style.color]="team.color.c1" class="text-sm font-semibold">Background</p>
+            <p [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" class="text-sm font-semibold">Background</p>
             <p class="text-neutral-700">{{ team.background ? team.background : '-' }}</p>
           </div>
         </div>
