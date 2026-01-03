@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from "./components/sidebar/sidebar.component";
 import { FooterComponent } from "./components/footer/footer.component";
 import { NgClass } from '@angular/common';
-import { faMapLocation, faNetworkWired, faRing, faShieldHalved, faTags, faUserTie, faWindowRestore } from '@fortawesome/free-solid-svg-icons';
+import { faFlag, faMapLocation, faNetworkWired, faRing, faShieldHalved, faTags, faUserTie, faWindowRestore } from '@fortawesome/free-solid-svg-icons';
 import { TopbarComponent } from "./components/topbar/topbar.component";
 
 @Component({
@@ -48,6 +48,7 @@ export class AppComponent {
     {
       sectionName: 'Management Copa Perú',
       routes: [
+        { route: 'leagues', name: 'Leagues', icon: faFlag },
         { route: 'teamsCP', name: 'Teams', icon: faShieldHalved },
       ],
     }
