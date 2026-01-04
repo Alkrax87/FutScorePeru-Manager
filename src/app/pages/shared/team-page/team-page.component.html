@@ -494,4 +494,130 @@
       (close)="isPerformanceConfirmOpen.set(false)"
     ></app-delete-confirmation-modal>
   }
+
+  <!-- ============================================= -->
+  <!-- =================Information================= -->
+  <!-- ============================================= -->
+  <div class="max-w-screen-lg mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
+    <!-- Title -->
+    <div class="flex gap-2 mb-2">
+      <p class="text-2xl font-semibold">Information</p>
+      @if (information()) {
+        <button (click)="isInformationModalOpen.set(true)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
+          <fa-icon [icon]="Edit"></fa-icon>
+        </button>
+        <button (click)="isInformationConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
+          <fa-icon [icon]="Delete"></fa-icon>
+        </button>
+      }
+    </div>
+    <!-- Content -->
+    <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
+      <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
+      <div class="p-5">
+        @if (!information()) {
+          <button (click)="isInformationModalOpen.set(true)" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full px-6 py-2 rounded-full">
+            <fa-icon [icon]="Add"></fa-icon> Add Information
+          </button>
+        } @else {
+          <div class="flex flex-col gap-4">
+            <!-- Description -->
+            <div class="bg-neutral-100 p-5 rounded-3xl shadow-md">
+              <p class="text-neutral-500 text-xs mb-1">Description:</p>
+              <p class="text-justify">{{ information()!.description }}</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              <!-- Founded -->
+              <div class="col-span-1 lg:col-span-1 flex gap-2 bg-neutral-100 p-2 rounded-full shadow-md">
+                <div class="bg-white w-10 h-10 flex items-center justify-center rounded-full">
+                  <fa-icon [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" class="text-xl" [icon]="Flag"></fa-icon>
+                </div>
+                <div>
+                  <p class="text-neutral-500 text-xs">Founded</p>
+                  <p class="font-semibold">{{ information()!.founded }}</p>
+                </div>
+              </div>
+              <!-- Website -->
+              <div class="col-span-1 md:col-span-2 lg:col-span-2 flex gap-2 bg-neutral-100 p-2 rounded-full shadow-md">
+                <div class="bg-white w-10 h-10 flex items-center justify-center rounded-full">
+                  <fa-icon [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" class="text-xl" [icon]="Web"></fa-icon>
+                </div>
+                <div>
+                  <p class="text-neutral-500 text-xs">Official Website</p>
+                  @if (information()!.website) {
+                    <a [href]="information()!.website" class="font-semibold text-blue-600">{{ information()!.website }}</a>
+                  } @else {
+                    <p class="font-semibold">There isn't an official website</p>
+                  }
+                </div>
+              </div>
+              <!-- Social Media -->
+              <div class="col-span-1 md:col-span-3 lg:col-span-2 flex gap-2 bg-neutral-100 p-2 rounded-full shadow-md">
+                <div class="bg-white min-w-10 h-10 flex items-center justify-center rounded-full">
+                  <fa-icon [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" class="text-xl" [icon]="Share"></fa-icon>
+                </div>
+                <div class="w-full flex gap-4 items-center justify-center">
+                  @if (
+                    information()?.social?.facebook ||
+                    information()?.social?.instagram ||
+                    information()?.social?.twitter ||
+                    information()?.social?.youtube ||
+                    information()?.social?.tiktok
+                  ) {
+                    @if (information()?.social?.facebook) {
+                      <a [href]="information()!.social.facebook" class="bg-blue-700 text-white flex items-center justify-center rounded-full h-8 w-8">
+                        <fa-icon [icon]="Facebook"></fa-icon>
+                      </a>
+                    }
+                    @if (information()?.social?.instagram) {
+                      <a [href]="information()!.social.instagram" class="bg-gradient-to-tr from-yellow-400 to-pink-500 text-white flex items-center justify-center rounded-full h-8 w-8">
+                        <fa-icon [icon]="Instagram"></fa-icon>
+                      </a>
+                    }
+                    @if (information()?.social?.twitter) {
+                      <a [href]="information()!.social.twitter" class="bg-black text-white flex items-center justify-center rounded-full h-8 w-8">
+                        <fa-icon [icon]="Twitter"></fa-icon>
+                      </a>
+                    }
+                    @if (information()?.social?.youtube) {
+                      <a [href]="information()!.social.youtube" class="bg-red-600 text-white flex items-center justify-center rounded-full h-8 w-8">
+                        <fa-icon [icon]="Youtube"></fa-icon>
+                      </a>
+                    }
+                    @if (information()?.social?.tiktok) {
+                      <a [href]="information()!.social.tiktok" class="bg-neutral-800 text-white flex items-center justify-center rounded-full h-8 w-8">
+                        <fa-icon [icon]="Tiktok"></fa-icon>
+                      </a>
+                    }
+                  } @else {
+                    <p class="font-semibold">There isn't any social media.</p>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (isInformationModalOpen()) {
+    <app-information-modal
+      [information]="information()!"
+      [teamId]="teamId"
+      (updated)="loadInformationData()"
+      (close)="isInformationModalOpen.set(false)"
+    ></app-information-modal>
+  }
+
+  @if (isInformationConfirmOpen()) {
+    <app-delete-confirmation-modal
+      [message]="{
+        section: 'Information',
+        element: selectedTeam()!.name + ' information'
+      }"
+      (confirm)="confirmDeleteInformation(teamId)"
+      (close)="isInformationConfirmOpen.set(false)"
+    ></app-delete-confirmation-modal>
+  }
 }

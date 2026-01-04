@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faCircle, faCircleCheck, faCircleMinus, faCircleXmark, faImages, faInfoCircle, faLocationDot, faPalette, faPenToSquare, faPlus, faRing, faTrashCan, faUsers, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCircle, faCircleCheck, faCircleMinus, faCircleXmark, faFlag, faGlobe, faImages, faInfoCircle, faLocationDot, faPalette, faPenToSquare, faPlus, faRing, faShareNodes, faTrashCan, faUsers, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { combineLatest } from 'rxjs';
 import { TeamsApiService } from '../../../services/teams-api.service';
 import { StadiumsApiService } from '../../../services/stadiums-api.service';
@@ -18,10 +18,14 @@ import { TeamPerformance } from '../../../interfaces/team-performance';
 import { PerformanceAddModalComponent } from "../../../components/performance-add-modal/performance-add-modal.component";
 import { PerformanceApiService } from '../../../services/performance-api.service';
 import { PerformanceUpdateModalComponent } from "../../../components/performance-update-modal/performance-update-modal.component";
+import { TeamInformation } from '../../../interfaces/team-information';
+import { InformationApiService } from '../../../services/information-api.service';
+import { faFacebookF, faInstagram, faTiktok, faXTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { InformationModalComponent } from "../../../components/information-modal/information-modal.component";
 
 @Component({
   selector: 'app-team-page',
-  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, TeamModalComponent, LastGamesAddModalComponent, LastGamesOptionModalComponent, PerformanceAddModalComponent, PerformanceUpdateModalComponent],
+  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, TeamModalComponent, LastGamesAddModalComponent, LastGamesOptionModalComponent, PerformanceAddModalComponent, PerformanceUpdateModalComponent, InformationModalComponent],
   templateUrl: './team-page.component.html',
   styles: ``,
 })
@@ -33,6 +37,7 @@ export class TeamPageComponent {
   private stadiumsService = inject(StadiumsApiService);
   private lastGamesService = inject(LastGamesApiService);
   private performanceService = inject(PerformanceApiService);
+  private informationService = inject(InformationApiService);
 
   stadiums!: Stadium[];
   category!: number;
@@ -60,6 +65,11 @@ export class TeamPageComponent {
   isPerformanceConfirmOpen = signal(false);
   performanceOptions = signal<{ phase: number, performance: TeamPerformance } | null>(null);
 
+  // Information
+  information = signal<TeamInformation | undefined>(undefined);
+  isInformationModalOpen = signal(false);
+  isInformationConfirmOpen = signal(false);
+
   // Icons
   Location = faLocationDot;
   Details = faInfoCircle;
@@ -75,6 +85,14 @@ export class TeamPageComponent {
   Draw = faCircleMinus;
   Loose = faCircleXmark;
   Default = faCircle;
+  Flag = faFlag;
+  Web = faGlobe;
+  Share = faShareNodes;
+  Facebook = faFacebookF;
+  Instagram = faInstagram;
+  Twitter = faXTwitter;
+  Youtube = faYoutube;
+  Tiktok = faTiktok;
 
   constructor() {
     this.stadiumsService.getStadiums();
@@ -95,6 +113,7 @@ export class TeamPageComponent {
         this.findStadium(data.stadium);
         this.loadLastGamesData();
         this.loadPerformaceData();
+        this.loadInformationData();
       },
       error: (err) => {
         console.error('Failed to load team data:', err.error.error);
@@ -146,7 +165,7 @@ export class TeamPageComponent {
   }
 
   // =============================================
-  // ==================LastGames==================
+  // =================Performance=================
   // =============================================
   loadPerformaceData() {
     this.performanceService.getTeamPerformance(this.category, this.teamId).subscribe({
@@ -165,6 +184,26 @@ export class TeamPageComponent {
       next: () => {
         this.loadPerformaceData();
         this.isPerformanceConfirmOpen.set(false);
+      },
+      error: (err) => {}
+    });
+  }
+
+  // =============================================
+  // =================Information=================
+  // =============================================
+  loadInformationData() {
+    this.informationService.getTeamsInformation(this.teamId).subscribe({
+      next: (data) => this.information.set(data),
+      error: (err) => this.information.set(undefined),
+    });
+  }
+
+  confirmDeleteInformation(teamId: string) {
+    this.informationService.deleteInformation(teamId).subscribe({
+      next: () => {
+        this.loadInformationData();
+        this.isInformationConfirmOpen.set(false);
       },
       error: (err) => {}
     });
