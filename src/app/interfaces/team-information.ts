@@ -1,7 +1,7 @@
 export interface TeamInformation {
   teamId: string;
-  foundation: number;
-  background: string;
+  description: string;
+  founded: number;
   website?: string;
   social: {
     facebook?: string;
