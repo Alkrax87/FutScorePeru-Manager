@@ -11,8 +11,8 @@ export class PerformanceApiService {
 
   private http = inject(HttpClient);
 
-  getTeamPerformance(category: number, teamId: string) {
-    return this.http.get<TeamPerformance>(this.backendUrl + 'performance/category/' + category + '/teamId/' + teamId);
+  getTeamPerformance(teamId: string) {
+    return this.http.get<TeamPerformance>(this.backendUrl + 'performance/teamId/' + teamId);
   }
 
   addPerformance(performance: { teamId: string, category: number }) {

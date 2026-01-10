@@ -168,7 +168,7 @@ export class TeamPageComponent {
   // =================Performance=================
   // =============================================
   loadPerformaceData() {
-    this.performanceService.getTeamPerformance(this.category, this.teamId).subscribe({
+    this.performanceService.getTeamPerformance(this.teamId).subscribe({
       next: (data) => this.performance.set(data),
       error: (err) => this.performance.set(undefined),
     });
