@@ -35,14 +35,14 @@ import { TeamsApiService } from '../../services/teams-api.service';
           <div class="flex flex-col gap-4 my-4">
             <div class="flex gap-4">
               <!-- TeamId -->
-              <div>
+              <div class="w-1/3">
                 <label for="teamId" class="relative">
                   <input id="teamId" type="text" formControlName="teamId" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
                   <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">TeamId</span>
                 </label>
               </div>
               <!-- Location -->
-              <div>
+              <div class="w-1/3">
                 <label for="location" class="relative">
                   <select id="location" formControlName="location" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
                     <option value="" disabled>Choose Location</option>
@@ -54,7 +54,7 @@ import { TeamsApiService } from '../../services/teams-api.service';
                 </label>
               </div>
               <!-- Category -->
-              <div>
+              <div class="w-1/3">
                 <label for="category" class="relative">
                   <select id="category" formControlName="category" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
                     <option value="0" disabled>Choose category</option>
@@ -106,8 +106,8 @@ import { TeamsApiService } from '../../services/teams-api.service';
             <div class="flex gap-4">
               <!-- Group First Phase -->
               <div class="w-1/2">
-                <label for="groupFirstPhase" class="relative">
-                  <select id="groupFirstPhase" formControlName="groupFirstPhase" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                <label for="groupPhase1" class="relative">
+                  <select id="groupPhase1" formControlName="groupPhase1" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
                     <option value="" selected>None</option>
                     <option disabled>---- Liga 2 ----</option>
                     <option value="a">Grupo A</option>
@@ -123,8 +123,8 @@ import { TeamsApiService } from '../../services/teams-api.service';
               </div>
               <!-- Group Second Phase -->
               <div class="w-1/2">
-                <label for="groupSecondPhase" class="relative">
-                  <select id="groupSecondPhase" formControlName="groupSecondPhase" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                <label for="groupPhase2" class="relative">
+                  <select id="groupPhase2" formControlName="groupPhase2" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
                     <option value="" selected>None</option>
                     <option disabled>---- Liga 2 ----</option>
                     <option value="p1">Grupo Ascenso 1</option>
@@ -211,13 +211,13 @@ export class TeamModalComponent {
   form = this.fb.group({
     teamId: ['', Validators.required],
     category: [0, Validators.required],
-    groupFirstPhase: [''],
-    groupSecondPhase: [''],
+    groupPhase1: [''],
+    groupPhase2: [''],
     name: ['', Validators.required],
     abbreviation: ['', Validators.required],
     image: ['', Validators.required],
     imageThumbnail: ['', Validators.required],
-    background: [''],
+    background: ['', Validators.required],
     location: ['', Validators.required],
     stadium: [0, Validators.required],
     color: this.fb.group({

@@ -1,8 +1,8 @@
 export interface Team {
   teamId: string;
   category: number;
-  groupFirstPhase: string;
-  groupSecondPhase: string;
+  groupPhase1: string;
+  groupPhase2: string;
   name: string;
   abbreviation: string;
   image: string;

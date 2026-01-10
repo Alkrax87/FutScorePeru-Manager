@@ -52,13 +52,13 @@
                 <p [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" class="text-sm font-semibold">Abbreviation</p>
                 <p class="text-neutral-700 font-semibold text-center">{{ team.abbreviation }}</p>
               </div>
-              @if (team.groupFirstPhase || team.groupSecondPhase) {
+              @if (team.groupPhase1 || team.groupPhase2) {
                 <div>
                   <p [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" class="text-sm font-semibold text-center">Groups</p>
                   <div class="flex gap-2">
-                    @if (team.groupFirstPhase) {
+                    @if (team.groupPhase1) {
                       <p class="border-2 rounded-full px-2 font-semibold text-sm" [style.borderColor]="team.color.c1">
-                        @switch (team.groupFirstPhase) {
+                        @switch (team.groupPhase1) {
                           @case ('a') { GA }
                           @case ('b') { GB }
                           @case ('1') { G1 }
@@ -68,9 +68,9 @@
                         }
                       </p>
                     }
-                    @if (team.groupSecondPhase) {
+                    @if (team.groupPhase2) {
                       <p class="border-2 rounded-full px-2 font-semibold text-sm" [style.borderColor]="team.color.c1">
-                        @switch (team.groupSecondPhase) {
+                        @switch (team.groupPhase2) {
                           @case ('p1') { P1 }
                           @case ('p2') { P2 }
                           @case ('r') { RE }
