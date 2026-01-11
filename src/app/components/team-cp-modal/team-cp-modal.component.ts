@@ -70,8 +70,9 @@ import { faFloppyDisk, faPlus } from '@fortawesome/free-solid-svg-icons';
               <label for="location" class="relative">
                 <select id="location" formControlName="location" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
                   <option value="" disabled selected hidden></option>
+                  <option [value]="''">None</option>
                   @for (location of locations; track $index) {
-                    <option [value]="location" class="hover:bg-main hover:text-red-700 h-20">{{ location }}</option>
+                    <option [value]="location">{{ location }}</option>
                   }
                 </select>
                 <span class="bg-white text-neutral-400 peer-focus:text-main cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Location</span>
@@ -109,9 +110,9 @@ export class TeamCPModalComponent {
     teamId: ['', Validators.required],
     name: ['', Validators.required],
     abbreviation: ['', Validators.required],
-    image: ['', Validators.required],
-    city: ['', Validators.required],
-    location: ['', Validators.required],
+    image: [''],
+    city: [''],
+    location: [''],
   });
   errorMessage: string | null = null;
 
