@@ -22,10 +22,14 @@ import { TeamInformation } from '../../../interfaces/team-information';
 import { InformationApiService } from '../../../services/information-api.service';
 import { faFacebookF, faInstagram, faTiktok, faXTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { InformationModalComponent } from "../../../components/information-modal/information-modal.component";
+import { ResultsApiService } from '../../../services/results-api.service';
+import { TeamResults } from '../../../interfaces/team-results';
+import { ResultsAddModalComponent } from "../../../components/results-add-modal/results-add-modal.component";
+import { ResultsUpdateModalComponent } from "../../../components/results-update-modal/results-update-modal.component";
 
 @Component({
   selector: 'app-team-page',
-  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, TeamModalComponent, LastGamesAddModalComponent, LastGamesOptionModalComponent, PerformanceAddModalComponent, PerformanceUpdateModalComponent, InformationModalComponent],
+  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, TeamModalComponent, LastGamesAddModalComponent, LastGamesOptionModalComponent, PerformanceAddModalComponent, PerformanceUpdateModalComponent, InformationModalComponent, ResultsAddModalComponent, ResultsUpdateModalComponent],
   templateUrl: './team-page.component.html',
   styles: ``,
 })
@@ -36,6 +40,7 @@ export class TeamPageComponent {
   private teamsService = inject(TeamsApiService);
   private stadiumsService = inject(StadiumsApiService);
   private lastGamesService = inject(LastGamesApiService);
+  private resultsService = inject(ResultsApiService);
   private performanceService = inject(PerformanceApiService);
   private informationService = inject(InformationApiService);
 
@@ -57,6 +62,13 @@ export class TeamPageComponent {
   isLastGamesOptionModalOpen = signal(false);
   isLastGamesConfirmOpen = signal(false);
   lastGamesOption = signal<{ teamId: string, phase: number, option: string } | null>(null);
+
+  // Results
+  results = signal<TeamResults | undefined>(undefined);
+  isResultsAddOpen = signal(false);
+  isResultsSetModalOpen = signal(false);
+  isResultsConfirmOpen = signal(false);
+  resultsOptions = signal<{ teamId: string, phase: number, size: number } | null>(null);
 
   // Performance
   performance = signal<TeamPerformance | undefined>(undefined);
@@ -112,6 +124,7 @@ export class TeamPageComponent {
         this.selectedTeam.set(data);
         this.findStadium(data.stadium);
         this.loadLastGamesData();
+        this.loadResultsData();
         this.loadPerformaceData();
         this.loadInformationData();
       },
@@ -159,6 +172,31 @@ export class TeamPageComponent {
       next: () => {
         this.loadLastGamesData();
         this.isLastGamesConfirmOpen.set(false);
+      },
+      error: (err) => {}
+    });
+  }
+
+  // =============================================
+  // ===================Results===================
+  // =============================================
+  loadResultsData() {
+    this.resultsService.getTeamResults(this.teamId).subscribe({
+      next: (data) => this.results.set(data),
+      error: (err) => this.results.set(undefined),
+    });
+  }
+
+  setResultsOptions(phase: number, size: number) {
+    this.resultsOptions.set({ teamId: this.teamId, phase, size });
+    this.isResultsSetModalOpen.set(true);
+  }
+
+  confirmDeleteResults(teamId: string) {
+    this.resultsService.deleteTeamResults(teamId).subscribe({
+      next: () => {
+        this.loadResultsData();
+        this.isResultsConfirmOpen.set(false);
       },
       error: (err) => {}
     });

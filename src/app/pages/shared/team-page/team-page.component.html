@@ -329,6 +329,106 @@
   }
 
   <!-- ============================================= -->
+  <!-- ==================Results==================== -->
+  <!-- ============================================= -->
+  <div class="max-w-screen-lg mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
+    <!-- Title -->
+    <div class="flex gap-2 mb-2">
+      <p class="text-2xl font-semibold">Results</p>
+      @if (results()) {
+        <button (click)="isResultsConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
+          <fa-icon [icon]="Delete"></fa-icon>
+        </button>
+      }
+    </div>
+    <!-- Content -->
+    <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
+      <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
+      <div class="p-5">
+        @if (!results()) {
+          <button (click)="isResultsAddOpen.set(true)" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full px-6 py-2 rounded-full">
+            <fa-icon [icon]="Add"></fa-icon> Add Results
+          </button>
+        } @else {
+          <div class="w-full flex flex-col lg:flex-row gap-5">
+            <!-- Phase 1 -->
+            <div class="w-full lg:w-1/2">
+              <div class="flex gap-2 mb-2">
+                <p class="font-semibold text-lg">Phase 1</p>
+                <button (click)="setResultsOptions(1, results()?.phase1!.length)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
+                  <fa-icon [icon]="Edit"></fa-icon>
+                </button>
+              </div>
+              <!-- Results -->
+              <div class="flex flex-wrap justify-center gap-2">
+                @for (result of results()?.phase1; track $index) {
+                  <div class="border rounded-xl min-w-11 text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                    <p class="text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">F{{ $index + 1 }}</p>
+                    @if (result != null) {
+                      <p class="font-semibold">{{ result }}</p>
+                    } @else {
+                      <p class="font-semibold">-</p>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+            <!-- Phase 2 -->
+            <div class="w-full lg:w-1/2">
+              <div class="flex gap-2 mb-2">
+                <p class="font-semibold text-lg">Phase 2</p>
+                <button (click)="setResultsOptions(2, results()?.phase2!.length)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
+                  <fa-icon [icon]="Edit"></fa-icon>
+                </button>
+              </div>
+              <!-- Results -->
+              <div class="flex flex-wrap justify-center gap-2">
+                @for (result of results()?.phase2; track $index) {
+                  <div class="border rounded-xl min-w-11 text-center overflow-hidden" [style.borderColor]="team.color.c1">
+                    <p class="text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">F{{ $index + 1 }}</p>
+                    @if (result != null) {
+                      <p class="font-semibold">{{ result }}</p>
+                    } @else {
+                      <p class="font-semibold">-</p>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (isResultsAddOpen()) {
+    <app-results-add-modal
+      [teamReference]="{ teamId: team.teamId, category: team.category }"
+      (added)="loadResultsData()"
+      (close)="isResultsAddOpen.set(false)"
+    ></app-results-add-modal>
+  }
+
+  @if (isResultsSetModalOpen()) {
+    <app-results-update-modal
+      [resultsReference]="resultsOptions()!"
+      (updated)="loadResultsData()"
+      (close)="isResultsSetModalOpen.set(false)"
+    ></app-results-update-modal>
+  }
+
+  @if (isResultsConfirmOpen()) {
+    <app-delete-confirmation-modal
+      [message]="{
+        section: 'Results',
+        element: selectedTeam()!.name + ' results'
+      }"
+      (confirm)="confirmDeleteResults(teamId)"
+      (close)="isResultsConfirmOpen.set(false)"
+    ></app-delete-confirmation-modal>
+  }
+
+  <!-- ============================================= -->
   <!-- ================Performance================== -->
   <!-- ============================================= -->
   <div class="max-w-screen-lg mx-auto px-3 sm:px-5 py-5 duration-500 select-none">

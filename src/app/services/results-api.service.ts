@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Environments } from '../environment/environments';
-import { TeamResults } from '../interfaces/team-results';
-import { LastGamesGenerator } from '../interfaces/last-games-generator';
+import { ResultsGenerator, TeamResults } from '../interfaces/team-results';
 
 @Injectable({
   providedIn: 'root',
@@ -16,11 +15,11 @@ export class ResultsApiService {
     return this.http.get<TeamResults>(this.backendUrl + 'results/teamId/' + teamId);
   }
 
-  addResults(resultsItem: LastGamesGenerator) {
-    return this.http.post(this.backendUrl + 'results', resultsItem);
+  addResults(resultsGenerator: ResultsGenerator) {
+    return this.http.post(this.backendUrl + 'results', resultsGenerator);
   }
 
-  updateTeamResults(teamId: string, phase: string, index: number, score: number) {
+  updateTeamResults(teamId: string, phase: number, index: number, score: number) {
     return this.http.put(this.backendUrl + 'results/' + teamId + '/' + phase + '/' + index, { score: score });
   }
 
