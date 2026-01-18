@@ -13,48 +13,16 @@ import { TeamsCPComponent } from './pages/teams-cp/teams-cp.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  {
-    path: 'home',
-    component: HomeComponent,
-  },
-  {
-    path: 'divisions',
-    component: DivisionsComponent,
-  },
-  {
-    path: 'fixtures',
-    component: FixturesComponent,
-  },
-  {
-    path: 'brackets',
-    component: BracketsComponent,
-  },
-  {
-    path: 'stadiums',
-    component: StadiumsComponent,
-  },
-  {
-    path: 'maps',
-    component: MapsComponent,
-  },
-  {
-    path: 'teams',
-    component: TeamsComponent,
-  },
-  {
-    path: 'team/:category/:teamId',
-    component: TeamPageComponent
-  },
-  {
-    path: 'managers',
-    component: ManagersComponent,
-  },
-  {
-    path: 'leagues',
-    component: LeaguesComponent,
-  },
-  {
-    path: 'teamsCP',
-    component: TeamsCPComponent,
-  },
+  { path: 'home', component: HomeComponent },
+  { path: 'divisions', component: DivisionsComponent },
+  { path: 'fixtures', component: FixturesComponent },
+  { path: 'brackets', component: BracketsComponent },
+  { path: 'stadiums', component: StadiumsComponent },
+  { path: 'maps', component: MapsComponent },
+  { path: 'teams', component: TeamsComponent },
+  { path: 'team/:category/:teamId', component: TeamPageComponent },
+  { path: 'managers', component: ManagersComponent },
+  { path: 'leagues', component: LeaguesComponent },
+  { path: 'teamsCP', component: TeamsCPComponent },
+  { path: '**', redirectTo: 'home' },
 ];
