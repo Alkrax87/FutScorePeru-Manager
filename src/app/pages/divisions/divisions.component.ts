@@ -26,7 +26,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
       <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">
         @for (division of divisions; track $index) {
           <div class="bg-white rounded-3xl shadow-md hover:shadow-xl duration-300 h-fit">
-            <div class="relative overflow-hidden h-48 shadow-md rounded-t-3xl bg-green-500">
+            <div class="relative overflow-hidden h-48 shadow-md rounded-t-3xl">
               <div class="bg-white bg-opacity-90 text-neutral-700 flex gap-1.5 z-10 rounded-full text-xs shadow-md font-semibold px-2 py-0.5 absolute right-3 top-3">
                 <p>ID: {{ division.divisionId }}</p>
               </div>
