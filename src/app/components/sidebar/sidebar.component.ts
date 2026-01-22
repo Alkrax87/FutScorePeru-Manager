@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleRight, IconDefinition } from '@fortawesome/free-solid-svg-icons';
@@ -19,11 +19,13 @@ import { faAngleRight, IconDefinition } from '@fortawesome/free-solid-svg-icons'
         </div>
       </div>
       <!-- Button -->
-      <div class="relative">
-        <div (click)="changeSidebarStatus()" class="bg-crimson hover:bg-crimson-hover text-white cursor-pointer flex justify-center items-center w-8 h-8 absolute rounded-full -top-4 -right-4">
-          <fa-icon class="duration-300" [icon]="ArrowClose" [ngClass]="{ 'rotate-180' : isOpen}"></fa-icon>
+      @if (!isMobile) {
+        <div class="relative">
+          <div (click)="changeSidebarStatus()" class="bg-crimson hover:bg-crimson-hover text-white cursor-pointer flex justify-center items-center w-8 h-8 absolute rounded-full -top-4 -right-4">
+            <fa-icon class="duration-300" [icon]="ArrowClose" [ngClass]="{ 'rotate-180' : isOpen}"></fa-icon>
+          </div>
         </div>
-      </div>
+      }
       <!-- Divider -->
       <div class="bg-neutral-700 h-0.5"></div>
       <!-- Menu -->
@@ -61,9 +63,34 @@ export class SidebarComponent {
   @Output() sidebarOpen = new EventEmitter<boolean>();
 
   isOpen: boolean = true;
+  isMobile: boolean = false;
 
   // Icons
   ArrowClose = faAngleRight;
+
+  ngOnInit() {
+    this.checkScreenWidth();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.checkScreenWidth();
+  }
+
+  checkScreenWidth() {
+    this.isMobile = window.innerWidth < 768;
+    if (this.isMobile) {
+      if (this.isOpen) {
+        this.isOpen = false;
+        this.sidebarOpen.emit(this.isOpen);
+      }
+    } else {
+      if (!this.isOpen) {
+        this.isOpen = true;
+        this.sidebarOpen.emit(this.isOpen);
+      }
+    }
+  }
 
   changeSidebarStatus() {
     this.isOpen = !this.isOpen;
