@@ -23,12 +23,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
         </button>
       </div>
       <!-- Content -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
         @for (division of divisions; track $index) {
           <div class="bg-white rounded-3xl shadow-md hover:shadow-xl duration-300 h-fit">
             <div class="relative overflow-hidden h-48 shadow-md rounded-t-3xl">
               <div class="bg-white bg-opacity-90 text-neutral-700 flex gap-1.5 z-10 rounded-full text-xs shadow-md font-semibold px-2 py-0.5 absolute right-3 top-3">
-                <p>ID: {{ division.divisionId }}</p>
+                <p>{{ division.category }}<sup>{{ division.sup }}</sup> División</p>
               </div>
               <div class="absolute w-full top-2">
                 <div class="flex flex-col items-center gap-1">
@@ -49,20 +49,31 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
               </div>
               <img src="./assets/images/pages/Banner-main.webp" class="object-cover w-full h-full" alt="Banner" />
             </div>
-            <div class="w-full p-4 flex flex-col gap-3">
+            <div class="w-full p-4 flex flex-col gap-4">
+              <!-- Description -->
+              <div>
+                <p class="text-gold font-semibold">Description:</p>
+                <p class="text-justify texs mb-2">{{ division.description }}</p>
+                <!-- Tags -->
+                <div class="flex flex-wrap gap-2">
+                  @for (tag of division.tags; track $index) {
+                    <p class="text-crimson px-4 text-sm rounded-full border-2 border-crimson text-nowrap">{{ tag }}</p>
+                  }
+                </div>
+              </div>
               <!-- Phases -->
-              @if (division.firstPhase.name || division.secondPhase.name || division.thirdPhase.name) {
+              @if (division.phase1?.name || division.phase2?.name || division.phase3?.name) {
                 <div>
-                  <p class="text-gold font-semibold mb-2">Fases</p>
+                  <p class="text-gold font-semibold mb-2">Phases</p>
                   <div class="flex flex-col gap-2">
                     <!-- First Phase -->
-                    @if (division.firstPhase.name) {
+                    @if (division.phase1) {
                       <div class="flex text-sm text-neutral-600 justify-between">
-                        <p class="font-semibold">{{ division.firstPhase.name }}</p>
+                        <p class="font-semibold">{{ division.phase1.name }}</p>
                         <div class="font-semibold flex gap-1">
-                          <p>{{ division.firstPhase.inGame }}</p>
+                          <p>{{ division.phase1.inGame }}</p>
                           <div class="text-center w-4">
-                            @if (division.firstPhase.status) {
+                            @if (division.phase1.status) {
                               <fa-icon class="text-green-600" [icon]="Play"></fa-icon>
                             } @else {
                               <fa-icon class="text-neutral-400" [icon]="Pause"></fa-icon>
@@ -72,13 +83,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                       </div>
                     }
                     <!-- Second Phase -->
-                    @if (division.secondPhase.name) {
+                    @if (division.phase2) {
                       <div class="flex text-sm text-neutral-600 justify-between">
-                        <p class="font-semibold">{{ division.secondPhase.name }}</p>
+                        <p class="font-semibold">{{ division.phase2.name }}</p>
                         <div class="font-semibold flex gap-1">
-                          <p>{{ division.secondPhase.inGame }}</p>
+                          <p>{{ division.phase2.inGame }}</p>
                           <div class="text-center w-4">
-                            @if (division.secondPhase.status) {
+                            @if (division.phase2.status) {
                               <fa-icon class="text-green-600" [icon]="Play"></fa-icon>
                             } @else {
                               <fa-icon class="text-neutral-400" [icon]="Pause"></fa-icon>
@@ -88,117 +99,17 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                       </div>
                     }
                     <!-- Third Phase -->
-                    @if (division.thirdPhase.name) {
+                    @if (division.phase3) {
                       <div class="flex text-sm text-neutral-600 justify-between">
-                        <p class="font-semibold">{{ division.thirdPhase.name }}</p>
+                        <p class="font-semibold">{{ division.phase3.name }}</p>
                         <div class="font-semibold flex gap-1">
                           <div class="text-center w-4">
-                            @if (division.thirdPhase.status) {
+                            @if (division.phase3.status) {
                               <fa-icon class="text-green-600" [icon]="Play"></fa-icon>
                             } @else {
                               <fa-icon class="text-neutral-400" [icon]="Pause"></fa-icon>
                             }
                           </div>
-                        </div>
-                      </div>
-                    }
-                  </div>
-                </div>
-              }
-              <!-- Brackets -->
-              @if (
-                division.brackets.bracket32?.name ||
-                division.brackets.bracket16?.name ||
-                division.brackets.bracket8?.name ||
-                division.brackets.bracket4?.name ||
-                division.brackets.bracket2?.name ||
-                division.brackets.bracket1?.name ||
-                division.brackets.bracketExtra?.name
-              ) {
-                <div>
-                  <p class="text-gold font-semibold mb-1">Brackets</p>
-                  <div class="grid gap-x-4 gap-y-1 grid-cols-2 text-xs text-neutral-500">
-                    @if (division.brackets.bracket32) {
-                      <div class="flex justify-between">
-                        <p class="truncate">{{ division.brackets.bracket32.name }}</p>
-                        <div class="text-center w-4">
-                          @if (division.brackets.bracket32.status) {
-                            <fa-icon class="text-green-600" [icon]="Play"></fa-icon>
-                          } @else {
-                            <fa-icon class="text-neutral-400" [icon]="Pause"></fa-icon>
-                          }
-                        </div>
-                      </div>
-                    }
-                    @if (division.brackets.bracket16) {
-                      <div class="flex justify-between">
-                        <p class="truncate">{{ division.brackets.bracket16.name }}</p>
-                        <div class="text-center w-4">
-                          @if (division.brackets.bracket16.status) {
-                            <fa-icon class="text-green-600" [icon]="Play"></fa-icon>
-                          } @else {
-                            <fa-icon class="text-neutral-400" [icon]="Pause"></fa-icon>
-                          }
-                        </div>
-                      </div>
-                    }
-                    @if (division.brackets.bracket8) {
-                      <div class="flex justify-between">
-                        <p class="truncate">{{ division.brackets.bracket8.name }}</p>
-                        <div class="text-center w-4">
-                          @if (division.brackets.bracket8.status) {
-                            <fa-icon class="text-green-600" [icon]="Play"></fa-icon>
-                          } @else {
-                            <fa-icon class="text-neutral-400" [icon]="Pause"></fa-icon>
-                          }
-                        </div>
-                      </div>
-                    }
-                    @if (division.brackets.bracket4) {
-                      <div class="flex justify-between">
-                        <p class="truncate">{{ division.brackets.bracket4.name }}</p>
-                        <div class="text-center w-4">
-                          @if (division.brackets.bracket4.status) {
-                            <fa-icon class="text-green-600" [icon]="Play"></fa-icon>
-                          } @else {
-                            <fa-icon class="text-neutral-400" [icon]="Pause"></fa-icon>
-                          }
-                        </div>
-                      </div>
-                    }
-                    @if (division.brackets.bracket2) {
-                      <div class="flex justify-between">
-                        <p class="truncate">{{ division.brackets.bracket2.name }}</p>
-                        <div class="text-center w-4">
-                          @if (division.brackets.bracket2.status) {
-                            <fa-icon class="text-green-600" [icon]="Play"></fa-icon>
-                          } @else {
-                            <fa-icon class="text-neutral-400" [icon]="Pause"></fa-icon>
-                          }
-                        </div>
-                      </div>
-                    }
-                    @if (division.brackets.bracket1) {
-                      <div class="flex justify-between">
-                        <p class="truncate">{{ division.brackets.bracket1.name }}</p>
-                        <div class="text-center w-4">
-                          @if (division.brackets.bracket1.status) {
-                            <fa-icon class="text-green-600" [icon]="Play"></fa-icon>
-                          } @else {
-                            <fa-icon class="text-neutral-400" [icon]="Pause"></fa-icon>
-                          }
-                        </div>
-                      </div>
-                    }
-                    @if (division.brackets.bracketExtra) {
-                      <div class="flex justify-between">
-                        <p class="truncate">{{ division.brackets.bracketExtra.name }}</p>
-                        <div class="text-center w-4">
-                          @if (division.brackets.bracketExtra.status) {
-                            <fa-icon class="text-green-600" [icon]="Play"></fa-icon>
-                          } @else {
-                            <fa-icon class="text-neutral-400" [icon]="Pause"></fa-icon>
-                          }
                         </div>
                       </div>
                     }
@@ -276,43 +187,9 @@ export class DivisionsComponent {
     this.isConfirmOpen.set(true);
   }
 
-  // onEdit(division: Division) {
-  //   this.editedDivision = {
-  //     ...division,
-  //     firstPhase: {...division.firstPhase},
-  //     secondPhase: {...division.secondPhase},
-  //     thirdPhase: {...division.thirdPhase},
-  //     brackets: {
-  //       bracket32: division.brackets.bracket32 ? {...division.brackets.bracket32} : undefined,
-  //       bracket16: division.brackets.bracket16 ? {...division.brackets.bracket16} : undefined,
-  //       bracket8: division.brackets.bracket8 ? {...division.brackets.bracket8} : undefined,
-  //       bracket4: division.brackets.bracket4 ? {...division.brackets.bracket4} : undefined,
-  //       bracket2: division.brackets.bracket2 ? {...division.brackets.bracket2} : undefined,
-  //       bracket1: division.brackets.bracket1 ? {...division.brackets.bracket1} : undefined,
-  //       bracketExtra: division.brackets.bracketExtra ? {...division.brackets.bracketExtra} : undefined,
-  //     },
-  //   };
-  //   this.showEditDivisionModal = true;
-  // }
-
-  // onDelete(division: Division) {
-  //   this.deletedDivision = division;
-  //   this.showDeleteDivisionModal = true;
-  // }
-
-  // addDivision(division: Division) {
-  //   this.divisionsService.addDivision(division);
-  //   this.showAddDivisionModal = false;
-  // }
-
-  // updateDivision(division: Division) {
-  //   this.divisionsService.updateDivision(division.divisionId, division);
-  //   this.showEditDivisionModal = false;
-  // }
-
   confirmDelete() {
-    if (this.selectedDivision()?.divisionId) {
-      this.divisionsService.deleteDivision(this.selectedDivision()!.divisionId!);
+    if (this.selectedDivision()?.category) {
+      this.divisionsService.deleteDivision(this.selectedDivision()!.category!);
     }
     this.isConfirmOpen.set(false);
   }

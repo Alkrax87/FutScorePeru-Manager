@@ -1,52 +1,13 @@
 export interface Division {
-  divisionId: number;
+  category: number;
   name: string;
   sup: string;
   image: string;
   teams: number;
   season: number;
-  firstPhase: {
-    name: string;
-    inGame: number;
-    status: boolean;
-  };
-  secondPhase: {
-    name: string;
-    inGame: number;
-    status: boolean;
-  };
-  thirdPhase: {
-    name: string;
-    status: boolean;
-  };
-  brackets: {
-    bracket32?: {
-      name: string;
-      status: boolean;
-    };
-    bracket16?: {
-      name: string;
-      status: boolean;
-    };
-    bracket8?: {
-      name: string;
-      status: boolean;
-    };
-    bracket4?: {
-      name: string;
-      status: boolean;
-    };
-    bracket2?: {
-      name: string;
-      status: boolean;
-    };
-    bracket1?: {
-      name: string;
-      status: boolean;
-    };
-    bracketExtra?: {
-      name: string;
-      status: boolean;
-    };
-  };
+  description: string;
+  tags: string[];
+  phase1?: { name: string; inGame: number; status: boolean };
+  phase2?: { name: string; inGame: number; status: boolean };
+  phase3?: { name: string; status: boolean };
 }
