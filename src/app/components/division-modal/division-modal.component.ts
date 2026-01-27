@@ -83,10 +83,17 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
                 <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text absolute start-3 -top-[68px] px-2 text-xs font-semibold transition-transform -translate-y-[22px] peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-[22px]">Descripción</span>
               </label>
             </div>
+            <!-- Goal -->
+            <div>
+              <label for="goal" class="relative">
+                <input id="goal" type="text" formControlName="goal" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Goal</span>
+              </label>
+            </div>
             <!-- Tags -->
             <div formArrayName="tags">
               <label class="text-gold text-sm font-semibold">
-                Oficinas
+                Phases
                 <button (click)="addTag()" type="button" class="bg-green-700 hover:bg-green-700/90 text-white rounded-full px-2 py-1 text-sm duration-300">
                   <fa-icon [icon]="Add"></fa-icon>
                 </button>
@@ -221,6 +228,7 @@ export class DivisionModalComponent {
       season: [null as number | null, [Validators.required, Validators.min(2000)]],
       teams: [null as number | null, [Validators.required, Validators.min(1)]],
       description: ['', Validators.required],
+      goal: ['', Validators.required],
       tags: this.fb.array([]),
       phase1: this.fb.group({
         name: [''],

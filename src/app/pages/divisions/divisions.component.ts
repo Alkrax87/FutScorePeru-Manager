@@ -50,11 +50,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
               <img src="./assets/images/pages/Banner-main.webp" class="object-cover w-full h-full" alt="Banner" />
             </div>
             <div class="w-full p-4 flex flex-col gap-4">
-              <!-- Description -->
               <div>
+                <!-- Description -->
                 <p class="text-gold font-semibold">Description:</p>
                 <p class="text-justify texs mb-2">{{ division.description }}</p>
+                <!-- Goal -->
+                <p class="text-gold font-semibold">Goal:</p>
+                <p class="text-justify texs mb-2">{{ division.goal }}</p>
                 <!-- Tags -->
+                <p class="text-gold font-semibold">Tags:</p>
                 <div class="flex flex-wrap gap-2">
                   @for (tag of division.tags; track $index) {
                     <p class="text-crimson px-4 text-sm rounded-full border-2 border-crimson text-nowrap">{{ tag }}</p>
