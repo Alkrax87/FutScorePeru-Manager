@@ -31,7 +31,7 @@ import { ResultsApiService } from '../../services/results-api.service';
             <!-- Score -->
             <div class="w-1/2">
               <label for="score" class="relative">
-                <input id="score" type="number" min="1" formControlName="score" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+                <input id="score" type="number" min="0" formControlName="score" placeholder="" autocomplete="false" class="bg-white text-neutral-700 border focus:border-crimson focus:text-crimson h-12 cursor-text px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
                 <span class="bg-white text-neutral-400 peer-focus:text-crimson cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Score</span>
               </label>
             </div>
