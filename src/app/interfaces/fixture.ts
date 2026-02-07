@@ -9,6 +9,7 @@ export interface Match {
   away: string;
   postponed: boolean;
   date: Date | null;
+  group: string;
 }
 
 export interface Matchday {

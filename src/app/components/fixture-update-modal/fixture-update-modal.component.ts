@@ -12,7 +12,7 @@ import { FixturesApiService } from '../../services/fixtures-api.service';
   imports: [ReactiveFormsModule, NgClass, FontAwesomeModule],
   template: `
     <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
-      <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-5xl">
+      <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-7xl">
         <div class="p-5">
           <h3 class="text-white text-xl font-semibold">Edit Fixture</h3>
           <p class="text-neutral-200 text-sm">Update the fixture details below.</p>
@@ -47,13 +47,13 @@ import { FixturesApiService } from '../../services/fixtures-api.service';
 												<div formArrayName="matches" class="flex flex-col gap-3">
 													@for (match of matches(phase1, $index).controls; track $index) {
 														<!-- Match -->
-														<div class="w-full flex gap-4" [formGroupName]="$index">
+														<div class="w-full flex gap-3" [formGroupName]="$index">
 															<!-- Index -->
 															<div class="text-neutral-400 text-xs flex items-center justify-center -mr-3 font-semibold min-w-3">
 																<span>{{ $index + 1 }}</span>
 															</div>
 															<!-- Home -->
-															<div class="w-full">
+															<div class="min-w-72">
 																<label [for]="'home' + $index" class="relative">
 																	<select [id]="'home' + $index" formControlName="home" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
 																		<option value="" disabled>Choose Team</option>
@@ -65,7 +65,7 @@ import { FixturesApiService } from '../../services/fixtures-api.service';
 																</label>
 															</div>
 															<!-- Away -->
-															<div class="w-full">
+															<div class="min-w-72">
 																<label [for]="'away' + $index" class="relative">
 																	<select [id]="'away' + $index" formControlName="away" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
 																		<option value="" disabled>Choose Team</option>
@@ -84,16 +84,29 @@ import { FixturesApiService } from '../../services/fixtures-api.service';
 																</label>
 															</div>
 															<!-- Postponed -->
-															<div class="flex items-center w-fit">
-																<label class="relative flex items-center p-1 rounded-full cursor-pointer">
-																	<input type="checkbox" [id]="'postponed' + $index" class="peer absolute h-0 w-0 opacity-0" formControlName="postponed">
-																	<span class="w-7 h-7 border-2 border-neutral-300 rounded-full flex items-center justify-center transition-all duration-200 ease-in-out peer-checked:bg-crimson peer-checked:border-crimson peer-focus-visible:ring-2 peer-focus-visible:ring-crimson/40">
-																		<svg class="w-4 h-4 text-white opacity-0 transition-opacity duration-200 ease-in-out peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-																			<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-																		</svg>
-																	</span>
+															<div class="w-fit relative">
+																<label [for]="'postponed' + $index" class="cursor-pointer relative flex items-center justify-between h-12 w-full rounded-full border bg-white px-5">
+																	<input type="checkbox" [id]="'postponed' + $index" formControlName="postponed" class="peer sr-only">
+																	<span class="text-neutral-400 text-xs font-semibold mr-2">Postponed</span>
+																	<div class="relative h-6 w-11 rounded-full bg-neutral-200 transition-colors after:absolute after:top-0.5 after:start-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow-sm after:transition-all after:content-[''] peer-checked:bg-crimson peer-checked:after:translate-x-full"></div>
 																</label>
-																<label [for]="'postponed' + $index" class="ml-1 text-neutral-700 select-none font-medium cursor-pointer">Postponed</label>
+															</div>
+															<!-- Group -->
+															<div class="w-1/2">
+																<label for="group" class="relative">
+																	<select id="group" formControlName="group" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+																		<option value="" selected>None</option>
+																		<option disabled>---- Liga 2 ----</option>
+																		<option value="a">Grupo A</option>
+																		<option value="b">Grupo B</option>
+																		<option disabled>---- Liga 3 ----</option>
+																		<option value="1">Grupo 1</option>
+																		<option value="2">Grupo 2</option>
+																		<option value="3">Grupo 3</option>
+																		<option value="4">Grupo 4</option>
+																	</select>
+																	<span class="bg-white text-neutral-400 peer-focus:text-main cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Group</span>
+																</label>
 															</div>
 															<!-- Delete -->
 															<button (click)="removeMatch(phase1, matchday.value.round - 1, $index)" type="button" class="bg-red-600 text-white hover:bg-red-600/80 w-fit rounded-full px-4 py-2 duration-300">
@@ -165,16 +178,30 @@ import { FixturesApiService } from '../../services/fixtures-api.service';
 																</label>
 															</div>
 															<!-- Postponed -->
-															<div class="flex items-center w-fit">
-																<label class="relative flex items-center p-1 rounded-full cursor-pointer">
-																	<input type="checkbox" [id]="'postponed' + $index" class="peer absolute h-0 w-0 opacity-0" formControlName="postponed">
-																	<span class="w-7 h-7 border-2 border-neutral-300 rounded-full flex items-center justify-center transition-all duration-200 ease-in-out peer-checked:bg-crimson peer-checked:border-crimson peer-focus-visible:ring-2 peer-focus-visible:ring-crimson/40">
-																		<svg class="w-4 h-4 text-white opacity-0 transition-opacity duration-200 ease-in-out peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-																			<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-																		</svg>
-																	</span>
+															<div class="w-fit relative">
+																<label [for]="'postponed' + $index" class="cursor-pointer relative flex items-center justify-between h-12 w-full rounded-full border bg-white px-5">
+																	<input type="checkbox" [id]="'postponed' + $index" formControlName="postponed" class="peer sr-only">
+																	<span class="text-neutral-400 text-xs font-semibold mr-2">Postponed</span>
+																	<div class="relative h-6 w-11 rounded-full bg-neutral-200 transition-colors after:absolute after:top-0.5 after:start-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow-sm after:transition-all after:content-[''] peer-checked:bg-crimson peer-checked:after:translate-x-full"></div>
 																</label>
-																<label [for]="'postponed' + $index" class="ml-1 text-neutral-700 select-none font-medium cursor-pointer">Postponed</label>
+															</div>
+															<!-- Group -->
+															<div class="w-1/2">
+																<label for="group" class="relative">
+																	<select id="group" formControlName="group" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
+																		<option value="" selected>None</option>
+																		<option disabled>---- Liga 2 ----</option>
+																		<option value="p1">Grupo Ascenso 1</option>
+																		<option value="p2">Grupo Ascenso 2</option>
+																		<option value="r">Grupo Descenso</option>
+																		<option disabled>---- Liga 3 ----</option>
+																		<option value="f1">Grupo Final 1</option>
+																		<option value="f2">Grupo Final 2</option>
+																		<option value="f3">Grupo Final 3</option>
+																		<option value="f4">Grupo Final 4</option>
+																	</select>
+																	<span class="bg-white text-neutral-400 peer-focus:text-main cursor-text flex items-center -translate-y-6 absolute inset-y-0 start-3 px-2 text-xs font-semibold transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-6">Group</span>
+																</label>
 															</div>
 															<!-- Delete -->
 															<button (click)="removeMatch(phase2, matchday.value.round - 1, $index)" type="button" class="bg-red-600 text-white hover:bg-red-600/80 w-fit rounded-full px-4 py-2 duration-300">
@@ -264,7 +291,8 @@ export class FixtureUpdateModalComponent {
           home: [m.home, Validators.required],
           away: [m.away, Validators.required],
           postponed: [m.postponed ?? false],
-          date: [this.formatForInput(m.date!)]
+          date: [this.formatForInput(m.date!)],
+					group: [m.group ?? null],
         })
       )
     );
@@ -289,6 +317,7 @@ export class FixtureUpdateModalComponent {
         away: ['', Validators.required],
         postponed: [false],
         date: [null],
+				group: [''],
       })
     );
   }
