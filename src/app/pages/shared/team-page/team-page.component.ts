@@ -14,10 +14,10 @@ import { LastGamesAddModalComponent } from "../../../components/last-games-add-m
 import { LastGamesApiService } from '../../../services/last-games-api.service';
 import { TeamLastGames } from '../../../interfaces/team-last-games';
 import { LastGamesOptionModalComponent } from "../../../components/last-games-option-modal/last-games-option-modal.component";
-import { TeamPerformance } from '../../../interfaces/team-performance';
-import { PerformanceAddModalComponent } from "../../../components/performance-add-modal/performance-add-modal.component";
-import { PerformanceApiService } from '../../../services/performance-api.service';
-import { PerformanceUpdateModalComponent } from "../../../components/performance-update-modal/performance-update-modal.component";
+import { TeamPerformance } from '../../../interfaces/teamPerformance';
+import { TeamPerformanceAddModalComponent } from "../../../components/team-performance-add-modal/team-performance-add-modal.component";
+import { TeamsPerformanceApiService } from '../../../services/teams-performance-api.service';
+import { TeamPerformanceUpdateModalComponent } from "../../../components/team-performance-update-modal/team-performance-update-modal.component";
 import { TeamInformation } from '../../../interfaces/team-information';
 import { InformationApiService } from '../../../services/information-api.service';
 import { faFacebookF, faInstagram, faTiktok, faXTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
@@ -29,7 +29,7 @@ import { ResultsUpdateModalComponent } from "../../../components/results-update-
 
 @Component({
   selector: 'app-team-page',
-  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, TeamModalComponent, LastGamesAddModalComponent, LastGamesOptionModalComponent, PerformanceAddModalComponent, PerformanceUpdateModalComponent, InformationModalComponent, ResultsAddModalComponent, ResultsUpdateModalComponent],
+  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, TeamModalComponent, LastGamesAddModalComponent, LastGamesOptionModalComponent, TeamPerformanceAddModalComponent, TeamPerformanceUpdateModalComponent, InformationModalComponent, ResultsAddModalComponent, ResultsUpdateModalComponent],
   templateUrl: './team-page.component.html',
   styles: ``,
 })
@@ -41,7 +41,7 @@ export class TeamPageComponent {
   private stadiumsService = inject(StadiumsApiService);
   private lastGamesService = inject(LastGamesApiService);
   private resultsService = inject(ResultsApiService);
-  private performanceService = inject(PerformanceApiService);
+  private teamsPerformanceService = inject(TeamsPerformanceApiService);
   private informationService = inject(InformationApiService);
 
   stadiums!: Stadium[];
@@ -206,7 +206,7 @@ export class TeamPageComponent {
   // =================Performance=================
   // =============================================
   loadPerformaceData() {
-    this.performanceService.getTeamPerformance(this.teamId).subscribe({
+    this.teamsPerformanceService.getTeamPerformance(this.teamId).subscribe({
       next: (data) => this.performance.set(data),
       error: (err) => this.performance.set(undefined),
     });
@@ -218,7 +218,7 @@ export class TeamPageComponent {
   }
 
   confirmDeletePerformance(teamId: string) {
-    this.performanceService.deleteTeamPerformance(teamId).subscribe({
+    this.teamsPerformanceService.deleteTeamPerformance(teamId).subscribe({
       next: () => {
         this.loadPerformaceData();
         this.isPerformanceConfirmOpen.set(false);

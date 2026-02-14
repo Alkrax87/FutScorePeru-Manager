@@ -569,19 +569,19 @@
   </div>
 
   @if (isPerformanceAddOpen()) {
-    <app-performance-add-modal
+    <app-team-performance-add-modal
       [options]="{ teamId: team.teamId, category: team.category, name: team.name}"
       (added)="loadPerformaceData()"
       (close)="isPerformanceAddOpen.set(false)"
-    ></app-performance-add-modal>
+    ></app-team-performance-add-modal>
   }
 
   @if (isPerformanceUpdateModal()) {
-    <app-performance-update-modal
+    <app-team-performance-update-modal
       [options]="performanceOptions()!"
       (updated)="loadPerformaceData()"
       (close)="isPerformanceUpdateModal.set(false)"
-    ></app-performance-update-modal>
+    ></app-team-performance-update-modal>
   }
 
   @if (isPerformanceConfirmOpen()) {

@@ -1,10 +1,10 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { PerformanceApiService } from '../../services/performance-api.service';
+import { TeamsPerformanceApiService } from '../../services/teams-performance-api.service';
 
 @Component({
-  selector: 'app-performance-add-modal',
+  selector: 'app-team-performance-add-modal',
   imports: [FontAwesomeModule],
   template: `
     <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
@@ -26,17 +26,17 @@ import { PerformanceApiService } from '../../services/performance-api.service';
   `,
   styles: ``,
 })
-export class PerformanceAddModalComponent {
+export class TeamPerformanceAddModalComponent {
   @Input() options!: { category: number, teamId: string, name: string };
   @Output() added = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
-  private performanceService = inject(PerformanceApiService);
+  private teamsPerformanceService = inject(TeamsPerformanceApiService);
 
   Add = faPlus;
 
   save() {
-    this.performanceService.addPerformance({ teamId: this.options.teamId, category: this.options.category}).subscribe({
+    this.teamsPerformanceService.addTeamPerformance({ teamId: this.options.teamId, category: this.options.category}).subscribe({
       next: () => {
         this.added.emit();
         this.close.emit();

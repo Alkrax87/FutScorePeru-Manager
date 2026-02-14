@@ -2,11 +2,11 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PerformanceApiService } from '../../services/performance-api.service';
-import { TeamPerformance } from '../../interfaces/team-performance';
+import { TeamsPerformanceApiService } from '../../services/teams-performance-api.service';
+import { TeamPerformance } from '../../interfaces/teamPerformance';
 
 @Component({
-  selector: 'app-performance-update-modal',
+  selector: 'app-team-performance-update-modal',
   imports: [FontAwesomeModule, ReactiveFormsModule],
   template: `
     <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
@@ -186,13 +186,13 @@ import { TeamPerformance } from '../../interfaces/team-performance';
   `,
   styles: ``,
 })
-export class PerformanceUpdateModalComponent {
+export class TeamPerformanceUpdateModalComponent {
   @Input() options!: {phase: number, performance: TeamPerformance};
   @Output() updated = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
-  private performanceService = inject(PerformanceApiService);
+  private teamsPerformanceService = inject(TeamsPerformanceApiService);
 
   form = this.fb.group({
     teamId: ['', Validators.required],
@@ -233,7 +233,7 @@ export class PerformanceUpdateModalComponent {
 
     const formPerformance = this.form.value as TeamPerformance;
 
-    this.performanceService.updateTeamPerformance(formPerformance.teamId, formPerformance).subscribe({
+    this.teamsPerformanceService.updateTeamPerformance(formPerformance.teamId, formPerformance).subscribe({
       next: () => {
         this.updated.emit();
         this.close.emit();
