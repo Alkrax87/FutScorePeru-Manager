@@ -1,10 +1,10 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faCircle, faCircleCheck, faCircleMinus, faCircleXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { LastGamesApiService } from '../../services/last-games-api.service';
+import { faCircle, faCircleCheck, faCircleMinus, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { TeamsFormApiService } from '../../services/teams-form-api.service';
 
 @Component({
-  selector: 'app-last-games-option-modal',
+  selector: 'app-team-form-option-modal',
   imports: [FontAwesomeModule],
   template: `
     <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
@@ -45,12 +45,12 @@ import { LastGamesApiService } from '../../services/last-games-api.service';
   `,
   styles: ``,
 })
-export class LastGamesOptionModalComponent {
+export class TeamFormOptionModalComponent {
   @Input() options!: { teamId: string; phase: number, option: string };
   @Output() updated = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
-  private lastgamesService = inject(LastGamesApiService);
+  private teamsFormService = inject(TeamsFormApiService);
 
   optionValue!: string;
 
@@ -79,7 +79,7 @@ export class LastGamesOptionModalComponent {
   }
 
   save() {
-    this.lastgamesService.updateTeamLastGames(this.options.teamId, this.options.phase, this.options.option).subscribe({
+    this.teamsFormService.updateTeamForm(this.options.teamId, this.options.phase, this.options.option).subscribe({
       next: () => {
         this.updated.emit();
         this.close.emit();

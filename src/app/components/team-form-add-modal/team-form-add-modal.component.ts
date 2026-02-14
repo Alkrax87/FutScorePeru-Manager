@@ -2,18 +2,18 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LastGamesApiService } from '../../services/last-games-api.service';
-import { LastGamesGenerator } from '../../interfaces/team-last-games';
+import { TeamsFormApiService } from '../../services/teams-form-api.service';
+import { TeamFormGenerator } from '../../interfaces/teamForm';
 
 @Component({
-  selector: 'app-last-games-add-modal',
+  selector: 'app-team-form-add-modal',
   imports: [ReactiveFormsModule, FontAwesomeModule],
   template: `
     <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
       <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-sm">
         <div class="p-5">
-          <h3 class="text-white text-xl font-semibold">Generate Last Games</h3>
-          <p class="text-neutral-200 text-sm">Enter the number of games for each phase to generate the last games.</p>
+          <h3 class="text-white text-xl font-semibold">Generate Team Form</h3>
+          <p class="text-neutral-200 text-sm">Enter the number of games for each phase to generate form.</p>
         </div>
         <form [formGroup]="form" (ngSubmit)="save()" class="bg-white px-5 pb-5 pt-2">
           <div class="flex gap-4 my-4">
@@ -44,13 +44,13 @@ import { LastGamesGenerator } from '../../interfaces/team-last-games';
   `,
   styles: ``,
 })
-export class LastGamesAddModalComponent {
+export class TeamFormAddModalComponent {
   @Input() teamReference!: { teamId: string, category: number };
   @Output() updated = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
-  private lastGamesService = inject(LastGamesApiService);
+  private teamsFormService = inject(TeamsFormApiService);
 
   form = this.fb.group({
     teamId: [null as string | null],
@@ -68,11 +68,11 @@ export class LastGamesAddModalComponent {
       return;
     }
 
-    const formLastGames = this.form.value as LastGamesGenerator;
-    formLastGames.teamId = this.teamReference.teamId;
-    formLastGames.category = this.teamReference.category;
+    const formTeamForm = this.form.value as TeamFormGenerator;
+    formTeamForm.teamId = this.teamReference.teamId;
+    formTeamForm.category = this.teamReference.category;
 
-    this.lastGamesService.addLastGames(formLastGames).subscribe({
+    this.teamsFormService.addTeamForm(formTeamForm).subscribe({
       next: () => {
         this.updated.emit();
         this.close.emit();

@@ -302,26 +302,26 @@
   </div>
 
   @if (isLastGamesAddOpen()) {
-    <app-last-games-add-modal
+    <app-team-form-add-modal
       [teamReference]="{ teamId: team.teamId, category: team.category}"
       (updated)="loadLastGamesData()"
       (close)="isLastGamesAddOpen.set(false)"
-    ></app-last-games-add-modal>
+    ></app-team-form-add-modal>
   }
 
   @if (isLastGamesOptionModalOpen()) {
-    <app-last-games-option-modal
+    <app-team-form-option-modal
       [options]="lastGamesOption()!"
       (updated)="loadLastGamesData()"
       (close)="isLastGamesOptionModalOpen.set(false)"
-    ></app-last-games-option-modal>
+    ></app-team-form-option-modal>
   }
 
   @if (isLastGamesConfirmOpen()) {
     <app-delete-confirmation-modal
       [message]="{
-        section: 'LastGames',
-        element: selectedTeam()!.name + ' last games'
+        section: 'Team Form',
+        element: selectedTeam()!.name + ' form'
       }"
       (confirm)="confirmDeleteLastGames(teamId)"
       (close)="isLastGamesConfirmOpen.set(false); lastGamesOption.set(null)"

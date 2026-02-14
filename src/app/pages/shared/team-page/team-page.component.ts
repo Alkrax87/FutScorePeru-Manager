@@ -10,10 +10,10 @@ import { Stadium } from '../../../interfaces/stadium';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DeleteConfirmationModalComponent } from "../../../components/delete-confirmation-modal/delete-confirmation-modal.component";
 import { TeamModalComponent } from "../../../components/team-modal/team-modal.component";
-import { LastGamesAddModalComponent } from "../../../components/last-games-add-modal/last-games-add-modal.component";
-import { LastGamesApiService } from '../../../services/last-games-api.service';
-import { TeamLastGames } from '../../../interfaces/team-last-games';
-import { LastGamesOptionModalComponent } from "../../../components/last-games-option-modal/last-games-option-modal.component";
+import { TeamForm } from '../../../interfaces/teamForm';
+import { TeamFormAddModalComponent } from "../../../components/team-form-add-modal/team-form-add-modal.component";
+import { TeamsFormApiService } from '../../../services/teams-form-api.service';
+import { TeamFormOptionModalComponent } from "../../../components/team-form-option-modal/team-form-option-modal.component";
 import { TeamPerformance } from '../../../interfaces/teamPerformance';
 import { TeamPerformanceAddModalComponent } from "../../../components/team-performance-add-modal/team-performance-add-modal.component";
 import { TeamsPerformanceApiService } from '../../../services/teams-performance-api.service';
@@ -29,7 +29,7 @@ import { ResultsUpdateModalComponent } from "../../../components/results-update-
 
 @Component({
   selector: 'app-team-page',
-  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, TeamModalComponent, LastGamesAddModalComponent, LastGamesOptionModalComponent, TeamPerformanceAddModalComponent, TeamPerformanceUpdateModalComponent, InformationModalComponent, ResultsAddModalComponent, ResultsUpdateModalComponent],
+  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, TeamModalComponent, TeamFormAddModalComponent, TeamFormOptionModalComponent, TeamPerformanceAddModalComponent, TeamPerformanceUpdateModalComponent, InformationModalComponent, ResultsAddModalComponent, ResultsUpdateModalComponent],
   templateUrl: './team-page.component.html',
   styles: ``,
 })
@@ -39,7 +39,7 @@ export class TeamPageComponent {
   private route = inject(ActivatedRoute);
   private teamsService = inject(TeamsApiService);
   private stadiumsService = inject(StadiumsApiService);
-  private lastGamesService = inject(LastGamesApiService);
+  private teamsFormService = inject(TeamsFormApiService);
   private resultsService = inject(ResultsApiService);
   private teamsPerformanceService = inject(TeamsPerformanceApiService);
   private informationService = inject(InformationApiService);
@@ -57,7 +57,7 @@ export class TeamPageComponent {
   stadium = signal<Stadium | null>(null);
 
   // LastGames
-  lastGames = signal<TeamLastGames | undefined>(undefined);
+  lastGames = signal<TeamForm | undefined>(undefined);
   isLastGamesAddOpen = signal(false);
   isLastGamesOptionModalOpen = signal(false);
   isLastGamesConfirmOpen = signal(false);
@@ -156,7 +156,7 @@ export class TeamPageComponent {
   // ==================LastGames==================
   // =============================================
   loadLastGamesData() {
-    this.lastGamesService.getTeamLastGames(this.teamId).subscribe({
+    this.teamsFormService.getTeamForm(this.teamId).subscribe({
       next: (data) => this.lastGames.set(data),
       error: (err) => this.lastGames.set(undefined),
     });
@@ -168,7 +168,7 @@ export class TeamPageComponent {
   }
 
   confirmDeleteLastGames(teamId: string) {
-    this.lastGamesService.deleteTeamLastGames(teamId).subscribe({
+    this.teamsFormService.deleteTeamForm(teamId).subscribe({
       next: () => {
         this.loadLastGamesData();
         this.isLastGamesConfirmOpen.set(false);
