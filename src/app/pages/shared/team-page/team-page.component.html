@@ -402,19 +402,19 @@
   </div>
 
   @if (isResultsAddOpen()) {
-    <app-results-add-modal
+    <app-team-match-results-add-modal
       [teamReference]="{ teamId: team.teamId, category: team.category }"
       (added)="loadResultsData()"
       (close)="isResultsAddOpen.set(false)"
-    ></app-results-add-modal>
+    ></app-team-match-results-add-modal>
   }
 
   @if (isResultsSetModalOpen()) {
-    <app-results-update-modal
+    <app-team-match-results-update-modal
       [resultsReference]="resultsOptions()!"
       (updated)="loadResultsData()"
       (close)="isResultsSetModalOpen.set(false)"
-    ></app-results-update-modal>
+    ></app-team-match-results-update-modal>
   }
 
   @if (isResultsConfirmOpen()) {

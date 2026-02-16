@@ -2,18 +2,18 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ResultsApiService } from '../../services/results-api.service';
-import { ResultsGenerator } from '../../interfaces/team-results';
+import { TeamsMatchResultsApiService } from '../../services/teams-match-results-api.service';
+import { TeamMatchResultsGenerator } from '../../interfaces/teamMatchResults';
 
 @Component({
-  selector: 'app-results-add-modal',
+  selector: 'app-team-match-results-add-modal',
   imports: [ReactiveFormsModule, FontAwesomeModule],
   template: `
     <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
       <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-sm">
         <div class="p-5">
-          <h3 class="text-white text-xl font-semibold">Generate Results</h3>
-          <p class="text-neutral-200 text-sm">Enter the number of games for each phase to generate results.</p>
+          <h3 class="text-white text-xl font-semibold">Generate Team Match Results</h3>
+          <p class="text-neutral-200 text-sm">Enter the number of games for each phase to generate team match results.</p>
         </div>
         <form [formGroup]="form" (ngSubmit)="save()" class="bg-white px-5 pb-5 pt-2">
           <div class="flex gap-4 my-4">
@@ -44,13 +44,13 @@ import { ResultsGenerator } from '../../interfaces/team-results';
   `,
   styles: ``,
 })
-export class ResultsAddModalComponent {
+export class TeamMatchResultsAddModalComponent {
   @Input() teamReference!: { teamId: string, category: number };
   @Output() added = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
-  private resultsService = inject(ResultsApiService);
+  private teamsMatchResultsService = inject(TeamsMatchResultsApiService);
 
   form = this.fb.group({
     teamId: [null as string | null],
@@ -68,11 +68,11 @@ export class ResultsAddModalComponent {
       return;
     }
 
-    const formResults = this.form.value as ResultsGenerator;
-    formResults.teamId = this.teamReference.teamId;
-    formResults.category = this.teamReference.category;
+    const formTeamMatchResults = this.form.value as TeamMatchResultsGenerator;
+    formTeamMatchResults.teamId = this.teamReference.teamId;
+    formTeamMatchResults.category = this.teamReference.category;
 
-    this.resultsService.addResults(formResults).subscribe({
+    this.teamsMatchResultsService.addTeamMatchResults(formTeamMatchResults).subscribe({
       next: () => {
         this.added.emit();
         this.close.emit();

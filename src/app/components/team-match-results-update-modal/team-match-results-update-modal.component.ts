@@ -2,10 +2,10 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import { ResultsApiService } from '../../services/results-api.service';
+import { TeamsMatchResultsApiService } from '../../services/teams-match-results-api.service';
 
 @Component({
-  selector: 'app-results-update-modal',
+  selector: 'app-team-match-results-update-modal',
   imports: [ReactiveFormsModule, FontAwesomeModule],
   template: `
     <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
@@ -48,13 +48,13 @@ import { ResultsApiService } from '../../services/results-api.service';
   `,
   styles: ``,
 })
-export class ResultsUpdateModalComponent {
+export class TeamMatchResultsUpdateModalComponent {
   @Input() resultsReference!: { teamId: string; phase: number; size: number };
   @Output() updated = new EventEmitter<{ index: number; score: number }>();
   @Output() close = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
-  private resultsService = inject(ResultsApiService);
+  private teamsMatchResultsService = inject(TeamsMatchResultsApiService);
 
   form = this.fb.group({
     index: [null as number | null],
@@ -76,7 +76,7 @@ export class ResultsUpdateModalComponent {
       return;
     }
 
-    this.resultsService.updateTeamResults(this.resultsReference.teamId, this.resultsReference.phase, this.form.value.index!, this.form.value.score!).subscribe({
+    this.teamsMatchResultsService.updateTeamMatchResults(this.resultsReference.teamId, this.resultsReference.phase, this.form.value.index!, this.form.value.score!).subscribe({
       next: () => {
         this.updated.emit();
         this.close.emit();
