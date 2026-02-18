@@ -18,10 +18,10 @@ import { TeamPerformance } from '../../../interfaces/teamPerformance';
 import { TeamPerformanceAddModalComponent } from "../../../components/team-performance-add-modal/team-performance-add-modal.component";
 import { TeamsPerformanceApiService } from '../../../services/teams-performance-api.service';
 import { TeamPerformanceUpdateModalComponent } from "../../../components/team-performance-update-modal/team-performance-update-modal.component";
-import { TeamInformation } from '../../../interfaces/team-information';
-import { InformationApiService } from '../../../services/information-api.service';
+import { TeamDetails } from '../../../interfaces/teamDetails';
+import { TeamsDetailsApiService } from '../../../services/teams-details-api.service';
 import { faFacebookF, faInstagram, faTiktok, faXTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { InformationModalComponent } from "../../../components/information-modal/information-modal.component";
+import { TeamDetailsModalComponent } from "../../../components/team-details-modal/team-details-modal.component";
 import { TeamsMatchResultsApiService } from '../../../services/teams-match-results-api.service';
 import { TeamMatchResults } from '../../../interfaces/teamMatchResults';
 import { TeamMatchResultsAddModalComponent } from "../../../components/team-match-results-add-modal/team-match-results-add-modal.component";
@@ -29,7 +29,7 @@ import { TeamMatchResultsUpdateModalComponent } from "../../../components/team-m
 
 @Component({
   selector: 'app-team-page',
-  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, TeamModalComponent, TeamFormAddModalComponent, TeamFormOptionModalComponent, TeamPerformanceAddModalComponent, TeamPerformanceUpdateModalComponent, InformationModalComponent, TeamMatchResultsAddModalComponent, TeamMatchResultsUpdateModalComponent],
+  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, TeamModalComponent, TeamFormAddModalComponent, TeamFormOptionModalComponent, TeamPerformanceAddModalComponent, TeamPerformanceUpdateModalComponent, TeamDetailsModalComponent, TeamMatchResultsAddModalComponent, TeamMatchResultsUpdateModalComponent],
   templateUrl: './team-page.component.html',
   styles: ``,
 })
@@ -42,7 +42,7 @@ export class TeamPageComponent {
   private teamsFormService = inject(TeamsFormApiService);
   private teamsMatchResultsService = inject(TeamsMatchResultsApiService);
   private teamsPerformanceService = inject(TeamsPerformanceApiService);
-  private informationService = inject(InformationApiService);
+  private teamsDetailsService = inject(TeamsDetailsApiService);
 
   stadiums!: Stadium[];
   category!: number;
@@ -78,7 +78,7 @@ export class TeamPageComponent {
   performanceOptions = signal<{ phase: number, performance: TeamPerformance } | null>(null);
 
   // Information
-  information = signal<TeamInformation | undefined>(undefined);
+  information = signal<TeamDetails | undefined>(undefined);
   isInformationModalOpen = signal(false);
   isInformationConfirmOpen = signal(false);
 
@@ -231,14 +231,14 @@ export class TeamPageComponent {
   // =================Information=================
   // =============================================
   loadInformationData() {
-    this.informationService.getTeamsInformation(this.teamId).subscribe({
+    this.teamsDetailsService.getTeamsDetails(this.teamId).subscribe({
       next: (data) => this.information.set(data),
       error: (err) => this.information.set(undefined),
     });
   }
 
   confirmDeleteInformation(teamId: string) {
-    this.informationService.deleteInformation(teamId).subscribe({
+    this.teamsDetailsService.deleteTeamDetails(teamId).subscribe({
       next: () => {
         this.loadInformationData();
         this.isInformationConfirmOpen.set(false);

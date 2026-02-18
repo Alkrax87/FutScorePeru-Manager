@@ -1,13 +1,13 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { TeamInformation } from '../../interfaces/team-information';
+import { TeamDetails } from '../../interfaces/teamDetails';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InformationApiService } from '../../services/information-api.service';
+import { TeamsDetailsApiService } from '../../services/teams-details-api.service';
 import { faFloppyDisk, faGlobe, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faFacebookF, faInstagram, faTiktok, faXTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
-  selector: 'app-information-modal',
+  selector: 'app-team-details-modal',
   imports: [ReactiveFormsModule, FontAwesomeModule],
   template: `
     <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
@@ -100,14 +100,14 @@ import { faFacebookF, faInstagram, faTiktok, faXTwitter, faYoutube } from '@fort
   `,
   styles: ``,
 })
-export class InformationModalComponent {
+export class TeamDetailsModalComponent {
   @Input() teamId: string | null = null;
-  @Input() information: TeamInformation | null = null;
+  @Input() information: TeamDetails | null = null;
   @Output() updated = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
-  private informationService = inject(InformationApiService);
+  private teamsDetailsService = inject(TeamsDetailsApiService);
 
   form = this.fb.group({
     teamId: ['', Validators.required],
@@ -147,36 +147,36 @@ export class InformationModalComponent {
       return;
     }
 
-    const formInformation = this.form.value as TeamInformation;
+    const formDetails = this.form.value as TeamDetails;
 
-    if (!formInformation.website) {
-      delete formInformation.website;
+    if (!formDetails.website) {
+      delete formDetails.website;
     }
-    if (!formInformation.social.facebook) {
-      delete formInformation.social.facebook;
+    if (!formDetails.social.facebook) {
+      delete formDetails.social.facebook;
     }
-    if (!formInformation.social.instagram) {
-      delete formInformation.social.instagram;
+    if (!formDetails.social.instagram) {
+      delete formDetails.social.instagram;
     }
-    if (!formInformation.social.twitter) {
-      delete formInformation.social.twitter;
+    if (!formDetails.social.twitter) {
+      delete formDetails.social.twitter;
     }
-    if (!formInformation.social.youtube) {
-      delete formInformation.social.youtube;
+    if (!formDetails.social.youtube) {
+      delete formDetails.social.youtube;
     }
-    if (!formInformation.social.tiktok) {
-      delete formInformation.social.tiktok;
+    if (!formDetails.social.tiktok) {
+      delete formDetails.social.tiktok;
     }
 
     if (this.information?.teamId) {
-      this.informationService.updateInformation(formInformation.teamId, formInformation).subscribe({
+      this.teamsDetailsService.updateTeamDetails(formDetails.teamId, formDetails).subscribe({
         next: () => {
           this.updated.emit();
           this.close.emit();
         }
       });
     } else {
-      this.informationService.addInformation(formInformation).subscribe({
+      this.teamsDetailsService.addTeamDetails(formDetails).subscribe({
         next: () => {
           this.updated.emit();
           this.close.emit();

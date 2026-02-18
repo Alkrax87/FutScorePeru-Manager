@@ -702,12 +702,12 @@
   </div>
 
   @if (isInformationModalOpen()) {
-    <app-information-modal
+    <app-team-details-modal
       [information]="information()!"
       [teamId]="teamId"
       (updated)="loadInformationData()"
       (close)="isInformationModalOpen.set(false)"
-    ></app-information-modal>
+    ></app-team-details-modal>
   }
 
   @if (isInformationConfirmOpen()) {

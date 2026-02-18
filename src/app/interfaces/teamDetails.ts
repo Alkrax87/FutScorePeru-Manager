@@ -1,4 +1,4 @@
-export interface TeamInformation {
+export interface TeamDetails {
   teamId: string;
   description: string;
   founded: number;
