@@ -10,7 +10,7 @@ import { TeamsPerformanceApiService } from '../../services/teams-performance-api
     <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
       <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-sm">
         <div class="p-5">
-          <h3 class="text-white text-xl font-semibold">Generate Performance</h3>
+          <h3 class="text-white text-xl font-semibold">Generate Team Performance</h3>
         </div>
         <div class="bg-white px-5 pb-5 pt-2">
           <p class="text-sm">Are you sure you want to generate <span class="font-semibold">{{ options.name }}</span> performance?</p>

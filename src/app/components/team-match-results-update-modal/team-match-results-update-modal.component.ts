@@ -11,8 +11,8 @@ import { TeamsMatchResultsApiService } from '../../services/teams-match-results-
     <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
       <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-sm">
         <div class="p-5">
-          <h3 class="text-white text-xl font-semibold">Set Result</h3>
-          <p class="text-neutral-200 text-sm">Select round and score to update results.</p>
+          <h3 class="text-white text-xl font-semibold">Set Match Result</h3>
+          <p class="text-neutral-200 text-sm">Select round and set match score.</p>
         </div>
         <form [formGroup]="form" (ngSubmit)="save()" class="bg-white px-5 pb-5 pt-2">
           <div class="flex gap-4 my-4">
@@ -39,7 +39,7 @@ import { TeamsMatchResultsApiService } from '../../services/teams-match-results-
           <div class="flex justify-end gap-2">
             <button type="button" (click)="close.emit()" class="hover:bg-neutral-100/80 text-neutral-600 border rounded-full px-6 py-2 text-sm duration-300">Cancel</button>
             <button type="submit" [disabled]="form.invalid" class="bg-yellow-500 hover:bg-yellow-500/80 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
-              <fa-icon [icon]="Edit"></fa-icon>&nbsp; Update Result
+              <fa-icon [icon]="Edit"></fa-icon>&nbsp; Update Match Result
             </button>
           </div>
         </form>

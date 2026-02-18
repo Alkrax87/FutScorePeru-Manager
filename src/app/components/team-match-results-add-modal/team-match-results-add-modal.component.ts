@@ -13,7 +13,7 @@ import { TeamMatchResultsGenerator } from '../../interfaces/teamMatchResults';
       <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-sm">
         <div class="p-5">
           <h3 class="text-white text-xl font-semibold">Generate Team Match Results</h3>
-          <p class="text-neutral-200 text-sm">Enter the number of games for each phase to generate team match results.</p>
+          <p class="text-neutral-200 text-sm">Enter the number of games for each phase to generate match results.</p>
         </div>
         <form [formGroup]="form" (ngSubmit)="save()" class="bg-white px-5 pb-5 pt-2">
           <div class="flex gap-4 my-4">

@@ -14,10 +14,10 @@ import { faFacebookF, faInstagram, faTiktok, faXTwitter, faYoutube } from '@fort
       <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-lg">
         <div class="p-5">
           @if (information) {
-            <h3 class="text-white text-xl font-semibold">Edit Information</h3>
-            <p class="text-neutral-200 text-sm">Update the information details below.</p>
+            <h3 class="text-white text-xl font-semibold">Edit Details</h3>
+            <p class="text-neutral-200 text-sm">Update team details below.</p>
           } @else {
-            <h3 class="text-white text-xl font-semibold">Add Information</h3>
+            <h3 class="text-white text-xl font-semibold">Add Details</h3>
             <p class="text-neutral-200 text-sm">Enter the details below.</p>
           }
           @if (errorMessage) {
@@ -90,7 +90,7 @@ import { faFacebookF, faInstagram, faTiktok, faXTwitter, faYoutube } from '@fort
               </button>
             } @else {
               <button type="submit" [disabled]="form.invalid" class="bg-green-700 hover:bg-green-700/90 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
-                <fa-icon [icon]="Add"></fa-icon>&nbsp; Add Team
+                <fa-icon [icon]="Add"></fa-icon>&nbsp; Add Details
               </button>
             }
           </div>

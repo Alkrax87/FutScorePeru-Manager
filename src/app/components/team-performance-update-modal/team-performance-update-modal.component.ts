@@ -12,7 +12,7 @@ import { TeamPerformance } from '../../interfaces/teamPerformance';
     <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
       <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-sm">
         <div class="p-5">
-          <h3 class="text-white text-xl font-semibold">Update Performance Data</h3>
+          <h3 class="text-white text-xl font-semibold">Update Performance</h3>
           <p class="text-neutral-200 text-sm">Update performance statistics.</p>
         </div>
         @if (errorMessage) {
