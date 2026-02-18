@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faCircle, faCircleCheck, faCircleMinus, faCircleXmark, faFlag, faGlobe, faImages, faInfoCircle, faLocationDot, faPalette, faPenToSquare, faPlus, faRing, faShareNodes, faTrashCan, faUsers, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCircle, faCircleCheck, faCircleMinus, faCircleXmark, faFlag, faGlobe, faImages, faLocationDot, faPenToSquare, faPlus, faRing, faShareNodes, faShieldHalved, faTrashCan, faUsers, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { combineLatest } from 'rxjs';
 import { TeamsApiService } from '../../../services/teams-api.service';
 import { StadiumsApiService } from '../../../services/stadiums-api.service';
@@ -56,36 +56,35 @@ export class TeamPageComponent {
   selectedTeam = signal<Team | null>(null);
   stadium = signal<Stadium | null>(null);
 
-  // LastGames
-  lastGames = signal<TeamForm | undefined>(undefined);
-  isLastGamesAddOpen = signal(false);
-  isLastGamesOptionModalOpen = signal(false);
-  isLastGamesConfirmOpen = signal(false);
-  lastGamesOption = signal<{ teamId: string, phase: number, option: string } | null>(null);
+  // TeamForm
+  teamForm = signal<TeamForm | undefined>(undefined);
+  isTeamFormAddOpen = signal(false);
+  isTeamFormOptionModalOpen = signal(false);
+  isTeamFormConfirmOpen = signal(false);
+  teamFormOption = signal<{ teamId: string, phase: number, option: string } | null>(null);
 
-  // Results
-  results = signal<TeamMatchResults | undefined>(undefined);
-  isResultsAddOpen = signal(false);
-  isResultsSetModalOpen = signal(false);
-  isResultsConfirmOpen = signal(false);
-  resultsOptions = signal<{ teamId: string, phase: number, size: number } | null>(null);
+  // TeamMatchResults
+  teamMatchResults = signal<TeamMatchResults | undefined>(undefined);
+  isTeamMatchResultsAddOpen = signal(false);
+  isTeamMatchResultsSetModalOpen = signal(false);
+  isTeamMatchResultsConfirmOpen = signal(false);
+  teamMatchResultsOptions = signal<{ teamId: string, phase: number, size: number } | null>(null);
 
-  // Performance
-  performance = signal<TeamPerformance | undefined>(undefined);
-  isPerformanceAddOpen = signal(false);
-  isPerformanceUpdateModal = signal(false);
-  isPerformanceConfirmOpen = signal(false);
-  performanceOptions = signal<{ phase: number, performance: TeamPerformance } | null>(null);
+  // TeamPerformance
+  teamPerformance = signal<TeamPerformance | undefined>(undefined);
+  isTeamPerformanceAddOpen = signal(false);
+  isTeamPerformanceUpdateModal = signal(false);
+  isTeamPerformanceConfirmOpen = signal(false);
+  teamPerformanceOptions = signal<{ phase: number, performance: TeamPerformance } | null>(null);
 
-  // Information
-  information = signal<TeamDetails | undefined>(undefined);
-  isInformationModalOpen = signal(false);
-  isInformationConfirmOpen = signal(false);
+  // TeamDetails
+  teamDetails = signal<TeamDetails | undefined>(undefined);
+  isTeamDetailsModalOpen = signal(false);
+  isTeamDetailsConfirmOpen = signal(false);
 
   // Icons
+  Team = faShieldHalved;
   Location = faLocationDot;
-  Details = faInfoCircle;
-  Color = faPalette;
   Resources = faImages;
   Stadium = faRing;
   People = faUsers;
@@ -123,10 +122,10 @@ export class TeamPageComponent {
         this.team = data;
         this.selectedTeam.set(data);
         this.findStadium(data.stadium);
-        this.loadLastGamesData();
-        this.loadResultsData();
-        this.loadPerformaceData();
-        this.loadInformationData();
+        this.loadTeamFormData();
+        this.loadTeamMatchResultsData();
+        this.loadTeamPerformanceData();
+        this.loadTeamDetailsData();
       },
       error: (err) => {
         console.error('Failed to load team data:', err.error.error);
@@ -153,50 +152,50 @@ export class TeamPageComponent {
   }
 
   // =============================================
-  // ==================LastGames==================
+  // ====================Form=====================
   // =============================================
-  loadLastGamesData() {
+  loadTeamFormData() {
     this.teamsFormService.getTeamForm(this.teamId).subscribe({
-      next: (data) => this.lastGames.set(data),
-      error: (err) => this.lastGames.set(undefined),
+      next: (data) => this.teamForm.set(data),
+      error: (err) => this.teamForm.set(undefined),
     });
   }
 
-  setLastGamesOptions(phase: number, option: string) {
-    this.lastGamesOption.set({ teamId: this.teamId, phase, option });
-    this.isLastGamesOptionModalOpen.set(true);
+  setTeamFormOptions(phase: number, option: string) {
+    this.teamFormOption.set({ teamId: this.teamId, phase, option });
+    this.isTeamFormOptionModalOpen.set(true);
   }
 
-  confirmDeleteLastGames(teamId: string) {
+  confirmDeleteTeamForm(teamId: string) {
     this.teamsFormService.deleteTeamForm(teamId).subscribe({
       next: () => {
-        this.loadLastGamesData();
-        this.isLastGamesConfirmOpen.set(false);
+        this.loadTeamFormData();
+        this.isTeamFormConfirmOpen.set(false);
       },
       error: (err) => {}
     });
   }
 
   // =============================================
-  // ===================Results===================
+  // ================Match Results================
   // =============================================
-  loadResultsData() {
+  loadTeamMatchResultsData() {
     this.teamsMatchResultsService.getTeamMatchResults(this.teamId).subscribe({
-      next: (data) => this.results.set(data),
-      error: (err) => this.results.set(undefined),
+      next: (data) => this.teamMatchResults.set(data),
+      error: (err) => this.teamMatchResults.set(undefined),
     });
   }
 
-  setResultsOptions(phase: number, size: number) {
-    this.resultsOptions.set({ teamId: this.teamId, phase, size });
-    this.isResultsSetModalOpen.set(true);
+  setTeamMatchResultsOptions(phase: number, size: number) {
+    this.teamMatchResultsOptions.set({ teamId: this.teamId, phase, size });
+    this.isTeamMatchResultsSetModalOpen.set(true);
   }
 
-  confirmDeleteResults(teamId: string) {
+  confirmDeleteTeamMatchResults(teamId: string) {
     this.teamsMatchResultsService.deleteTeamMatchResults(teamId).subscribe({
       next: () => {
-        this.loadResultsData();
-        this.isResultsConfirmOpen.set(false);
+        this.loadTeamMatchResultsData();
+        this.isTeamMatchResultsConfirmOpen.set(false);
       },
       error: (err) => {}
     });
@@ -205,43 +204,43 @@ export class TeamPageComponent {
   // =============================================
   // =================Performance=================
   // =============================================
-  loadPerformaceData() {
+  loadTeamPerformanceData() {
     this.teamsPerformanceService.getTeamPerformance(this.teamId).subscribe({
-      next: (data) => this.performance.set(data),
-      error: (err) => this.performance.set(undefined),
+      next: (data) => this.teamPerformance.set(data),
+      error: (err) => this.teamPerformance.set(undefined),
     });
   }
 
-  setPerformanceOptions(phase: number) {
-    this.performanceOptions.set({ phase, performance: this.performance()! });
-    this.isPerformanceUpdateModal.set(true);
+  setTeamPerformanceOptions(phase: number) {
+    this.teamPerformanceOptions.set({ phase, performance: this.teamPerformance()! });
+    this.isTeamPerformanceUpdateModal.set(true);
   }
 
-  confirmDeletePerformance(teamId: string) {
+  confirmDeleteTeamPerformance(teamId: string) {
     this.teamsPerformanceService.deleteTeamPerformance(teamId).subscribe({
       next: () => {
-        this.loadPerformaceData();
-        this.isPerformanceConfirmOpen.set(false);
+        this.loadTeamPerformanceData();
+        this.isTeamPerformanceConfirmOpen.set(false);
       },
       error: (err) => {}
     });
   }
 
   // =============================================
-  // =================Information=================
+  // ===================Details===================
   // =============================================
-  loadInformationData() {
+  loadTeamDetailsData() {
     this.teamsDetailsService.getTeamsDetails(this.teamId).subscribe({
-      next: (data) => this.information.set(data),
-      error: (err) => this.information.set(undefined),
+      next: (data) => this.teamDetails.set(data),
+      error: (err) => this.teamDetails.set(undefined),
     });
   }
 
-  confirmDeleteInformation(teamId: string) {
+  confirmDeleteTeamDetails(teamId: string) {
     this.teamsDetailsService.deleteTeamDetails(teamId).subscribe({
       next: () => {
-        this.loadInformationData();
-        this.isInformationConfirmOpen.set(false);
+        this.loadTeamDetailsData();
+        this.isTeamDetailsConfirmOpen.set(false);
       },
       error: (err) => {}
     });

@@ -190,8 +190,8 @@
     <!-- Title -->
     <div class="flex gap-2 mb-2">
       <p class="text-2xl font-semibold">Form</p>
-      @if (lastGames()) {
-        <button (click)="isLastGamesConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
+      @if (teamForm()) {
+        <button (click)="isTeamFormConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
           <fa-icon [icon]="Delete"></fa-icon>
         </button>
       }
@@ -200,9 +200,9 @@
     <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
       <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
       <div class="p-5">
-        @if (!lastGames()) {
-          <button (click)="isLastGamesAddOpen.set(true)" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full px-6 py-2 rounded-full">
-            <fa-icon [icon]="Add"></fa-icon> Add LastGames
+        @if (!teamForm()) {
+          <button (click)="isTeamFormAddOpen.set(true)" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full px-6 py-2 rounded-full">
+            <fa-icon [icon]="Add"></fa-icon> Add Form
           </button>
         } @else {
           <div class="w-full flex flex-col lg:flex-row gap-5">
@@ -211,26 +211,26 @@
               <p class="font-semibold text-lg">Phase 1</p>
               <!-- Buttons -->
               <div class="flex gap-2 justify-between my-2">
-                <button (click)="setLastGamesOptions(1, 'w')" class="bg-green-600 hover:bg-green-600/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                <button (click)="setTeamFormOptions(1, 'w')" class="bg-green-600 hover:bg-green-600/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
                   <fa-icon [icon]="Win"></fa-icon>
                   <p class="font-semibold truncate">Win</p>
                 </button>
-                <button (click)="setLastGamesOptions(1, 'd')" class="bg-neutral-400 hover:bg-neutral-400/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                <button (click)="setTeamFormOptions(1, 'd')" class="bg-neutral-400 hover:bg-neutral-400/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
                   <fa-icon [icon]="Draw"></fa-icon>
                   <p class="font-semibold truncate">Draw</p>
                 </button>
-                <button (click)="setLastGamesOptions(1, 'l')" class="bg-red-600 hover:bg-red-600/80 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                <button (click)="setTeamFormOptions(1, 'l')" class="bg-red-600 hover:bg-red-600/80 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
                   <fa-icon [icon]="Loose"></fa-icon>
                   <p class="font-semibold">Loose</p>
                 </button>
-                <button (click)="setLastGamesOptions(1, 'r')" class="bg-neutral-700 hover:bg-neutral-700/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                <button (click)="setTeamFormOptions(1, 'r')" class="bg-neutral-700 hover:bg-neutral-700/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
                   <fa-icon [icon]="Default"></fa-icon>
                   <p class="font-semibold truncate">Default</p>
                 </button>
               </div>
               <!-- Icons -->
               <div class="bg-neutral-100 shadow-md px-4 py-2 rounded-full flex gap-1 flex-wrap justify-evenly">
-                @for (element of lastGames()?.phase1; track $index) {
+                @for (element of teamForm()?.phase1; track $index) {
                   @switch (element) {
                     @case ("w") {
                       <fa-icon class="text-green-600" [icon]="Win"></fa-icon>
@@ -253,26 +253,26 @@
               <p class="font-semibold text-lg">Phase 2</p>
               <!-- Buttons -->
               <div class="flex gap-2 justify-between my-2">
-                <button (click)="setLastGamesOptions(2, 'w')" class="bg-green-600 hover:bg-green-600/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                <button (click)="setTeamFormOptions(2, 'w')" class="bg-green-600 hover:bg-green-600/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
                   <fa-icon [icon]="Win"></fa-icon>
                   <p class="font-semibold truncate">Win</p>
                 </button>
-                <button (click)="setLastGamesOptions(2, 'd')" class="bg-neutral-400 hover:bg-neutral-400/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                <button (click)="setTeamFormOptions(2, 'd')" class="bg-neutral-400 hover:bg-neutral-400/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
                   <fa-icon [icon]="Draw"></fa-icon>
                   <p class="font-semibold truncate">Draw</p>
                 </button>
-                <button (click)="setLastGamesOptions(2, 'l')" class="bg-red-600 hover:bg-red-600/80 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                <button (click)="setTeamFormOptions(2, 'l')" class="bg-red-600 hover:bg-red-600/80 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
                   <fa-icon [icon]="Loose"></fa-icon>
                   <p class="font-semibold">Loose</p>
                 </button>
-                <button (click)="setLastGamesOptions(2, 'r')" class="bg-neutral-700 hover:bg-neutral-700/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
+                <button (click)="setTeamFormOptions(2, 'r')" class="bg-neutral-700 hover:bg-neutral-700/90 text-white flex items-center justify-center w-full gap-2 text-sm py-2 rounded-full outline-none">
                   <fa-icon [icon]="Default"></fa-icon>
                   <p class="font-semibold truncate">Default</p>
                 </button>
               </div>
               <!-- Icons -->
               <div class="bg-neutral-100 shadow-md px-4 py-2 rounded-full flex gap-1 flex-wrap justify-evenly">
-                @for (element of lastGames()?.phase2; track $index) {
+                @for (element of teamForm()?.phase2; track $index) {
                   @switch (element) {
                     @case ("w") {
                       <fa-icon class="text-green-600" [icon]="Win"></fa-icon>
@@ -296,30 +296,30 @@
     </div>
   </div>
 
-  @if (isLastGamesAddOpen()) {
+  @if (isTeamFormAddOpen()) {
     <app-team-form-add-modal
       [teamReference]="{ teamId: team.teamId, category: team.category}"
-      (updated)="loadLastGamesData()"
-      (close)="isLastGamesAddOpen.set(false)"
+      (updated)="loadTeamFormData()"
+      (close)="isTeamFormAddOpen.set(false)"
     ></app-team-form-add-modal>
   }
 
-  @if (isLastGamesOptionModalOpen()) {
+  @if (isTeamFormOptionModalOpen()) {
     <app-team-form-option-modal
-      [options]="lastGamesOption()!"
-      (updated)="loadLastGamesData()"
-      (close)="isLastGamesOptionModalOpen.set(false)"
+      [options]="teamFormOption()!"
+      (updated)="loadTeamFormData()"
+      (close)="isTeamFormOptionModalOpen.set(false)"
     ></app-team-form-option-modal>
   }
 
-  @if (isLastGamesConfirmOpen()) {
+  @if (isTeamFormConfirmOpen()) {
     <app-delete-confirmation-modal
       [message]="{
         section: 'Team Form',
         element: selectedTeam()!.name + ' form'
       }"
-      (confirm)="confirmDeleteLastGames(teamId)"
-      (close)="isLastGamesConfirmOpen.set(false); lastGamesOption.set(null)"
+      (confirm)="confirmDeleteTeamForm(teamId)"
+      (close)="isTeamFormConfirmOpen.set(false); teamFormOption.set(null)"
     ></app-delete-confirmation-modal>
   }
 
@@ -330,8 +330,8 @@
     <!-- Title -->
     <div class="flex gap-2 mb-2">
       <p class="text-2xl font-semibold">Match Results</p>
-      @if (results()) {
-        <button (click)="isResultsConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
+      @if (teamMatchResults()) {
+        <button (click)="isTeamMatchResultsConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
           <fa-icon [icon]="Delete"></fa-icon>
         </button>
       }
@@ -340,9 +340,9 @@
     <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
       <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
       <div class="p-5">
-        @if (!results()) {
-          <button (click)="isResultsAddOpen.set(true)" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full px-6 py-2 rounded-full">
-            <fa-icon [icon]="Add"></fa-icon> Add Results
+        @if (!teamMatchResults()) {
+          <button (click)="isTeamMatchResultsAddOpen.set(true)" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full px-6 py-2 rounded-full">
+            <fa-icon [icon]="Add"></fa-icon> Add Match Results
           </button>
         } @else {
           <div class="w-full flex flex-col lg:flex-row gap-5">
@@ -350,13 +350,13 @@
             <div class="w-full lg:w-1/2">
               <div class="flex gap-2 mb-2">
                 <p class="font-semibold text-lg">Phase 1</p>
-                <button (click)="setResultsOptions(1, results()?.phase1!.length)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
+                <button (click)="setTeamMatchResultsOptions(1, teamMatchResults()?.phase1!.length)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
                   <fa-icon [icon]="Edit"></fa-icon>
                 </button>
               </div>
               <!-- Results -->
               <div class="flex flex-wrap justify-center gap-2">
-                @for (result of results()?.phase1; track $index) {
+                @for (result of teamMatchResults()?.phase1; track $index) {
                   <div class="border rounded-xl min-w-11 text-center overflow-hidden" [style.borderColor]="team.color.c1">
                     <p class="text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">F{{ $index + 1 }}</p>
                     @if (result != null) {
@@ -372,13 +372,13 @@
             <div class="w-full lg:w-1/2">
               <div class="flex gap-2 mb-2">
                 <p class="font-semibold text-lg">Phase 2</p>
-                <button (click)="setResultsOptions(2, results()?.phase2!.length)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
+                <button (click)="setTeamMatchResultsOptions(2, teamMatchResults()?.phase2!.length)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
                   <fa-icon [icon]="Edit"></fa-icon>
                 </button>
               </div>
               <!-- Results -->
               <div class="flex flex-wrap justify-center gap-2">
-                @for (result of results()?.phase2; track $index) {
+                @for (result of teamMatchResults()?.phase2; track $index) {
                   <div class="border rounded-xl min-w-11 text-center overflow-hidden" [style.borderColor]="team.color.c1">
                     <p class="text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">F{{ $index + 1 }}</p>
                     @if (result != null) {
@@ -396,30 +396,30 @@
     </div>
   </div>
 
-  @if (isResultsAddOpen()) {
+  @if (isTeamMatchResultsAddOpen()) {
     <app-team-match-results-add-modal
       [teamReference]="{ teamId: team.teamId, category: team.category }"
-      (added)="loadResultsData()"
-      (close)="isResultsAddOpen.set(false)"
+      (added)="loadTeamMatchResultsData()"
+      (close)="isTeamMatchResultsAddOpen.set(false)"
     ></app-team-match-results-add-modal>
   }
 
-  @if (isResultsSetModalOpen()) {
+  @if (isTeamMatchResultsSetModalOpen()) {
     <app-team-match-results-update-modal
-      [resultsReference]="resultsOptions()!"
-      (updated)="loadResultsData()"
-      (close)="isResultsSetModalOpen.set(false)"
+      [resultsReference]="teamMatchResultsOptions()!"
+      (updated)="loadTeamMatchResultsData()"
+      (close)="isTeamMatchResultsSetModalOpen.set(false)"
     ></app-team-match-results-update-modal>
   }
 
-  @if (isResultsConfirmOpen()) {
+  @if (isTeamMatchResultsConfirmOpen()) {
     <app-delete-confirmation-modal
       [message]="{
-        section: 'Results',
-        element: selectedTeam()!.name + ' results'
+        section: 'Match Results',
+        element: selectedTeam()!.name + ' match results'
       }"
-      (confirm)="confirmDeleteResults(teamId)"
-      (close)="isResultsConfirmOpen.set(false)"
+      (confirm)="confirmDeleteTeamMatchResults(teamId)"
+      (close)="isTeamMatchResultsConfirmOpen.set(false)"
     ></app-delete-confirmation-modal>
   }
 
@@ -430,8 +430,8 @@
     <!-- Title -->
     <div class="flex gap-2 mb-2">
       <p class="text-2xl font-semibold">Performance</p>
-      @if (performance()) {
-        <button (click)="isPerformanceConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
+      @if (teamPerformance()) {
+        <button (click)="isTeamPerformanceConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
           <fa-icon [icon]="Delete"></fa-icon>
         </button>
       }
@@ -440,8 +440,8 @@
     <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
       <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
       <div class="p-5">
-        @if (!performance()) {
-          <button (click)="isPerformanceAddOpen.set(true)" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full px-6 py-2 rounded-full">
+        @if (!teamPerformance()) {
+          <button (click)="isTeamPerformanceAddOpen.set(true)" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full px-6 py-2 rounded-full">
             <fa-icon [icon]="Add"></fa-icon> Add Performance
           </button>
         } @else {
@@ -450,7 +450,7 @@
             <div class="w-full lg:w-1/2">
               <div class="flex gap-2 mb-2">
                 <p class="font-semibold text-lg">Phase 1</p>
-                <button (click)="setPerformanceOptions(1)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
+                <button (click)="setTeamPerformanceOptions(1)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
                   <fa-icon [icon]="Edit"></fa-icon>
                 </button>
               </div>
@@ -458,42 +458,42 @@
               <div class="flex justify-around gap-1">
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">Points</p>
-                  <p class="font-semibold">{{ performance()!.phase1.w * 3 + performance()!.phase1.d - performance()!.phase1.sanction }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase1.w * 3 + teamPerformance()!.phase1.d - teamPerformance()!.phase1.sanction }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">Played</p>
-                  <p class="font-semibold">{{ performance()!.phase1.w + performance()!.phase1.d + performance()!.phase1.l }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase1.w + teamPerformance()!.phase1.d + teamPerformance()!.phase1.l }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">W</p>
-                  <p class="font-semibold">{{ performance()!.phase1.w }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase1.w }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">D</p>
-                  <p class="font-semibold">{{ performance()!.phase1.d }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase1.d }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">L</p>
-                  <p class="font-semibold">{{ performance()!.phase1.l }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase1.l }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">GF</p>
-                  <p class="font-semibold">{{ performance()!.phase1.gf }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase1.gf }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">GA</p>
-                  <p class="font-semibold">{{ performance()!.phase1.ga }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase1.ga }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">GD</p>
-                  <p class="font-semibold">{{ (performance()!.phase1.gf - performance()!.phase1.ga) > 0 ? '+' + (performance()!.phase1.gf - performance()!.phase1.ga) : performance()!.phase1.gf - performance()!.phase1.ga }}</p>
+                  <p class="font-semibold">{{ (teamPerformance()!.phase1.gf - teamPerformance()!.phase1.ga) > 0 ? '+' + (teamPerformance()!.phase1.gf - teamPerformance()!.phase1.ga) : teamPerformance()!.phase1.gf - teamPerformance()!.phase1.ga }}</p>
                 </div>
               </div>
               <!-- Extras -->
-              @if (performance()!.phase1.sanction) {
+              @if (teamPerformance()!.phase1.sanction) {
                 <div class="bg-neutral-200 h-0.5 my-2 rounded-full"></div>
                 <div class="bg-red-100 border-red-500 text-red-700 border w-1/2 rounded-full py-0.5 text-center">
-                  <p>Sanction: <b>-{{ performance()!.phase1.sanction }}</b></p>
+                  <p>Sanction: <b>-{{ teamPerformance()!.phase1.sanction }}</b></p>
                 </div>
               }
             </div>
@@ -501,7 +501,7 @@
             <div class="w-full lg:w-1/2">
               <div class="flex gap-2 mb-2">
                 <p class="font-semibold text-lg">Phase 2</p>
-                <button (click)="setPerformanceOptions(2)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
+                <button (click)="setTeamPerformanceOptions(2)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
                   <fa-icon [icon]="Edit"></fa-icon>
                 </button>
               </div>
@@ -509,49 +509,49 @@
               <div class="flex justify-around gap-1">
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">Points</p>
-                  <p class="font-semibold">{{ performance()!.phase2.w * 3 + performance()!.phase2.d - performance()!.phase2.sanction + performance()!.phase2.addition }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase2.w * 3 + teamPerformance()!.phase2.d - teamPerformance()!.phase2.sanction + teamPerformance()!.phase2.addition }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">Played</p>
-                  <p class="font-semibold">{{ performance()!.phase2.w + performance()!.phase2.d + performance()!.phase2.l }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase2.w + teamPerformance()!.phase2.d + teamPerformance()!.phase2.l }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">W</p>
-                  <p class="font-semibold">{{ performance()!.phase2.w }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase2.w }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">D</p>
-                  <p class="font-semibold">{{ performance()!.phase2.d }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase2.d }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">L</p>
-                  <p class="font-semibold">{{ performance()!.phase2.l }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase2.l }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">GF</p>
-                  <p class="font-semibold">{{ performance()!.phase2.gf }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase2.gf }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">GA</p>
-                  <p class="font-semibold">{{ performance()!.phase2.ga }}</p>
+                  <p class="font-semibold">{{ teamPerformance()!.phase2.ga }}</p>
                 </div>
                 <div class="border rounded-xl w-full text-center overflow-hidden" [style.borderColor]="team.color.c1">
                   <p class="text-gray-500 text-xs py-0.5 font-semibold" [style.backgroundColor]="team.color.c1" [style.color]="team.color.c2">GD</p>
-                  <p class="font-semibold">{{ (performance()!.phase2.gf - performance()!.phase2.ga) > 0 ? '+' + (performance()!.phase2.gf - performance()!.phase2.ga) : performance()!.phase2.gf - performance()!.phase2.ga }}</p>
+                  <p class="font-semibold">{{ (teamPerformance()!.phase2.gf - teamPerformance()!.phase2.ga) > 0 ? '+' + (teamPerformance()!.phase2.gf - teamPerformance()!.phase2.ga) : teamPerformance()!.phase2.gf - teamPerformance()!.phase2.ga }}</p>
                 </div>
               </div>
               <!-- Extras -->
-              @if (performance()!.phase2.sanction || performance()!.phase2.addition) {
+              @if (teamPerformance()!.phase2.sanction || teamPerformance()!.phase2.addition) {
                 <div class="bg-neutral-200 h-0.5 my-2 rounded-full"></div>
                 <div class="flex gap-1">
-                  @if (performance()!.phase2.sanction) {
+                  @if (teamPerformance()!.phase2.sanction) {
                     <div class="bg-red-100 border-red-500 text-red-700 border w-1/2 rounded-full py-0.5 text-center">
-                      <p>Sanction: <b>-{{ performance()!.phase2.sanction }}</b></p>
+                      <p>Sanction: <b>-{{ teamPerformance()!.phase2.sanction }}</b></p>
                     </div>
                   }
-                  @if (performance()!.phase2.addition) {
+                  @if (teamPerformance()!.phase2.addition) {
                     <div class="bg-green-100 border-green-600 text-green-700 border w-1/2 rounded-full py-0.5 text-center">
-                      <p>Addition: <b>+{{ performance()!.phase2.addition }}</b></p>
+                      <p>Addition: <b>+{{ teamPerformance()!.phase2.addition }}</b></p>
                     </div>
                   }
                 </div>
@@ -563,30 +563,30 @@
     </div>
   </div>
 
-  @if (isPerformanceAddOpen()) {
+  @if (isTeamPerformanceAddOpen()) {
     <app-team-performance-add-modal
       [options]="{ teamId: team.teamId, category: team.category, name: team.name}"
-      (added)="loadPerformaceData()"
-      (close)="isPerformanceAddOpen.set(false)"
+      (added)="loadTeamPerformanceData()"
+      (close)="isTeamPerformanceAddOpen.set(false)"
     ></app-team-performance-add-modal>
   }
 
-  @if (isPerformanceUpdateModal()) {
+  @if (isTeamPerformanceUpdateModal()) {
     <app-team-performance-update-modal
-      [options]="performanceOptions()!"
-      (updated)="loadPerformaceData()"
-      (close)="isPerformanceUpdateModal.set(false)"
+      [options]="teamPerformanceOptions()!"
+      (updated)="loadTeamPerformanceData()"
+      (close)="isTeamPerformanceUpdateModal.set(false)"
     ></app-team-performance-update-modal>
   }
 
-  @if (isPerformanceConfirmOpen()) {
+  @if (isTeamPerformanceConfirmOpen()) {
     <app-delete-confirmation-modal
       [message]="{
         section: 'Performance',
         element: selectedTeam()!.name + ' performance'
       }"
-      (confirm)="confirmDeletePerformance(teamId)"
-      (close)="isPerformanceConfirmOpen.set(false)"
+      (confirm)="confirmDeleteTeamPerformance(teamId)"
+      (close)="isTeamPerformanceConfirmOpen.set(false)"
     ></app-delete-confirmation-modal>
   }
 
@@ -597,11 +597,11 @@
     <!-- Title -->
     <div class="flex gap-2 mb-2">
       <p class="text-2xl font-semibold">Details</p>
-      @if (information()) {
-        <button (click)="isInformationModalOpen.set(true)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
+      @if (teamDetails()) {
+        <button (click)="isTeamDetailsModalOpen.set(true)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
           <fa-icon [icon]="Edit"></fa-icon>
         </button>
-        <button (click)="isInformationConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
+        <button (click)="isTeamDetailsConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
           <fa-icon [icon]="Delete"></fa-icon>
         </button>
       }
@@ -610,16 +610,16 @@
     <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
       <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
       <div class="p-5">
-        @if (!information()) {
-          <button (click)="isInformationModalOpen.set(true)" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full px-6 py-2 rounded-full">
-            <fa-icon [icon]="Add"></fa-icon> Add Information
+        @if (!teamDetails()) {
+          <button (click)="isTeamDetailsModalOpen.set(true)" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full px-6 py-2 rounded-full">
+            <fa-icon [icon]="Add"></fa-icon> Add Details
           </button>
         } @else {
           <div class="flex flex-col gap-4">
             <!-- Description -->
             <div class="bg-neutral-100 p-5 rounded-3xl shadow-md">
               <p class="text-neutral-500 text-xs mb-1">Description:</p>
-              <p class="text-justify">{{ information()!.description }}</p>
+              <p class="text-justify">{{ teamDetails()!.description }}</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
               <!-- Founded -->
@@ -629,7 +629,7 @@
                 </div>
                 <div>
                   <p class="text-neutral-500 text-xs">Founded</p>
-                  <p class="font-semibold">{{ information()!.founded }}</p>
+                  <p class="font-semibold">{{ teamDetails()!.founded }}</p>
                 </div>
               </div>
               <!-- Website -->
@@ -639,8 +639,8 @@
                 </div>
                 <div>
                   <p class="text-neutral-500 text-xs">Official Website</p>
-                  @if (information()!.website) {
-                    <a [href]="information()!.website" class="font-semibold text-blue-600">{{ information()!.website }}</a>
+                  @if (teamDetails()!.website) {
+                    <a [href]="teamDetails()!.website" class="font-semibold text-blue-600">{{ teamDetails()!.website }}</a>
                   } @else {
                     <p class="font-semibold">There isn't an official website</p>
                   }
@@ -653,34 +653,34 @@
                 </div>
                 <div class="w-full flex gap-4 items-center justify-center">
                   @if (
-                    information()?.social?.facebook ||
-                    information()?.social?.instagram ||
-                    information()?.social?.twitter ||
-                    information()?.social?.youtube ||
-                    information()?.social?.tiktok
+                    teamDetails()?.social?.facebook ||
+                    teamDetails()?.social?.instagram ||
+                    teamDetails()?.social?.twitter ||
+                    teamDetails()?.social?.youtube ||
+                    teamDetails()?.social?.tiktok
                   ) {
-                    @if (information()?.social?.facebook) {
-                      <a [href]="information()!.social.facebook" class="bg-blue-700 text-white flex items-center justify-center rounded-full h-8 w-8">
+                    @if (teamDetails()?.social?.facebook) {
+                      <a [href]="teamDetails()!.social.facebook" class="bg-blue-700 text-white flex items-center justify-center rounded-full h-8 w-8">
                         <fa-icon [icon]="Facebook"></fa-icon>
                       </a>
                     }
-                    @if (information()?.social?.instagram) {
-                      <a [href]="information()!.social.instagram" class="bg-gradient-to-tr from-yellow-400 to-pink-500 text-white flex items-center justify-center rounded-full h-8 w-8">
+                    @if (teamDetails()?.social?.instagram) {
+                      <a [href]="teamDetails()!.social.instagram" class="bg-gradient-to-tr from-yellow-400 to-pink-500 text-white flex items-center justify-center rounded-full h-8 w-8">
                         <fa-icon [icon]="Instagram"></fa-icon>
                       </a>
                     }
-                    @if (information()?.social?.twitter) {
-                      <a [href]="information()!.social.twitter" class="bg-black text-white flex items-center justify-center rounded-full h-8 w-8">
+                    @if (teamDetails()?.social?.twitter) {
+                      <a [href]="teamDetails()!.social.twitter" class="bg-black text-white flex items-center justify-center rounded-full h-8 w-8">
                         <fa-icon [icon]="Twitter"></fa-icon>
                       </a>
                     }
-                    @if (information()?.social?.youtube) {
-                      <a [href]="information()!.social.youtube" class="bg-red-600 text-white flex items-center justify-center rounded-full h-8 w-8">
+                    @if (teamDetails()?.social?.youtube) {
+                      <a [href]="teamDetails()!.social.youtube" class="bg-red-600 text-white flex items-center justify-center rounded-full h-8 w-8">
                         <fa-icon [icon]="Youtube"></fa-icon>
                       </a>
                     }
-                    @if (information()?.social?.tiktok) {
-                      <a [href]="information()!.social.tiktok" class="bg-neutral-800 text-white flex items-center justify-center rounded-full h-8 w-8">
+                    @if (teamDetails()?.social?.tiktok) {
+                      <a [href]="teamDetails()!.social.tiktok" class="bg-neutral-800 text-white flex items-center justify-center rounded-full h-8 w-8">
                         <fa-icon [icon]="Tiktok"></fa-icon>
                       </a>
                     }
@@ -696,23 +696,23 @@
     </div>
   </div>
 
-  @if (isInformationModalOpen()) {
+  @if (isTeamDetailsModalOpen()) {
     <app-team-details-modal
-      [information]="information()!"
+      [information]="teamDetails()!"
       [teamId]="teamId"
-      (updated)="loadInformationData()"
-      (close)="isInformationModalOpen.set(false)"
+      (updated)="loadTeamDetailsData()"
+      (close)="isTeamDetailsModalOpen.set(false)"
     ></app-team-details-modal>
   }
 
-  @if (isInformationConfirmOpen()) {
+  @if (isTeamDetailsConfirmOpen()) {
     <app-delete-confirmation-modal
       [message]="{
-        section: 'Information',
-        element: selectedTeam()!.name + ' information'
+        section: 'Details',
+        element: selectedTeam()!.name + ' details'
       }"
-      (confirm)="confirmDeleteInformation(teamId)"
-      (close)="isInformationConfirmOpen.set(false)"
+      (confirm)="confirmDeleteTeamDetails(teamId)"
+      (close)="isTeamDetailsConfirmOpen.set(false)"
     ></app-delete-confirmation-modal>
   }
 }
