@@ -2,7 +2,7 @@
   <div class="max-w-screen-lg mx-auto px-3 sm:px-5 py-5 flex flex-col gap-4 duration-500 select-none">
     <!-- Title -->
     <div class="text-center">
-      <h1 class="font-bold text-4xl">Team Profile</h1>
+      <h1 class="font-bold text-4xl"><fa-icon [icon]="Team"></fa-icon> Team Profile</h1>
       <p class="text-neutral-500">Manage and view detailed team information</p>
     </div>
     <!-- Team -->
@@ -37,9 +37,8 @@
     </div>
     <!-- Description -->
     <div class="grid grid-cols-4 gap-4">
-      <!-- Details -->
+      <!-- Information -->
       <div class="col-span-3">
-        <p class="text-2xl font-semibold mb-2"><fa-icon [icon]="Details"></fa-icon> Details</p>
         <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
           <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
           <div class="p-4">
@@ -96,7 +95,6 @@
       </div>
       <!-- Colors -->
       <div class="col-span-1">
-        <p class="text-2xl font-semibold mb-2"><fa-icon [icon]="Color"></fa-icon> Colors</p>
         <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
           <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
           <div class="p-4 grid grid-cols-2 gap-5 my-0.5">
@@ -113,34 +111,31 @@
       </div>
     </div>
     <!-- Stadium -->
-    <div>
-      <p class="text-2xl font-semibold mb-2"><fa-icon [icon]="Stadium"></fa-icon> Stadium</p>
-      <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
-        <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
-        @if (stadium()) {
-          <div class="flex gap-5 p-5">
-            <div class="w-1/3">
-              <img [src]="stadium()!.image" alt="TEAM-stadium" class="w-full h-40 object-cover rounded-lg">
-            </div>
-            <div class="text-neutral-700 w-2/3 flex flex-col justify-center">
-              <p class="text-neutral-500 text-xs">StadiumID: {{ stadium()!.stadiumId }}</p>
-              <div class="text-2xl font-semibold">{{ stadium()!.name }}</div>
-              <div class="grid grid-cols-2 gap-5 mt-4">
-                <div class="bg-neutral-100 rounded-xl grid-cols-1 p-3 text-center">
-                  <fa-icon [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" [icon]="Location"></fa-icon>
-                  <p class="text-neutral-500 text-sm">Location</p>
-                  <p class="text-neutral-700 text-lg font-semibold">{{ stadium()!.location }}</p>
-                </div>
-                <div class="bg-neutral-100 rounded-lg grid-cols-1 p-3 text-center">
-                  <fa-icon [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" [icon]="People"></fa-icon>
-                  <p class="text-neutral-500 text-sm">Capacity</p>
-                  <p class="text-neutral-700 text-lg font-semibold">{{ stadium()!.capacity }}</p>
-                </div>
+    <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
+      <div class="h-4" [style.backgroundColor]="team.color.c1"></div>
+      @if (stadium()) {
+        <div class="flex gap-5 p-5">
+          <div class="w-1/3">
+            <img [src]="stadium()!.image" alt="TEAM-stadium" class="w-full h-40 object-cover rounded-lg">
+          </div>
+          <div class="text-neutral-700 w-2/3 flex flex-col justify-center">
+            <p class="text-neutral-500 text-xs">StadiumID: {{ stadium()!.stadiumId }}</p>
+            <div class="text-2xl font-semibold">{{ stadium()!.name }}</div>
+            <div class="grid grid-cols-2 gap-5 mt-4">
+              <div class="bg-neutral-100 rounded-xl grid-cols-1 p-3 text-center">
+                <fa-icon [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" [icon]="Location"></fa-icon>
+                <p class="text-neutral-500 text-sm">Location</p>
+                <p class="text-neutral-700 text-lg font-semibold">{{ stadium()!.location }}</p>
+              </div>
+              <div class="bg-neutral-100 rounded-lg grid-cols-1 p-3 text-center">
+                <fa-icon [style.color]="team.color.c2 === '#ffffff' ? team.color.c1 : team.color.c2" [icon]="People"></fa-icon>
+                <p class="text-neutral-500 text-sm">Capacity</p>
+                <p class="text-neutral-700 text-lg font-semibold">{{ stadium()!.capacity }}</p>
               </div>
             </div>
           </div>
-        }
-      </div>
+        </div>
+      }
     </div>
   </div>
 
@@ -189,12 +184,12 @@
   }
 
   <!-- ============================================= -->
-  <!-- ==================LastGames================== -->
+  <!-- =====================Form==================== -->
   <!-- ============================================= -->
   <div class="max-w-screen-lg mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
     <!-- Title -->
     <div class="flex gap-2 mb-2">
-      <p class="text-2xl font-semibold">LastGames</p>
+      <p class="text-2xl font-semibold">Form</p>
       @if (lastGames()) {
         <button (click)="isLastGamesConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
           <fa-icon [icon]="Delete"></fa-icon>
@@ -329,12 +324,12 @@
   }
 
   <!-- ============================================= -->
-  <!-- ==================Results==================== -->
+  <!-- ===============Match Results================= -->
   <!-- ============================================= -->
   <div class="max-w-screen-lg mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
     <!-- Title -->
     <div class="flex gap-2 mb-2">
-      <p class="text-2xl font-semibold">Results</p>
+      <p class="text-2xl font-semibold">Match Results</p>
       @if (results()) {
         <button (click)="isResultsConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white px-3 rounded-full text-sm duration-300">
           <fa-icon [icon]="Delete"></fa-icon>
@@ -596,12 +591,12 @@
   }
 
   <!-- ============================================= -->
-  <!-- =================Information================= -->
+  <!-- ===================Details=================== -->
   <!-- ============================================= -->
   <div class="max-w-screen-lg mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
     <!-- Title -->
     <div class="flex gap-2 mb-2">
-      <p class="text-2xl font-semibold">Information</p>
+      <p class="text-2xl font-semibold">Details</p>
       @if (information()) {
         <button (click)="isInformationModalOpen.set(true)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white px-3 rounded-full text-sm duration-300">
           <fa-icon [icon]="Edit"></fa-icon>
