@@ -1,18 +1,18 @@
 import { Component, inject, signal } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPenToSquare, faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { LeaguesApiService } from '../../services/leagues-api.service';
 import { League } from '../../interfaces/league';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LeagueModalComponent } from "../../components/league-modal/league-modal.component";
-import { DeleteConfirmationModalComponent } from "../../components/delete-confirmation-modal/delete-confirmation-modal.component";
 import { TeamsCPApiService } from '../../services/teams-cp-api.service';
 import { TeamCP } from '../../interfaces/team-cp';
 import { combineLatest } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-leagues',
-  imports: [FontAwesomeModule, LeagueModalComponent, DeleteConfirmationModalComponent],
+  imports: [FontAwesomeModule, LeagueModalComponent, RouterLink],
   template: `
     <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
       <!-- Title -->
@@ -28,8 +28,8 @@ import { combineLatest } from 'rxjs';
       <!-- Content -->
       <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">
         @for (league of leagues; track $index) {
-          <div class="bg-white rounded-3xl shadow-md hover:shadow-xl duration-300 flex flex-col gap-2 p-5">
-            <img [src]="league.image" [alt]="'Flag-' + $index" class="rounded-lg">
+          <div [routerLink]="['/league',league.leagueId]" class="bg-white rounded-3xl shadow-md hover:shadow-xl duration-300 flex flex-col gap-2 p-5 cursor-pointer">
+            <img [src]="league.image" [alt]="league.alt" class="rounded-lg">
             <div>
               <div class="flex justify-between">
                 <p class="bg-crimson text-white font-semibold text-xs px-3 py-0.5 rounded-full w-fit">{{ league.leagueId }}</p>
@@ -49,35 +49,13 @@ import { combineLatest } from 'rxjs';
                 </div>
               }
             </div>
-            <div class="flex gap-2 mt-2">
-              <button (click)="onEdit(league)" class="hover:bg-neutral-100/80 text-neutral-600 border w-full rounded-full py-2 text-sm duration-300">
-                <fa-icon [icon]="Edit"></fa-icon> Edit
-              </button>
-              <button (click)="onDelete(league)" class="bg-red-600 hover:bg-red-600/80 text-white rounded-full px-4 py-2 text-sm duration-300">
-                <fa-icon [icon]="Delete"></fa-icon>
-              </button>
-            </div>
           </div>
         }
       </div>
     </div>
 
-    @if (isLeagueModalOpen()) {
-      <app-league-modal
-        [league]="selectedLeague()"
-        (close)="isLeagueModalOpen.set(false)"
-      ></app-league-modal>
-    }
-
-    @if (isConfirmOpen()) {
-      <app-delete-confirmation-modal
-        [message]="{
-          section: 'League',
-          element: selectedLeague()!.location
-        }"
-        (confirm)="confirmDelete()"
-        (close)="isConfirmOpen.set(false)"
-      ></app-delete-confirmation-modal>
+    @if (showAddLeagueModal()) {
+      <app-league-modal (close)="showAddLeagueModal.set(false)"></app-league-modal>
     }
   `,
   styles: ``,
@@ -88,13 +66,9 @@ export class LeaguesComponent {
   leagues: League[] = [];
   teamsCP: TeamCP[] = [];
 
-  isLeagueModalOpen = signal(false);
-  isConfirmOpen = signal(false);
-  selectedLeague = signal<League | null>(null);
+  showAddLeagueModal = signal(false);
 
   Add = faPlus;
-  Edit = faPenToSquare;
-  Delete = faTrashCan;
 
   constructor() {
     this.leaguesService.getLeagues();
@@ -112,24 +86,6 @@ export class LeaguesComponent {
   }
 
   onAdd() {
-    this.selectedLeague.set(null);
-    this.isLeagueModalOpen.set(true);
-  }
-
-  onEdit(league: League) {
-    this.selectedLeague.set(league);
-    this.isLeagueModalOpen.set(true);
-  }
-
-  onDelete(league: League) {
-    this.selectedLeague.set(league);
-    this.isConfirmOpen.set(true);
-  }
-
-  confirmDelete() {
-    if (this.selectedLeague()?.leagueId) {
-      this.leaguesService.deleteLeague(this.selectedLeague()!.leagueId!);
-    }
-    this.isConfirmOpen.set(false);
+    this.showAddLeagueModal.set(true);
   }
 }

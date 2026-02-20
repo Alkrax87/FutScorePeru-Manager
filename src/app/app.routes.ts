@@ -9,6 +9,7 @@ import { TeamsComponent } from './pages/teams/teams.component';
 import { TeamPageComponent } from './pages/shared/team-page/team-page.component';
 import { ManagersComponent } from './pages/managers/managers.component';
 import { LeaguesComponent } from './pages/leagues/leagues.component';
+import { LeaguePageComponent } from './pages/shared/league-page/league-page.component';
 import { TeamsCPComponent } from './pages/teams-cp/teams-cp.component';
 
 export const routes: Routes = [
@@ -23,6 +24,7 @@ export const routes: Routes = [
   { path: 'team/:category/:teamId', component: TeamPageComponent },
   { path: 'managers', component: ManagersComponent },
   { path: 'leagues', component: LeaguesComponent },
+  { path: 'league/:leagueId', component: LeaguePageComponent },
   { path: 'teamsCP', component: TeamsCPComponent },
   { path: '**', redirectTo: 'home' },
 ];
