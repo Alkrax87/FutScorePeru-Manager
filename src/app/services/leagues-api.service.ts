@@ -22,6 +22,10 @@ export class LeaguesApiService {
     });
   }
 
+  getLeagueByLeagueId(leagueId: string) {
+    return this.http.get<League>(this.backendUrl + 'leagues/leagueId/' + leagueId);
+  }
+
   addLeague(league: League) {
     this.http.post(this.backendUrl + 'leagues', league).subscribe({
       next: () => this.getLeagues(),

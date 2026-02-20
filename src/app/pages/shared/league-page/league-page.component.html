@@ -1,0 +1,88 @@
+@if (league) {
+  <div class="max-w-screen-lg mx-auto px-3 sm:px-5 py-5 flex flex-col gap-4 duration-500 select-none">
+    <!-- Title -->
+    <div class="text-center">
+      <h1 class="font-bold text-4xl"><fa-icon [icon]="League"></fa-icon> League Profile</h1>
+      <p class="text-neutral-500">Manage and view detailed league information</p>
+    </div>
+    <!-- League -->
+    <div class="bg-white rounded-3xl overflow-hidden shadow-md">
+      <div class="h-4" [style.backgroundColor]="league.color.c1"></div>
+      <div class="flex gap-5 p-5">
+        <!-- Left -->
+        <div class="w-full">
+          <div class="flex gap-4">
+            <img [src]="league.image" [alt]="league.alt" class="object-cover rounded-lg h-28">
+            <div class="flex flex-col justify-center">
+              <p class="text-neutral-500 text-xs">ID: {{ league.leagueId }}</p>
+              <p class="text-3xl font-semibold">{{ league.location }} <span class="text-neutral-500 font-normal text-xs">({{ league.alt.split('-', 1) }})</span></p>
+            </div>
+          </div>
+        </div>
+        <!-- Right -->
+        <div class="flex flex-col justify-center gap-2">
+          <button (click)="isLeagueModalOpen.set(true)" class="bg-yellow-500 hover:bg-yellow-500/80 text-white w-32 rounded-full py-2 text-sm duration-300">
+            <fa-icon [icon]="Edit"></fa-icon>&nbsp; Edit
+          </button>
+          <button (click)="isConfirmOpen.set(true)" class="bg-red-600 hover:hover:bg-red-600/80 text-white w-32 rounded-full py-2 text-sm duration-300">
+            <fa-icon [icon]="Delete"></fa-icon>&nbsp; Delete
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Description -->
+    <div class="grid grid-cols-4 gap-4">
+      <!-- Teams -->
+      <div class="col-span-3">
+        <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
+          <div class="h-4" [style.backgroundColor]="league.color.c1"></div>
+          <div class="p-4">
+            <div class="flex justify-evenly gap-10">
+              @for (team of league.teams; track $index) {
+                <div class="flex items-center gap-2">
+                  <img [src]="getTeam(team)?.image ? getTeam(team)?.image : './assets/images/no-team.webp'" alt="" class="w-11 h-11">
+                  <p class="truncate">{{ getTeam(team)?.name }}</p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Colors -->
+      <div class="col-span-1">
+        <div class="bg-white w-full rounded-3xl overflow-hidden shadow-md">
+          <div class="h-4" [style.backgroundColor]="league.color.c1"></div>
+          <div class="p-4 grid grid-cols-2 gap-5 my-0.5">
+            <div class="flex items-center gap-1">
+              <div [style.backgroundColor]="league.color.c1" class="border shadow-md min-w-10 h-10 rounded-full"></div>
+              <p class="text-neutral-700 text-sm font-semibold">{{ league.color.c1 }}</p>
+            </div>
+            <div class="flex items-center gap-1">
+              <div [style.backgroundColor]="league.color.c2" class="border shadow-md min-w-10 h-10 rounded-full"></div>
+              <p class="text-neutral-700 text-sm font-semibold">{{ league.color.c2 }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if (isLeagueModalOpen()) {
+    <app-league-modal
+      [league]="selectedLeague()"
+      (updated)="updateLeagueData($event)"
+      (close)="isLeagueModalOpen.set(false)"
+    ></app-league-modal>
+  }
+
+  @if (isConfirmOpen()) {
+    <app-delete-confirmation-modal
+      [message]="{
+        section: 'League',
+        element: selectedLeague()!.location
+      }"
+      (confirm)="confirmDelete()"
+      (close)="isConfirmOpen.set(false)"
+    ></app-delete-confirmation-modal>
+  }
+}

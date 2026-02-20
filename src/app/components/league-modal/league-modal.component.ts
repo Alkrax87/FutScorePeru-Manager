@@ -154,6 +154,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class LeagueModalComponent {
   @Input() league: League | null = null;
+  @Output() updated = new EventEmitter<League>();
   @Output() close = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
@@ -245,7 +246,7 @@ export class LeagueModalComponent {
 
     if (this.league?.leagueId) {
       this.leaguesService.updateLeague(this.league.leagueId!, formLeague);
-      this.close.emit();
+      this.updated.emit(formLeague);
     } else {
       this.leaguesService.addLeague(formLeague);
       this.close.emit();
