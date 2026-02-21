@@ -700,6 +700,7 @@
     <app-team-details-modal
       [information]="teamDetails()!"
       [teamId]="teamId"
+      [category]="category"
       (updated)="loadTeamDetailsData()"
       (close)="isTeamDetailsModalOpen.set(false)"
     ></app-team-details-modal>

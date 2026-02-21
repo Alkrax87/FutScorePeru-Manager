@@ -1,5 +1,6 @@
 export interface TeamDetails {
   teamId: string;
+  category: number;
   description: string;
   founded: number;
   website?: string;

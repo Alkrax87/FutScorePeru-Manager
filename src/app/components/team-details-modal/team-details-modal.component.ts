@@ -102,6 +102,7 @@ import { faFacebookF, faInstagram, faTiktok, faXTwitter, faYoutube } from '@fort
 })
 export class TeamDetailsModalComponent {
   @Input() teamId: string | null = null;
+  @Input() category: number | null = null;
   @Input() information: TeamDetails | null = null;
   @Output() updated = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
@@ -111,6 +112,7 @@ export class TeamDetailsModalComponent {
 
   form = this.fb.group({
     teamId: ['', Validators.required],
+    category: [null as number | null, Validators.required],
     description: ['', Validators.required],
     founded: [null as number | null, [Validators.required, Validators.min(1900)]],
     website: [''],
@@ -137,7 +139,7 @@ export class TeamDetailsModalComponent {
     if (this.information) {
       this.form.patchValue(this.information);
     } else {
-      this.form.patchValue({ teamId: this.teamId });
+      this.form.patchValue({ teamId: this.teamId, category: this.category });
     }
   }
 
