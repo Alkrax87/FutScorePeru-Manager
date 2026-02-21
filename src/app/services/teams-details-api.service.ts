@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { TeamDetails } from '../interfaces/teamDetails';
+import { HttpClient } from '@angular/common/http';
 import { Environments } from '../environment/environments';
+import { TeamDetails } from '../interfaces/teamDetails';
 
 @Injectable({
   providedIn: 'root',
@@ -12,18 +12,18 @@ export class TeamsDetailsApiService {
   private http = inject(HttpClient);
 
   getTeamsDetails(teamId: string) {
-    return this.http.get<TeamDetails>(this.backendUrl + 'details/club/' + teamId);
+    return this.http.get<TeamDetails>(this.backendUrl + 'teamsDetails/teamId/' + teamId);
   }
 
   addTeamDetails(teamDetails: TeamDetails) {
-    return this.http.post<TeamDetails>(this.backendUrl + 'details/club', teamDetails);
+    return this.http.post<TeamDetails>(this.backendUrl + 'teamsDetails', teamDetails);
   }
 
   updateTeamDetails(teamId: string, teamDetails: TeamDetails) {
-    return this.http.put(this.backendUrl + 'details/club/' + teamId, teamDetails);
+    return this.http.put(this.backendUrl + 'teamsDetails/' + teamId, teamDetails);
   }
 
   deleteTeamDetails(teamId: string) {
-    return this.http.delete(this.backendUrl + 'details/club/' + teamId);
+    return this.http.delete(this.backendUrl + 'teamsDetails/' + teamId);
   }
 }
