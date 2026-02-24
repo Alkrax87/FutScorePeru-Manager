@@ -93,7 +93,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
             <!-- Tags -->
             <div formArrayName="tags">
               <label class="text-gold text-sm font-semibold">
-                Phases
+                Tags
                 <button (click)="addTag()" type="button" class="bg-green-700 hover:bg-green-700/90 text-white rounded-full px-2 py-1 text-sm duration-300">
                   <fa-icon [icon]="Add"></fa-icon>
                 </button>

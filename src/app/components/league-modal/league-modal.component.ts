@@ -19,7 +19,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
             <h3 class="text-white text-xl font-semibold">Edit League</h3>
             <p class="text-neutral-200 text-sm">Update the league details below.</p>
           } @else {
-            <h3 class="text-white text-xl font-semibold">Add New League</h3>
+            <h3 class="text-white text-xl font-semibold">Add League</h3>
             <p class="text-neutral-200 text-sm">Enter the details for the new league below.</p>
           }
           @if (errorMessage) {
@@ -141,7 +141,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                 </button>
               } @else {
                 <button type="submit" [disabled]="form!.invalid" class="bg-green-700 hover:bg-green-700/90 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
-                  <fa-icon [icon]="Add"></fa-icon>&nbsp; Add Team
+                  <fa-icon [icon]="Add"></fa-icon>&nbsp; Add League
                 </button>
               }
             </div>
