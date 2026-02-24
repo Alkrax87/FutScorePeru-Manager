@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { League } from '../../../interfaces/league';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faFlag, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faCircle, faFlag, faLocationDot, faPenToSquare, faPlus, faTrashCan, faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LeaguesApiService } from '../../../services/leagues-api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -10,10 +10,13 @@ import { DeleteConfirmationModalComponent } from "../../../components/delete-con
 import { TeamsCPApiService } from '../../../services/teams-cp-api.service';
 import { TeamCP } from '../../../interfaces/team-cp';
 import { combineLatest } from 'rxjs';
+import { LeagueDetails } from '../../../interfaces/leagueDetails';
+import { LeagueDetailsModalComponent } from "../../../components/league-details-modal/league-details-modal.component";
+import { LeaguesDetailsApiService } from '../../../services/leagues-details-api.service';
 
 @Component({
   selector: 'app-league-page',
-  imports: [FontAwesomeModule, LeagueModalComponent, DeleteConfirmationModalComponent],
+  imports: [FontAwesomeModule, LeagueModalComponent, DeleteConfirmationModalComponent, LeagueDetailsModalComponent],
   templateUrl: './league-page.component.html',
   styles: ``,
 })
@@ -22,6 +25,7 @@ export class LeaguePageComponent {
   private route = inject(ActivatedRoute);
   private leaguesService = inject(LeaguesApiService);
   private teamsCPService = inject(TeamsCPApiService);
+  private leaguesDetailsService = inject(LeaguesDetailsApiService);
 
   teamsCP: TeamCP[] = [];
   leagueId!: string;
@@ -32,10 +36,19 @@ export class LeaguePageComponent {
   isConfirmOpen = signal(false);
   selectedLeague = signal<League | null>(null);
 
+  // LeagueDetails
+  leagueDetails = signal<LeagueDetails | undefined>(undefined);
+  isLeagueDetailsModalOpen = signal(false);
+  isLeagueDetailsConfirmOpen = signal(false);
+
   // Icons
   League = faFlag;
   Edit = faPenToSquare;
   Delete = faTrashCan;
+  Add = faPlus;
+  Flag = faFlag;
+  Location = faLocationDot;
+  Cup = faTrophy;
 
   constructor() {
     this.teamsCPService.getTeamsCP();
@@ -52,6 +65,7 @@ export class LeaguePageComponent {
       next: (data) => {
         this.league = data;
         this.selectedLeague.set(data);
+        this.loadLeagueDetailsData();
       },
       error: (err) => {
         console.error('Failed to load league data:', err.error.error);
@@ -74,5 +88,25 @@ export class LeaguePageComponent {
     this.leaguesService.deleteLeague(this.selectedLeague()!.leagueId!);
     this.isConfirmOpen.set(false);
     this.router.navigate(['leagues']);
+  }
+
+  // =============================================
+  // =================Main Details================
+  // =============================================
+  loadLeagueDetailsData() {
+    this.leaguesDetailsService.getLeagueDetails(this.leagueId).subscribe({
+      next: (data) => this.leagueDetails.set(data),
+      error: (err) => this.leagueDetails.set(undefined),
+    });
+  }
+
+  confirmDeleteLeagueDetails(leagueId: string) {
+    this.leaguesDetailsService.deleteLeagueDetails(leagueId).subscribe({
+      next: () => {
+        this.loadLeagueDetailsData();
+        this.isLeagueDetailsConfirmOpen.set(false);
+      },
+      error: (err) => {}
+    });
   }
 }
