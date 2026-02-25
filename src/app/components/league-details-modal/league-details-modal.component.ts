@@ -74,7 +74,7 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } fr
             <!-- Provincial Leagues -->
             <div formArrayName="provincialLeagues">
               <label class="text-gold text-sm font-semibold">
-                Tags
+                Province
                 <button (click)="addProvincialLeague()" type="button" class="bg-green-700 hover:bg-green-700/90 text-white rounded-full px-2 py-1 text-sm duration-300">
                   <fa-icon [icon]="Add"></fa-icon>
                 </button>
