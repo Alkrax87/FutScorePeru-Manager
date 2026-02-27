@@ -13,10 +13,11 @@ import { combineLatest } from 'rxjs';
 import { LeagueDetails } from '../../../interfaces/leagueDetails';
 import { LeagueDetailsModalComponent } from "../../../components/league-details-modal/league-details-modal.component";
 import { LeaguesDetailsApiService } from '../../../services/leagues-details-api.service';
+import { LeagueHistoricalChampionsModalComponent } from "../../../components/league-historical-champions-modal/league-historical-champions-modal.component";
 
 @Component({
   selector: 'app-league-page',
-  imports: [FontAwesomeModule, LeagueModalComponent, DeleteConfirmationModalComponent, LeagueDetailsModalComponent],
+  imports: [FontAwesomeModule, LeagueModalComponent, DeleteConfirmationModalComponent, LeagueDetailsModalComponent, LeagueHistoricalChampionsModalComponent],
   templateUrl: './league-page.component.html',
   styles: ``,
 })
@@ -40,6 +41,9 @@ export class LeaguePageComponent {
   leagueDetails = signal<LeagueDetails | undefined>(undefined);
   isLeagueDetailsModalOpen = signal(false);
   isLeagueDetailsConfirmOpen = signal(false);
+
+  // HistoricalChampions
+  isHistoricalChampionsModalOpen = signal(false);
 
   // Icons
   League = faFlag;
