@@ -30,22 +30,47 @@ import { combineLatest } from 'rxjs';
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @for (fixture of fixtures; track $index) {
           <div class="bg-white rounded-3xl shadow-md hover:shadow-xl duration-300">
-            <div class="p-4">
-              <div class="flex flex-col gap-4">
-                <div class="bg-crimson w-fit mx-auto px-6 py-1 rounded-full">
-                  <p class="text-white font-bold text-xl">LIGA {{ fixture.category }}</p>
+            <div class="relative overflow-hidden h-[152px] shadow-md rounded-t-3xl">
+              <div class="absolute w-full top-2">
+                <div class="flex flex-col items-center gap-1">
+                  @switch (fixture.category) {
+                    @case (1) {
+                      <div class="bg-white rounded-full overflow-hidden p-2">
+                        <img src="assets/images/pages/liga-1.webp" alt="DIVISION-image" class="w-20 h-20 object-cover rounded-lg">
+                      </div>
+                    }
+                    @case (2) {
+                      <div class="bg-white rounded-full overflow-hidden p-2">
+                        <img src="assets/images/pages/liga-2.webp" alt="DIVISION-image" class="w-20 h-20 object-cover rounded-lg">
+                      </div>
+                    }
+                    @case (3) {
+                      <div class="bg-white rounded-full overflow-hidden p-2">
+                        <img src="assets/images/pages/liga-3.webp" alt="DIVISION-image" class="w-20 h-20 object-cover rounded-lg">
+                      </div>
+                    }
+                    @case (4) {
+                      <div class="bg-white rounded-full overflow-hidden p-2">
+                        <img src="assets/images/pages/copa-peru.webp" alt="DIVISION-image" class="w-20 h-20 object-cover rounded-lg">
+                      </div>
+                    }
+                  }
+                  <p class="text-white font-bold text-2xl text-center">Liga {{ fixture.category }}</p>
                 </div>
-                <div class="flex gap-4 text-center">
-                  <!-- Phase1 -->
-                  <div class="w-1/2 shadow-md border rounded-3xl p-4">
-                    <p class="text-gold text-sm font-semibold">Phase 1</p>
-                    <p class="-mt-1"><b>{{ fixture.phase1.length }}</b> matchdays</p>
-                  </div>
-                  <!-- Phase2 -->
-                  <div class="w-1/2 shadow-md border rounded-3xl p-4">
-                    <p class="text-gold text-sm font-semibold">Phase 2</p>
-                    <p class="-mt-1"><b>{{ fixture.phase2.length }}</b> matchdays</p>
-                  </div>
+              </div>
+              <img src="./assets/images/pages/Banner-main.webp" class="object-cover w-full h-full" alt="Banner" />
+            </div>
+            <div class="p-4">
+              <div class="flex gap-4 text-center">
+                <!-- Phase1 -->
+                <div class="w-1/2 shadow-md border rounded-3xl p-4">
+                  <p class="text-gold text-sm font-semibold">Phase 1</p>
+                  <p class="-mt-1"><b>{{ fixture.phase1.length }}</b> matchdays</p>
+                </div>
+                <!-- Phase2 -->
+                <div class="w-1/2 shadow-md border rounded-3xl p-4">
+                  <p class="text-gold text-sm font-semibold">Phase 2</p>
+                  <p class="-mt-1"><b>{{ fixture.phase2.length }}</b> matchdays</p>
                 </div>
               </div>
               <div class="flex gap-2 mt-4">
