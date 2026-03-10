@@ -110,7 +110,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
               </button>
             } @else {
               <button type="submit" [disabled]="form.invalid" class="bg-green-700 hover:bg-green-700/90 text-white disabled:opacity-50 disabled:cursor-not-allowed rounded-full px-6 py-2 text-sm duration-300">
-                <fa-icon [icon]="Add"></fa-icon>&nbsp; Add Team
+                <fa-icon [icon]="Add"></fa-icon>&nbsp; Add Manager
               </button>
             }
           </div>
