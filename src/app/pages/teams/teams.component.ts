@@ -22,7 +22,7 @@ import { NgClass } from '@angular/common';
           <p class="text-neutral-400">Manage and view all teams</p>
         </div>
         <button (click)="onAdd()" class="bg-green-700 hover:bg-green-700/90 text-white font-semibold w-full h-fit sm:w-fit px-6 py-2 rounded-full">
-          <fa-icon [icon]="Add"></fa-icon> Add Stadium
+          <fa-icon [icon]="Add"></fa-icon> Add Team
         </button>
       </div>
       <!-- Filter -->
