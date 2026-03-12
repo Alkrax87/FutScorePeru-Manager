@@ -97,8 +97,8 @@ import { FixturesApiService } from '../../services/fixtures-api.service';
 																	<select id="group" formControlName="group" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
 																		<option value="" selected>None</option>
 																		<option disabled>---- Liga 2 ----</option>
-																		<option value="a">Grupo A</option>
-																		<option value="b">Grupo B</option>
+																		<option value="1">Grupo 1</option>
+																		<option value="2">Grupo 2</option>
 																		<option disabled>---- Liga 3 ----</option>
 																		<option value="1">Grupo 1</option>
 																		<option value="2">Grupo 2</option>
@@ -191,9 +191,8 @@ import { FixturesApiService } from '../../services/fixtures-api.service';
 																	<select id="group" formControlName="group" placeholder="" class="bg-white text-neutral-700 border focus:border-main focus:text-main h-12 cursor-pointer px-5 py-2 peer w-full rounded-full shadow-sm duration-100 outline-none">
 																		<option value="" selected>None</option>
 																		<option disabled>---- Liga 2 ----</option>
-																		<option value="p1">Grupo Ascenso 1</option>
-																		<option value="p2">Grupo Ascenso 2</option>
-																		<option value="r">Grupo Descenso</option>
+																		<option value="1">Grupo 1</option>
+																		<option value="2">Grupo 2</option>
 																		<option disabled>---- Liga 3 ----</option>
 																		<option value="f1">Grupo Final 1</option>
 																		<option value="f2">Grupo Final 2</option>
