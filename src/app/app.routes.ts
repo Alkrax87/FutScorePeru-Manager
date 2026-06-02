@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { DivisionsComponent } from './pages/divisions/divisions.component';
 import { FixturesComponent } from './pages/fixtures/fixtures.component';
+import { CupsComponent } from './pages/cups/cups.component';
 import { BracketsComponent } from './pages/brackets/brackets.component';
 import { StadiumsComponent } from './pages/stadiums/stadiums.component';
 import { MapsComponent } from './pages/maps/maps.component';
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'divisions', component: DivisionsComponent },
   { path: 'fixtures', component: FixturesComponent },
+  { path: 'cups', component: CupsComponent },
   { path: 'brackets', component: BracketsComponent },
   { path: 'stadiums', component: StadiumsComponent },
   { path: 'maps', component: MapsComponent },
