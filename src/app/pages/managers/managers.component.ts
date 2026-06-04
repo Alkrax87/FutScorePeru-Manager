@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ManagersApiService } from '../../services/managers-api.service';
 import { TeamsApiService } from '../../services/teams-api.service';
 import { faFilter, faPenToSquare, faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
@@ -12,12 +12,11 @@ import { NgClass } from '@angular/common';
 
 interface managerView extends Manager {
   teamLogo: string;
-  teamName: string;
 }
 
 @Component({
   selector: 'app-managers',
-  imports: [FontAwesomeModule, DeleteConfirmationModalComponent, ManagerModalComponent, NgClass],
+  imports: [DeleteConfirmationModalComponent, ManagerModalComponent, NgClass, FaIconComponent],
   template: `
     <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
       <!-- Title -->
@@ -37,7 +36,7 @@ interface managerView extends Manager {
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
           @for (item of filters; track $index) {
-            <button (click)="filterManagers(item.id)"
+            <button type="button" (click)="filterManagers(item.id)"
               class="hover:bg-crimson hover:text-white font-semibold shadow-md hover:shadow-xl rounded-full w-full sm:w-32 py-1 cursor-pointer"
               [ngClass]="selectedFilter === item.id ? 'bg-crimson text-white duration-300' : 'bg-white text-gray-600 duration-300'"
               >
@@ -49,39 +48,31 @@ interface managerView extends Manager {
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @for (manager of filteredManagers; track $index) {
-          <div class="bg-white rounded-3xl shadow-md hover:shadow-xl duration-300">
-            <div class="p-4">
-              <div class="w-full">
-                <div class="flex flex-col items-center gap-2">
-                  <div class="bg-nightfall text-white flex justify-center items-center gap-2 rounded-full py-2 px-4 w-fit">
-                    <img [src]="manager.teamLogo" alt="TEAM-logo" class="w-8 h-8">
-                    <p class="font-semibold text-sm truncate">{{ manager.teamName }}</p>
-                  </div>
-                  <div class="flex justify-center">
-                    <div class="rounded-full overflow-hidden">
-                      @if (manager.photo) {
-                        <img [src]="manager.photo" alt="MANAGER-image" class="w-28 h-28 object-cover">
-                      } @else {
-                        <img src="assets/images/no-manager.webp" alt="MANAGER-image" class="w-28 h-28 object-cover">
-                      }
-                    </div>
-                  </div>
-                  <p class="text-neutral-400 text-xs">ID: {{ manager.managerId }}</p>
-                  <div class="flex gap-2">
-                    <p class="font-semibold truncate">{{ manager.name }}</p>
-                    @if (manager.cod) {
-                      <img src="assets/svg/{{ manager.cod }}.svg" alt="FLAG" class="top-20 right-32 w-6">
-                    }
-                  </div>
+          <div class="bg-white rounded-[40px] flex flex-col shadow-xl p-2 border">
+            <div  class="bg-night rounded-[32px] flex flex-col items-center gap-2 py-4 shadow-lg">
+              <div class="relative bg-white p-1 rounded-full">
+                @if (manager.photo) {
+                  <img [src]="manager.photo" [alt]="'Manager-image-' + $index" class="w-20 h-20 object-cover rounded-full">
+                } @else {
+                  <img src="assets/images/no-manager.webp" [alt]="'MANAGER-' + $index" class="w-20 h-20 object-cover rounded-full">
+                }
+                <div class="absolute bottom-0 right-0 bg-white flex justify-center items-center gap-2 rounded-full p-1">
+                  <img [src]="manager.teamLogo" alt="TEAM-logo" class="w-6 h-6">
                 </div>
-                <div class="flex gap-2 mt-2">
-                  <button (click)="onEdit(manager)" class="hover:bg-neutral-100/80 text-neutral-600 border w-full rounded-full py-2 text-sm duration-300">
-                    <fa-icon [icon]="Edit"></fa-icon> Edit
-                  </button>
-                  <button (click)="onDelete(manager)" class="bg-red-600 text-white hover:bg-red-600/80 rounded-full px-4 py-2 text-sm duration-300">
-                    <fa-icon [icon]="Delete"></fa-icon>
-                  </button>
-                </div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-4 p-4">
+              <div class="flex justify-center gap-1">
+                <img [src]="'assets/svg/'+ manager.cod +'.svg'" [alt]="'FLAG-' + $index" class="w-6 h-6">
+                <p class="font-semibold truncate">{{ manager.name }}</p>
+              </div>
+              <div class="flex gap-2">
+                <button (click)="onEdit(manager)" class="hover:bg-neutral-100/80 text-neutral-600 border w-full rounded-full py-2 text-sm duration-300">
+                  <fa-icon [icon]="Edit"></fa-icon> Edit
+                </button>
+                <button (click)="onDelete(manager)" class="bg-red-600 text-white hover:bg-red-600/90 rounded-full px-4 py-2 text-sm duration-300">
+                  <fa-icon [icon]="Delete"></fa-icon>
+                </button>
               </div>
             </div>
           </div>
@@ -144,7 +135,6 @@ export class ManagersComponent {
           return {
             ...manager,
             teamLogo: team?.image ?? '',
-            teamName: team?.name ?? ''
           };
         });
         this.filteredManagers = managers.map(manager => {
@@ -152,7 +142,6 @@ export class ManagersComponent {
           return {
             ...manager,
             teamLogo: team?.image ?? '',
-            teamName: team?.name ?? ''
           };
         });
       }
