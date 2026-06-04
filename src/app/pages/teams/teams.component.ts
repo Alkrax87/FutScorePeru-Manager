@@ -1,9 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faChevronRight, faFilter, faLocationDot, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { TeamsApiService } from '../../services/teams-api.service';
-import { StadiumsApiService } from '../../services/stadiums-api.service';
 import { Team } from '../../interfaces/team';
 import { TeamModalComponent } from '../../components/team-modal/team-modal.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -12,7 +11,7 @@ import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-teams',
-  imports: [FontAwesomeModule, RouterLink, TeamModalComponent, NgClass],
+  imports: [RouterLink, TeamModalComponent, NgClass, FaIconComponent],
   template: `
     <div class="max-w-screen-2xl mx-auto px-3 sm:px-5 py-5 duration-500 select-none">
       <!-- Title -->
@@ -32,10 +31,10 @@ import { NgClass } from '@angular/common';
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
           @for (item of filters; track $index) {
-            <button (click)="filterTeams(item.id)"
+            <button type="button" (click)="filterTeams(item.id)"
               class="hover:bg-crimson hover:text-white font-semibold shadow-md hover:shadow-xl rounded-full w-full sm:w-32 py-1 cursor-pointer"
               [ngClass]="selectedFilter === item.id ? 'bg-crimson text-white duration-300' : 'bg-white text-gray-600 duration-300'"
-              >
+            >
               {{ item.label }}
             </button>
           }
@@ -44,24 +43,20 @@ import { NgClass } from '@angular/common';
       <!-- Content -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @for (team of filteredTeams; track $index) {
-          <div [routerLink]="['/team',team.category, team.teamId]" class=" bg-white group rounded-3xl overflow-hidden shadow-md hover:shadow-xl duration-300 cursor-pointer">
-            <div [style.backgroundColor]="team.color.c1" class="h-3"></div>
-            <div class="px-4 pb-4 pt-3">
-              <div class="flex">
-                <div class="w-full">
-                  <p class="text-neutral-400 text-xs">ID: {{ team.teamId }}</p>
-                  <div class="flex items-center gap-2 mt-2">
-                    <img [src]="team.image" [alt]="team.alt" class="w-12 h-12">
-                    <div class="truncate">
-                      <p class="font-semibold text-sm truncate min-w-32">{{ team.name }}</p>
-                      <p class="text-neutral-500 text-xs"><fa-icon [icon]="Location"></fa-icon> {{ team.location }}</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex items-center text-neutral-500 text-sm">
-                  <fa-icon class="py-2 px-3.5 group-hover:bg-crimson group-hover:text-white rounded-full duration-300" [icon]="Redirect"></fa-icon>
-                </div>
+          <div class="bg-white rounded-[40px] flex flex-col shadow-xl p-2 border">
+            <div  class="bg-night rounded-[32px] flex justify-center items-center py-4 shadow-lg">
+              <div [style.border-color]="team.color.c1" class="bg-white p-2 rounded-full border-[4px] border-solid">
+                <img [src]="team.image" [alt]="team.alt" class="w-12 h-12">
               </div>
+            </div>
+            <div class="p-4 flex justify-between gap-2">
+              <div class="truncate">
+                <p class="font-semibold truncate">{{ team.name }}</p>
+                <p class="text-neutral-400 text-xs"><fa-icon [icon]="Location"></fa-icon> {{ team.location }}</p>
+              </div>
+              <button type="button" [routerLink]="['/team',team.category, team.teamId]" class="bg-crimson hover:bg-crimson/90 text-white px-4 py-2 flex items-center justify-center rounded-full text-sm font-semibold duration-300">
+                Go <fa-icon [icon]="Redirect"></fa-icon>
+              </button>
             </div>
           </div>
         }
@@ -76,7 +71,6 @@ import { NgClass } from '@angular/common';
 })
 export class TeamsComponent {
   private teamsService = inject(TeamsApiService);
-  private stadiumsService = inject(StadiumsApiService);
   teams: Team[] = [];
   filteredTeams: Team[] = [];
 
@@ -97,7 +91,6 @@ export class TeamsComponent {
 
   constructor() {
     this.teamsService.getTeams();
-    this.stadiumsService.getStadiums();
     this.teamsService.dataTeams$.pipe(takeUntilDestroyed()).subscribe({
       next: (data) => {
         this.teams = data;
