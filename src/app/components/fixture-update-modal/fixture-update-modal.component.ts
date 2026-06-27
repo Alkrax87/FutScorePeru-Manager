@@ -12,7 +12,7 @@ import { FixturesApiService } from '../../services/fixtures-api.service';
   imports: [ReactiveFormsModule, NgClass, FontAwesomeModule],
   template: `
     <div class="bg-black bg-opacity-70 fixed inset-0 z-50 flex justify-center items-center select-none px-3">
-      <div class="bg-crimson rounded-3xl overflow-hidden w-full max-w-7xl">
+      <div class="bg-crimson rounded-3xl w-full max-w-7xl max-h-full overflow-auto">
         <div class="p-5">
           <h3 class="text-white text-xl font-semibold">Edit Fixture</h3>
           <p class="text-neutral-200 text-sm">Update the fixture details below.</p>
